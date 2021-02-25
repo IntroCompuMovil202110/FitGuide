@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">FItguide</string>
+    <string name="app_name">FitGuide</string>
     <string name="no_text_logo">Main no text logo.</string>
     <string name="login_title">INICIAR SESIÓN</string>
     <string name="email_hint">example@hint.com</string>
