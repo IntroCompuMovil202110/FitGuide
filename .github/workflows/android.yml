@@ -32,6 +32,7 @@ jobs:
       id: upload_apk
       uses: actions/upload-artifact@v1
       with:
+        name: FitGuide
         tag_name: ${{ github.ref }}
         release_name: Release ${{ github.ref }}
         draft: false
