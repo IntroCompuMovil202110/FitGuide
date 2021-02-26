@@ -13,4 +13,5 @@
     <string name="contacts_title">AGREGAR AMIGO</string>
     <string name="contacts_description">SELECCIONA LOS AMIGOS QUE DESAS AGREGAR Y LUEGO EL BOTÓN DE AGREGAR</string>
     <string name="contacts_button_text">AGREGAR</string>
+    <string name="add_fiends_btext">AGREGAR</string>
 </resources>
