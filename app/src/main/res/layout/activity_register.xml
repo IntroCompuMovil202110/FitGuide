@@ -3,7 +3,285 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="5dp"
+    android:background="@color/main_green"
+    android:padding="12dp"
     tools:context=".RegisterActivity">
+
+    <ImageView
+        android:id="@+id/imageViewLogo"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:layout_marginTop="48dp"
+        android:layout_marginBottom="6dp"
+        android:contentDescription="@string/no_text_logo"
+        app:layout_constraintBottom_toTopOf="@+id/titleViewRegister"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="1.0"
+        app:srcCompat="@drawable/w2b" />
+
+    <TextView
+        android:id="@+id/titleViewRegister"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="200dp"
+        android:fontFamily="@font/roboto_bold"
+        android:text="REGISTRARSE"
+        android:textColor="@color/white"
+        android:textSize="36sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.343" />
+
+    <ScrollView
+        android:id="@+id/scrollView2"
+        android:layout_width="match_parent"
+        android:layout_height="477dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/titleViewRegister"
+        app:layout_constraintVertical_bias="1.0">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/textViewName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginVertical="10dp"
+                android:fontFamily="@font/roboto_bold"
+                android:text="NOMBRE"
+                android:textColor="@color/white" />
+
+            <EditText
+                android:id="@+id/editTextTextName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="5dp"
+                android:background="@drawable/border_style_purple"
+                android:ems="10"
+                android:fontFamily="@font/roboto"
+                android:hint="Pepito"
+                android:textColorHint="@color/purple_200" />
+
+            <TextView
+                android:id="@+id/textViewLastName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginVertical="10dp"
+                android:fontFamily="@font/roboto_bold"
+                android:text="APELLIDO"
+                android:textColor="@color/white" />
+
+            <EditText
+                android:id="@+id/editTextLastName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="5dp"
+                android:background="@drawable/border_style_purple"
+                android:ems="10"
+                android:fontFamily="@font/roboto"
+                android:hint="Perez"
+                android:textColorHint="@color/purple_200" />
+
+            <TextView
+                android:id="@+id/textViewEmail"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginVertical="10dp"
+                android:fontFamily="@font/roboto_bold"
+                android:text="EMAIL"
+                android:textColor="@color/white" />
+
+            <EditText
+                android:id="@+id/editTextTextEmail"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="5dp"
+                android:background="@drawable/border_style_purple"
+                android:ems="10"
+                android:fontFamily="@font/roboto"
+                android:hint="pepito@w2b.com"
+                android:inputType="textEmailAddress"
+                android:textColorHint="@color/purple_200" />
+
+            <TextView
+                android:id="@+id/textViewUsername"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginVertical="10dp"
+                android:fontFamily="@font/roboto_bold"
+                android:text="USUARIO"
+                android:textColor="@color/white" />
+
+            <EditText
+                android:id="@+id/editTextTextUsername"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="5dp"
+                android:background="@drawable/border_style_purple"
+                android:ems="10"
+                android:fontFamily="@font/roboto"
+                android:hint="pepitofit"
+                android:textColorHint="@color/purple_200" />
+
+            <TextView
+                android:id="@+id/textViewPhone"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginVertical="10dp"
+                android:fontFamily="@font/roboto_bold"
+                android:text="TELÉFONO"
+                android:textColor="@color/white" />
+
+            <EditText
+                android:id="@+id/editTextPhone"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="5dp"
+                android:background="@drawable/border_style_purple"
+                android:ems="10"
+                android:fontFamily="@font/roboto"
+                android:hint="3011234567"
+                android:inputType="phone"
+                android:textColorHint="@color/purple_200" />
+
+            <TextView
+                android:id="@+id/textViewPassword"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginVertical="10dp"
+                android:fontFamily="@font/roboto_bold"
+                android:text="CONTRASEÑA"
+                android:textColor="@color/white" />
+
+            <EditText
+                android:id="@+id/editTextTextPassword"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="5dp"
+                android:background="@drawable/border_style_purple"
+                android:ems="10"
+                android:fontFamily="@font/roboto"
+                android:hint="password"
+                android:inputType="textPassword"
+                android:textColorHint="@color/purple_200" />
+
+            <TextView
+                android:id="@+id/textViewBirthdate"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginVertical="10dp"
+                android:fontFamily="@font/roboto_bold"
+                android:text="FECHA DE NACIMIENTO"
+                android:textColor="@color/white" />
+
+            <EditText
+                android:id="@+id/editTextDate"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/border_style_purple"
+                android:drawableRight="@android:drawable/ic_menu_my_calendar"
+                android:ems="10"
+                android:fontFamily="@font/roboto"
+                android:hint="DD/MM/AAAA"
+                android:inputType="date"
+                android:textColorHint="@color/purple_200" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="98dp"
+                android:layout_marginVertical="10dp"
+                android:orientation="horizontal">
+
+                <LinearLayout
+                    android:layout_width="23dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/textViewHeight"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/roboto_bold"
+                        android:text="ESTATURA"
+                        android:textColor="@color/white" />
+
+                    <EditText
+                        android:id="@+id/editTexHeight"
+                        android:layout_width="139dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:background="@drawable/border_style_purple"
+                        android:ems="10"
+                        android:fontFamily="@font/roboto"
+                        android:hint="1.80m"
+                        android:inputType="numberDecimal"
+                        android:textColorHint="@color/purple_200" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="13dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/textViewWeight"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/roboto_bold"
+                        android:text="PESO"
+                        android:textColor="@color/white" />
+
+                    <EditText
+                        android:id="@+id/editTextWeight"
+                        android:layout_width="139dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:background="@drawable/border_style_purple"
+                        android:ems="10"
+                        android:fontFamily="@font/roboto"
+                        android:hint="60 kg"
+                        android:inputType="numberDecimal"
+                        android:textColorHint="@color/purple_200" />
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/textView9"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginVertical="10dp"
+                android:fontFamily="@font/roboto"
+                android:text="Al registrarte, aceptas los Terminos de Servicio y la Política de Pirvacidad de FitGuide y WorkToBe"
+                android:textColor="@color/white" />
+
+            <Button
+                android:id="@+id/buttonRegister"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginVertical="5dp"
+                android:background="@drawable/purple_border_button"
+                android:backgroundTint="@color/purple_500"
+                android:backgroundTintMode="add"
+                android:text="REGISTRARSE"
+                android:textColor="@color/main_green" />
+        </LinearLayout>
+    </ScrollView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
