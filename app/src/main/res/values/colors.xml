@@ -10,5 +10,6 @@
     <color name="main_green">#60E0BE</color>
     <color name="main_purple">#B23AF8</color>
     <color name="soft_purple">#80B23AF8</color>
+    <color name="clear_purple">#54B23AF8</color>
 
 </resources>
