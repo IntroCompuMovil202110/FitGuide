@@ -13,7 +13,6 @@ public class LoggedOutActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_logged_out);
-        button = findViewById(R.id.button);
 
 
     }
