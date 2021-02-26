@@ -4,4 +4,13 @@
     <string name="login_title">INICIAR SESIÓN</string>
     <string name="email_hint">example@hint.com</string>
     <string name="email_label">Email</string>
+    <string name="add_friend_input_hint">sampleUsername</string>
+    <string name="add_friend_title">AGREGAR AMIGO</string>
+    <string name="add_friend_input_label">USERNAME</string>
+    <string name="add_contacts_btext">AGREGAR AMIGOS DESDE MIS CONTACTOS</string>
+    <string name="friends_request_title">SOLICITUDES DE AMISTAD</string>
+    <string name="friends_list_title">LISTA DE AMIGOS</string>
+    <string name="contacts_title">AGREGAR AMIGO</string>
+    <string name="contacts_description">SELECCIONA LOS AMIGOS QUE DESAS AGREGAR Y LUEGO EL BOTÓN DE AGREGAR</string>
+    <string name="contacts_button_text">AGREGAR</string>
 </resources>
