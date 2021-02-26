@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/navbar"
+    app:startDestination="@id/feedActivity">
+
+    <activity
+        android:id="@+id/feedActivity"
+        android:name="org.phonen.fitguide.FeedActivity"
+        android:label="activity_feed"
+        tools:layout="@layout/activity_feed" />
+    <activity
+        android:id="@+id/profileActivity"
+        android:name="org.phonen.fitguide.ProfileActivity"
+        android:label="activity_profile"
+        tools:layout="@layout/activity_profile" />
+    <activity
+        android:id="@+id/challengesActivity"
+        android:name="org.phonen.fitguide.ChallengesActivity"
+        android:label="activity_challenges"
+        tools:layout="@layout/activity_challenges" />
+    <activity
+        android:id="@+id/startActivity"
+        android:name="org.phonen.fitguide.StartActivity"
+        android:label="activity_start"
+        tools:layout="@layout/activity_start" />
+</navigation>
