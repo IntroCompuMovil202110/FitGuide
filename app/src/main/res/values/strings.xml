@@ -16,4 +16,6 @@
     <string name="add_fiends_btext">AGREGAR</string>
     <string name="sample_add_friend_name">Mateo Florido Sanchez</string>
     <string name="sample_add_friend_username">FLORIDOM</string>
+    <string name="friend_requests_button_label">SOLICITUDES DE AMISTAD</string>
+    <string name="add_friend_button_label">AGREGAR AMIGO</string>
 </resources>
