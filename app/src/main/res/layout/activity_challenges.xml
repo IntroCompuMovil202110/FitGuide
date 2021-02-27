@@ -55,6 +55,8 @@
         android:layout_height="wrap_content"
         android:paddingHorizontal="20dp"
         app:layout_constraintBottom_toTopOf="@+id/bottomNavigationView"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView6">
 
         <LinearLayout
@@ -71,15 +73,15 @@
                     android:layout_height="wrap_content"
                     android:orientation="vertical">
                     <!-- Challenge Title -->
-                    <LinearLayout
-                        style="@style/Widget.App.CardMainLayout">
+                    <LinearLayout style="@style/Widget.App.CardMainLayout">
+
                         <TextView
                             style="@style/Widget.App.CardMainText"
                             android:text="CHALLENGE 20K GOLD" />
 
                         <ImageView
-                            style="@style/Widget.App.CardMainIcon"
                             android:id="@+id/imageView4"
+                            style="@style/Widget.App.CardMainIcon"
                             app:srcCompat="@drawable/accept_icon" />
                     </LinearLayout>
 
@@ -89,7 +91,8 @@
 
                         <TextView
                             style="@style/Widget.App.CardContentText"
-                            android:text="This a challenge test text and can be modified by the component\n Points: 200" />
+                            android:text="This a challenge test text and can be modified by the component\n Points: 200"
+                            />
                     </LinearLayout>
 
                 </LinearLayout>
