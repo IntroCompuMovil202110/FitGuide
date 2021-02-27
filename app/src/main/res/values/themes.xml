@@ -82,4 +82,35 @@
         <item name="cornerFamily">cut</item>
         <item name="cornerSize">4dp</item>
     </style>
+    
+    <style name="Widget.AppFriendRequestSnippet" parent="">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:background">@android:color/transparent</item>
+        <item name="android:orientation">horizontal</item>
+    </style>
+    <style name="Widget.App.FriendRequestInfo" parent="">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_weight">0.9</item>
+        <item name="android:orientation">vertical</item>
+    </style>
+    <style name="Widget.App.NameText" parent="">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:fontFamily">@font/roboto_bold</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="android:textSize">18sp</item>
+    </style>
+    <style name="Widget.App.UsernameText" parent="Widget.App.NameText">
+        <item name="android:fontFamily">@font/roboto</item>
+    </style>
+    <style name="Widget.App.CheckBoxFriend" parent="Widget.AppCompat.CompoundButton.CheckBox">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:layout_weight">0.1</item>
+        <item name="buttonTint">@color/white</item>
+        <item name="android:onClick">onCheckBoxClicked</item>
+    </style>
+
 </resources>

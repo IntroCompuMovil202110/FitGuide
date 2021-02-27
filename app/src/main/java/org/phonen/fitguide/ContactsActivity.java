@@ -11,4 +11,9 @@ public class ContactsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_contacts);
     }
+
+    public void onCheckboxClicked(android.view.View v){
+        //TODO
+    }
 }
+
