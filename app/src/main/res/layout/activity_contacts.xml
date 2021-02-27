@@ -68,10 +68,10 @@
                 android:orientation="vertical">
 
                 <LinearLayout
-                    style="@style/Widget.AppFriendRequestSnippet">
+                    style="@style/Widget.App.AddFriendSnippet">
 
                     <LinearLayout
-                        style="@style/Widget.App.FriendRequestInfo">
+                        style="@style/Widget.App.AddFriendInfo">
 
                         <TextView
                             style="@style/Widget.App.NameText"
