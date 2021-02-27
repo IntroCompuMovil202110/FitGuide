@@ -60,28 +60,27 @@
             app:layout_constraintBottom_toTopOf="@+id/add_button"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textView4">
+            app:layout_constraintTop_toBottomOf="@+id/textView4"
+            app:layout_constraintVertical_bias="0.13999999">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
 
-                <LinearLayout
-                    style="@style/Widget.App.AddFriendSnippet">
+                <LinearLayout style="@style/Widget.App.AddFriendSnippet">
 
-                    <LinearLayout
-                        style="@style/Widget.App.AddFriendInfo">
+                    <LinearLayout style="@style/Widget.App.AddFriendInfo">
 
                         <TextView
-                            style="@style/Widget.App.NameText"
                             android:id="@+id/add_friend_option_name"
-                            android:text="@string/sample_add_friend_name"/>
+                            style="@style/Widget.App.NameText"
+                            android:text="@string/sample_add_friend_name" />
 
                         <TextView
-                            style="@style/Widget.App.UsernameText"
                             android:id="@+id/add_friend_option_username"
-                            android:text="@string/sample_add_friend_username"/>
+                            style="@style/Widget.App.UsernameText"
+                            android:text="@string/sample_add_friend_username" />
                     </LinearLayout>
 
                     <CheckBox
