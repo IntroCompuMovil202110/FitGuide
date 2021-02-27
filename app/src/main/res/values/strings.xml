@@ -14,4 +14,6 @@
     <string name="contacts_description">SELECCIONA LOS AMIGOS QUE DESAS AGREGAR Y LUEGO EL BOTÓN DE AGREGAR</string>
     <string name="contacts_button_text">AGREGAR</string>
     <string name="add_fiends_btext">AGREGAR</string>
+    <string name="sample_add_friend_name">Mateo Florido Sanchez</string>
+    <string name="sample_add_friend_username">FLORIDOM</string>
 </resources>
