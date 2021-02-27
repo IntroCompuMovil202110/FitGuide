@@ -71,15 +71,19 @@
                     android:layout_height="wrap_content"
                     android:orientation="vertical">
                     <!-- Challenge Title -->
-                    <TextView
-                        style="@style/Widget.App.CardMainText"
-                        android:text="CHALLENGE 20K GOLD" />
+                    <LinearLayout
+                        style="@style/Widget.App.CardMainLayout">
+                        <TextView
+                            style="@style/Widget.App.CardMainText"
+                            android:text="CHALLENGE 20K GOLD" />
+
+                        <ImageView
+                            style="@style/Widget.App.CardMainIcon"
+                            android:id="@+id/imageView4"
+                            app:srcCompat="@drawable/accept_icon" />
+                    </LinearLayout>
+
                     <!-- Challenge Content -->
-                    <ImageView
-                        android:id="@+id/imageView4"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        app:srcCompat="@drawable/emoji_events_white_18dp" />
 
                     <LinearLayout style="@style/Widget.CardContent">
 
