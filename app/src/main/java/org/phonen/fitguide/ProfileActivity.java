@@ -26,14 +26,8 @@ public class ProfileActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
         navBarSettings();
-        textView12 = findViewById(R.id.textView12);
         scrollView4 = findViewById(R.id.scrollView4);
-        textView12.setText("LOS RETOS QUE HAS COMPLETADO ESTA SEMANA");
-        //scrollView4.addView(textView12);
-        TextView tv = new TextView(this);
-        tv.setText("Your string");
 
-        scrollView4.addView(tv);
     }
 
     public void navBarSettings(){
@@ -63,4 +57,13 @@ public class ProfileActivity extends AppCompatActivity {
         });
     }
 
+    public void EditarPerfil(View view) {
+        startActivity(new Intent(getApplicationContext(), EditProfileActivity.class));
+        overridePendingTransition(0, 0);
+    }
+
+    public void ListaAmigos(View view) {
+        startActivity(new Intent(getApplicationContext(), FriendsListActivity.class));
+        overridePendingTransition(0, 0);
+    }
 }
