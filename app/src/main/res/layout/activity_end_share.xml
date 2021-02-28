@@ -83,3 +83,4 @@
                 android:text="FINALIZAR" />
         </LinearLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>
+</FrameLayout>
