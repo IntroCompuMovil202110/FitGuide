@@ -14,7 +14,7 @@
     <string name="contacts_description">SELECCIONA LOS AMIGOS QUE DESAS AGREGAR Y LUEGO EL BOTÓN DE AGREGAR</string>
     <string name="contacts_button_text">AGREGAR</string>
     <string name="gem_emoji">NIVEL: &#128142;</string>
-    <string name="fire_emoji"&#128293;</string>
+    <string name="fire_emoji">&#128293;</string>
 
 
 </resources>
