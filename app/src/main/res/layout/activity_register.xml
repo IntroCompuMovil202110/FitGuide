@@ -3,51 +3,49 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:layout_marginBottom="5dp"
+    android:layout_height="match_parent"
     android:background="@color/main_green"
     android:padding="12dp"
     tools:context=".RegisterActivity">
 
     <ImageView
         android:id="@+id/imageViewLogo"
-        android:layout_width="wrap_content"
-        android:layout_height="0dp"
+        android:layout_width="171dp"
+        android:layout_height="111dp"
         android:layout_marginTop="48dp"
         android:layout_marginBottom="6dp"
         android:contentDescription="@string/no_text_logo"
         app:layout_constraintBottom_toTopOf="@+id/titleViewRegister"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="1.0"
+        app:layout_constraintVertical_bias="0.551"
         app:srcCompat="@drawable/w2b" />
 
     <TextView
         android:id="@+id/titleViewRegister"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="200dp"
+        android:layout_marginTop="188dp"
         android:fontFamily="@font/roboto_bold"
         android:text="REGISTRARSE"
         android:textColor="@color/white"
         android:textSize="36sp"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.343" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <ScrollView
         android:id="@+id/scrollView2"
-        android:layout_width="match_parent"
-        android:layout_height="477dp"
+        android:layout_width="381dp"
+        android:layout_height="401dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintHorizontal_bias="0.466"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/titleViewRegister"
-        app:layout_constraintVertical_bias="1.0">
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.875">
 
         <LinearLayout
             android:layout_width="match_parent"
