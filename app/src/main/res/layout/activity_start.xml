@@ -64,7 +64,7 @@
                 android:textSize="36sp" />
 
             <View
-                android:id="@+id/view"
+                android:id="@+id/white_line_1"
                 android:layout_width="341dp"
                 android:layout_height="7dp"
                 android:background="#7AB23AF8" />
@@ -123,25 +123,31 @@
 
             <Button
                 android:id="@+id/buttonWalk"
+                style="@style/Widget.MaterialComponents.Button.OutlinedButton"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="#FFFFFF"
-                android:text="CAMINAR" />
+                android:text="CAMINAR"
+                app:strokeColor="@color/main_purple"
+                app:strokeWidth="2dp"/>
 
             <Button
                 android:id="@+id/buttonBici"
+                style="@style/Widget.MaterialComponents.Button.OutlinedButton"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginVertical="50dp"
-                android:background="#FFFFFF"
-                android:text="BICICLETA" />
+                android:text="BICICLETA"
+                app:strokeColor="@color/main_purple"
+                app:strokeWidth="2dp"/>
 
             <Button
                 android:id="@+id/buttonRun"
+                style="@style/Widget.MaterialComponents.Button.OutlinedButton"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="#FFFFFF"
-                android:text="CORRER" />
+                android:text="CORRER"
+                app:strokeColor="@color/main_purple"
+                app:strokeWidth="2dp"/>
         </LinearLayout>
 
         <Button
