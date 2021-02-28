@@ -165,7 +165,7 @@
                 android:textSize="25dp" />
 
             <View
-                android:id="@+id/view"
+                android:id="@+id/white_line_1"
                 android:layout_width="341dp"
                 android:layout_height="7dp"
                 android:layout_gravity="center"
