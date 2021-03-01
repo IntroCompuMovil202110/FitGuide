@@ -54,6 +54,7 @@
                 android:paddingHorizontal="64dp"
                 android:paddingVertical="10dp"
                 android:text="LOG IN "
+                android:onClick="Login"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/textView5"
@@ -67,6 +68,7 @@
                 android:paddingHorizontal="40dp"
                 android:paddingVertical="10dp"
                 android:text="REGISTRARSE"
+                android:onClick="Register"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/logged_out_btn_login" />

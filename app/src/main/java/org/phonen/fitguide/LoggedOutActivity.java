@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 
@@ -17,7 +18,12 @@ public class LoggedOutActivity extends AppCompatActivity {
 
     }
 
-    public void Profile(View view) {
-        startActivity(new Intent(getApplicationContext(), ProfileActivity.class));
+
+    public void Login(View view) {
+        startActivity(new Intent(getApplicationContext(), LoginActivity.class));
+    }
+
+    public void Register(View view) {
+        startActivity(new Intent(getApplicationContext(), RegisterActivity.class));
     }
 }

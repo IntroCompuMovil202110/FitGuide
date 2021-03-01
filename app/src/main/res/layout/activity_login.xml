@@ -109,6 +109,7 @@
         style="@style/Widget.MaterialComponents.Button.OutlinedButton"
         android:hapticFeedbackEnabled="false"
         android:text="log in"
+        android:onClick="Login"
         android:textColor="@color/white"
         android:textColorHighlight="#FFFFFF"
         android:textColorHint="#FFFFFF"
