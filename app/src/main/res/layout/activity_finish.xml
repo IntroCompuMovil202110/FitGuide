@@ -227,6 +227,7 @@
                     android:layout_gravity="center"
                     android:layout_marginVertical="15dp"
                     android:fontFamily="@font/roboto_black"
+                    android:onClick="shareFeed"
                     android:text="COMPARTIR EN FEED" />
 
                 <Button
@@ -238,6 +239,7 @@
                     android:drawableTint="@color/white"
                     android:fontFamily="@font/roboto_bold"
                     android:text="FOTO"
+                    android:onClick="sharePhoto"
                     android:textColor="@color/white"
                     app:rippleColor="@color/white" />
 
@@ -249,6 +251,7 @@
                     android:layout_marginVertical="15dp"
                     android:fontFamily="@font/roboto_bold"
                     android:text="FINALIZAR"
+                    android:onClick="finishActivity"
                     android:textColor="@color/white" />
 
             </LinearLayout>

@@ -339,7 +339,7 @@
 
     <ScrollView
         android:id="@+id/scrollView4"
-        android:layout_width="412dp"
+        android:layout_width="match_parent"
         android:layout_height="357dp"
         android:layout_marginTop="50dp"
         android:background="@drawable/corner_radius"
