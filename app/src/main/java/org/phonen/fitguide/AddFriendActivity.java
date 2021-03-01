@@ -47,7 +47,7 @@ public class AddFriendActivity extends AppCompatActivity {
         });
     }
     public void AddFriend(View view) {
-        startActivity(new Intent(getApplicationContext(), AddFriendActivity.class));
+        startActivity(new Intent(getApplicationContext(), FriendsListActivity.class));
     }
 
     public void Contacts(View view) {
