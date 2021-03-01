@@ -6,8 +6,22 @@
     android:layout_height="match_parent"
     android:layout_marginBottom="5dp"
     android:background="@color/main_green"
-    android:padding="12dp"
     tools:context=".EditProfileActivity">
+
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/bottomNavigationView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#ffff"
+        app:itemIconTint="@drawable/selector"
+        app:itemTextColor="@drawable/selector"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="1.0"
+        app:menu="@menu/bottom_menu" />
 
     <ImageView
         android:id="@+id/imageViewLogo"
@@ -42,7 +56,8 @@
         android:id="@+id/scrollView3"
         android:layout_width="match_parent"
         android:layout_height="470dp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_margin="10dp"
+        app:layout_constraintBottom_toTopOf="@+id/bottomNavigationView"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
@@ -269,6 +284,7 @@
                 android:background="@drawable/purple_border_button"
                 android:backgroundTint="@color/purple_500"
                 android:backgroundTintMode="add"
+                android:onClick="editProfile"
                 android:text="ACEPTAR CAMBIOS"
                 android:textColor="@color/main_green" />
         </LinearLayout>

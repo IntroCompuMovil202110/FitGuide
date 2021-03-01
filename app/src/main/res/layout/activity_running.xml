@@ -178,6 +178,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:gravity="center"
+                android:onClick="endActivity"
                 android:text="FINALIZAR" />
 
         </LinearLayout>

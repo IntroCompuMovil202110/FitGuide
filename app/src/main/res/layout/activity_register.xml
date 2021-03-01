@@ -38,7 +38,7 @@
 
     <ScrollView
         android:id="@+id/scrollView2"
-        android:layout_width="381dp"
+        android:layout_width="match_parent"
         android:layout_height="401dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -277,6 +277,7 @@
                 android:background="@drawable/purple_border_button"
                 android:backgroundTint="@color/purple_500"
                 android:backgroundTintMode="add"
+                android:onClick="register"
                 android:text="REGISTRARSE"
                 android:textColor="@color/main_green" />
         </LinearLayout>
