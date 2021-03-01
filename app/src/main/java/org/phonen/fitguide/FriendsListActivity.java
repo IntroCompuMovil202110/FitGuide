@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.view.View;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
@@ -19,6 +20,7 @@ public class FriendsListActivity extends AppCompatActivity {
     }
     public void navBarSettings(){
         bottomNavigationView = findViewById(R.id.bottomNavigationView);
+        bottomNavigationView.setSelectedItemId(R.id.profileActivity);
         bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
@@ -43,5 +45,13 @@ public class FriendsListActivity extends AppCompatActivity {
                 return false;
             }
         });
+    }
+
+    public void AddFriend(View view) {
+        startActivity(new Intent(getApplicationContext(), AddFriendActivity.class));
+    }
+
+    public void FriendRequests(View view) {
+        startActivity(new Intent(getApplicationContext(), FriendRequestActivity.class));
     }
 }

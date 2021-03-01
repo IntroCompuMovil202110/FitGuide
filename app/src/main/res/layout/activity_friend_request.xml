@@ -91,11 +91,11 @@
 
                             <TextView
                                 style="@style/Widget.App.EvenNameText"
-                                android:text="@string/sample_add_friend_name" />
+                                android:text="@string/sample_add_friend_name_2" />
 
                             <TextView
                                 style="@style/Widget.App.EvenUsernameText"
-                                android:text="@string/sample_add_friend_username" />
+                                android:text="@string/sample_add_friend_username_2" />
                         </LinearLayout>
 
                         <ImageView
