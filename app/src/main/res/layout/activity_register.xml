@@ -70,6 +70,8 @@
                 android:ems="10"
                 android:fontFamily="@font/roboto"
                 android:hint="Pepito"
+                android:textColor="@color/main_purple"
+                android:textColorHighlight="#FFFFFF"
                 android:textColorHint="@color/purple_200" />
 
             <TextView
@@ -90,6 +92,7 @@
                 android:ems="10"
                 android:fontFamily="@font/roboto"
                 android:hint="Perez"
+                android:textColor="@color/main_purple"
                 android:textColorHint="@color/purple_200" />
 
             <TextView
@@ -111,6 +114,7 @@
                 android:fontFamily="@font/roboto"
                 android:hint="pepito@w2b.com"
                 android:inputType="textEmailAddress"
+                android:textColor="@color/main_purple"
                 android:textColorHint="@color/purple_200" />
 
             <TextView
@@ -131,6 +135,7 @@
                 android:ems="10"
                 android:fontFamily="@font/roboto"
                 android:hint="pepitofit"
+                android:textColor="@color/main_purple"
                 android:textColorHint="@color/purple_200" />
 
             <TextView
@@ -152,6 +157,7 @@
                 android:fontFamily="@font/roboto"
                 android:hint="3011234567"
                 android:inputType="phone"
+                android:textColor="@color/main_purple"
                 android:textColorHint="@color/purple_200" />
 
             <TextView
@@ -173,6 +179,7 @@
                 android:fontFamily="@font/roboto"
                 android:hint="password"
                 android:inputType="textPassword"
+                android:textColor="@color/main_purple"
                 android:textColorHint="@color/purple_200" />
 
             <TextView
@@ -194,6 +201,7 @@
                 android:fontFamily="@font/roboto"
                 android:hint="DD/MM/AAAA"
                 android:inputType="date"
+                android:textColor="@color/main_purple"
                 android:textColorHint="@color/purple_200" />
 
             <LinearLayout
@@ -227,6 +235,7 @@
                         android:fontFamily="@font/roboto"
                         android:hint="1.80m"
                         android:inputType="numberDecimal"
+                        android:textColor="@color/main_purple"
                         android:textColorHint="@color/purple_200" />
                 </LinearLayout>
 
@@ -255,6 +264,7 @@
                         android:fontFamily="@font/roboto"
                         android:hint="60 kg"
                         android:inputType="numberDecimal"
+                        android:textColor="@color/main_purple"
                         android:textColorHint="@color/purple_200" />
                 </LinearLayout>
 
