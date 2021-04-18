@@ -48,6 +48,8 @@ public class StartActivity extends AppCompatActivity {
     }
 
     public void startActivity(View view) {
-        startActivity(new Intent(getApplicationContext(), RunningActivity.class));
+        Intent intent = new Intent();
+
+        startActivity(new Intent(getApplicationContext(), RunningMapsActivity.class));
     }
 }
