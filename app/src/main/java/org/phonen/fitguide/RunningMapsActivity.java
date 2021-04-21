@@ -31,11 +31,17 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptor;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MapStyleOptions;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationRequest;
+import com.google.android.gms.maps.model.Marker;
+import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.maps.model.Polyline;
+import com.google.android.gms.maps.model.PolylineOptions;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
@@ -59,9 +65,10 @@ public class RunningMapsActivity extends FragmentActivity implements OnMapReadyC
     private List<LatLng> routeCoords;
     private LatLng prevLocation;
     private double currentDistance;
-    private static final double VALID_DISTANCE_THRESHOLD = 5;
+    private static final double VALID_DISTANCE_THRESHOLD = 1;
     private TextView distanceIndicator;
     private DecimalFormat df = new DecimalFormat("###.###");
+    private Marker marker;
     // Sensors
     private SensorManager sensorManager;
     Sensor lightSensor;
@@ -104,22 +111,19 @@ public class RunningMapsActivity extends FragmentActivity implements OnMapReadyC
                         mMap.setMapStyle(MapStyleOptions.loadRawResourceStyle(RunningMapsActivity.this, R.raw.darkmap));
                     } else {
                         mMap.setMapStyle(MapStyleOptions.loadRawResourceStyle(RunningMapsActivity.this, R.raw.lightmap));
-
                     }
                 }
             }
-
             @Override
             public void onAccuracyChanged(Sensor sensor, int accuracy) {
-
             }
         };
     }
 
     protected LocationRequest createLocationRequest() {
         LocationRequest locationRequest = new LocationRequest();
-        locationRequest.setInterval(10000);
-        locationRequest.setFastestInterval(5000);
+        locationRequest.setInterval(8000);
+        locationRequest.setFastestInterval(3000);
         locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
         return locationRequest;
     }
@@ -137,7 +141,7 @@ public class RunningMapsActivity extends FragmentActivity implements OnMapReadyC
                         LatLng newLocation = new LatLng(location.getLatitude(), location.getLongitude());
                         if (prevLocation == null) {
                             drawInitialPoint(newLocation);
-                            prevLocation = newLocation;
+                            prevLocation = new LatLng(newLocation.latitude, newLocation.longitude);
                         } else {
                             updateRoute(prevLocation, newLocation);
                         }
@@ -146,43 +150,58 @@ public class RunningMapsActivity extends FragmentActivity implements OnMapReadyC
             };
         }
     }
+
     private void drawInitialPoint(LatLng newLocation) {
+        this.marker = mMap.addMarker(new MarkerOptions().icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_MAGENTA)).position(newLocation).title("Punto de partida"));
         mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(newLocation, 18));
     }
 
-    private void updateRoute(LatLng prevLocation, LatLng newLocation) {
-        if (validDistance(prevLocation, newLocation)){
-            prevLocation = newLocation;
+    private void updateRoute(LatLng prLocation, LatLng newLocation) {
+        if (validDistance(prLocation, newLocation)){
             Log.i("MAPS DEBUG: ", "Valid distance: " + newLocation);
             mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(newLocation, 18));
             routeCoords.add(newLocation);
-            //drawLine();
+            drawLine(prLocation, newLocation);
+            this.prevLocation = new LatLng(newLocation.latitude, newLocation.longitude);
         }else{
             Log.i("MAPS DEBUG: ", "Not valid distance: " + newLocation);
         }
-
+    }
+    private void drawLine(LatLng origin, LatLng end){
+        if (this.marker != null)
+            this.marker.remove();
+        this.marker = mMap.addMarker(new MarkerOptions()
+                .icon(
+                        BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_MAGENTA)
+                )
+                .position(end).title("Punto de partida"));
+        mMap.addPolyline(new PolylineOptions().color(R.color.main_purple).add(origin, end));
     }
 
-    private boolean validDistance(LatLng p, LatLng n){
-        double d2;
+    private double getDistance(LatLng l1, LatLng l2){
         double RADIUS_OF_EARTH_KM = 6371; // metres
-        double latDistance = Math.toRadians(n.latitude - p.latitude);
-        double lngDistance = Math.toRadians(n.longitude - p.longitude);
+        double latDistance = Math.toRadians(l2.latitude - l1.latitude);
+        double lngDistance = Math.toRadians(l2.longitude - l1.longitude);
         double a = Math.sin(latDistance / 2) * Math.sin(latDistance / 2)
-                + Math.cos(Math.toRadians(n.latitude)) * Math.cos(Math.toRadians(p.latitude))
+                + Math.cos(Math.toRadians(l2.latitude)) * Math.cos(Math.toRadians(l1.latitude))
                 * Math.sin(lngDistance / 2) * Math.sin(lngDistance / 2);
         double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
         double result = RADIUS_OF_EARTH_KM * c;
-        d2=  Math.round(result*100.0)/100.0;
+        return result*100.0;
+    }
+
+    private boolean validDistance(LatLng p, LatLng n){
         double distance;
-        Location pLoc = new Location("Punto inicial");
+        /*Location pLoc = new Location("Punto inicial");
         pLoc.setLatitude(p.latitude);
         pLoc.setLongitude(p.longitude);
         Location nLoc = new Location("Punto final");
         nLoc.setLatitude(n.latitude);
         nLoc.setLongitude(n.longitude);
         distance = pLoc.distanceTo(nLoc);
-        Log.i("MAPS DEBUG: ", "Distance: " + distance + " nostros: " + d2);
+        Log.i("MAPS DEBUG: ", "Distance: " + distance + " nostros: " + d2);*/
+        distance = this.getDistance(p, n);
+        Log.i("MAPS DEBUG: ", "Distance: " + distance);
         currentDistance += distance;
         if (distance > VALID_DISTANCE_THRESHOLD){
             updateDistanceIndicator(currentDistance);
@@ -252,8 +271,6 @@ public class RunningMapsActivity extends FragmentActivity implements OnMapReadyC
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
         mMap.setMapStyle(MapStyleOptions.loadRawResourceStyle(RunningMapsActivity.this, R.raw.lightmap));
-
-        // Add a marker in Sydney and move the camera
         mMap.getUiSettings().setZoomGesturesEnabled(true);
     }
 
