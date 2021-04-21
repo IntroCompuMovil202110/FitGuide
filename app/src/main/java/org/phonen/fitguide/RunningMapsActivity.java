@@ -7,14 +7,17 @@ import androidx.fragment.app.FragmentActivity;
 import android.Manifest;
 import android.content.Intent;
 import android.content.IntentSender;
+import android.graphics.Color;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.location.Location;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.util.Log;
 import android.view.View;
+import android.widget.Chronometer;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -50,7 +53,9 @@ import org.phonen.fitguide.utils.PermissionManager;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 
 public class RunningMapsActivity extends FragmentActivity implements OnMapReadyCallback {
@@ -66,23 +71,26 @@ public class RunningMapsActivity extends FragmentActivity implements OnMapReadyC
     private LatLng prevLocation;
     private double currentDistance;
     private static final double VALID_DISTANCE_THRESHOLD = 1;
-    private TextView distanceIndicator;
-    private DecimalFormat df = new DecimalFormat("###.###");
+    private DecimalFormat df = new DecimalFormat("##.###");
     private Marker marker;
+    private Date startTime, finalTime;
     // Sensors
     private SensorManager sensorManager;
     Sensor lightSensor;
     SensorEventListener lightSEL;
+    //Layout
+    private TextView distanceIndicator;
+    private Chronometer chronometer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_running_maps);
-        // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
         distanceIndicator = findViewById(R.id.labelKM);
+        chronometer = findViewById(R.id.chronometer);
         currentDistance = 0;
         PermissionManager.requestPermission(
                 this,
@@ -96,17 +104,17 @@ public class RunningMapsActivity extends FragmentActivity implements OnMapReadyC
     }
 
     public void endActivity(View view) {
-        startActivity(new Intent(getApplicationContext(), FinishActivity.class));
+        this.dummyEnd();
+        //startActivity(new Intent(getApplicationContext(), FinishActivity.class));
     }
 
     private void initLightSensor() {
         sensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
-        lightSensor = sensorManager.getDefaultSensor(Sensor.TYPE_LIGHT); //Null: Si el dispositivo no tiene ese sensor.
+        lightSensor = sensorManager.getDefaultSensor(Sensor.TYPE_LIGHT);
         lightSEL = new SensorEventListener() {
             @Override
             public void onSensorChanged(SensorEvent event) {
                 if (mMap != null) {
-                    //Nivel de luz: 2000
                     if (event.values[0] < 10000) {
                         mMap.setMapStyle(MapStyleOptions.loadRawResourceStyle(RunningMapsActivity.this, R.raw.darkmap));
                     } else {
@@ -122,7 +130,7 @@ public class RunningMapsActivity extends FragmentActivity implements OnMapReadyC
 
     protected LocationRequest createLocationRequest() {
         LocationRequest locationRequest = new LocationRequest();
-        locationRequest.setInterval(8000);
+        locationRequest.setInterval(5000);
         locationRequest.setFastestInterval(3000);
         locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
         return locationRequest;
@@ -140,9 +148,13 @@ public class RunningMapsActivity extends FragmentActivity implements OnMapReadyC
                     if (location != null) {
                         LatLng newLocation = new LatLng(location.getLatitude(), location.getLongitude());
                         if (prevLocation == null) {
+                            currentDistance = 0;
+                            //startTime = Calendar.getInstance().getTime();
+                            startChronometer();
                             drawInitialPoint(newLocation);
                             prevLocation = new LatLng(newLocation.latitude, newLocation.longitude);
                         } else {
+
                             updateRoute(prevLocation, newLocation);
                         }
                     }
@@ -150,21 +162,33 @@ public class RunningMapsActivity extends FragmentActivity implements OnMapReadyC
             };
         }
     }
+    private void startChronometer(){
+        this.chronometer.setBase(SystemClock.elapsedRealtime());
+        this.chronometer.start();
+    }
+    public void dummyEnd(){
+        this.chronometer.stop();
+
+        long a = SystemClock.elapsedRealtime() - this.chronometer.getBase();
+        Log.i("MAPS DEBUG: ", "Chronotime: " + a/1000);
+        //this.chronometer.start();
+    }
 
     private void drawInitialPoint(LatLng newLocation) {
-        this.marker = mMap.addMarker(new MarkerOptions().icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_MAGENTA)).position(newLocation).title("Punto de partida"));
+        this.marker = mMap.addMarker(new MarkerOptions().icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_VIOLET)).position(newLocation).title("Punto de partida"));
         mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(newLocation, 18));
     }
 
     private void updateRoute(LatLng prLocation, LatLng newLocation) {
         if (validDistance(prLocation, newLocation)){
-            Log.i("MAPS DEBUG: ", "Valid distance: " + newLocation);
+            //Log.i("MAPS DEBUG: ", "Valid distance: " + newLocation);
+            updateDistanceIndicator(currentDistance);
             mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(newLocation, 18));
             routeCoords.add(newLocation);
             drawLine(prLocation, newLocation);
             this.prevLocation = new LatLng(newLocation.latitude, newLocation.longitude);
         }else{
-            Log.i("MAPS DEBUG: ", "Not valid distance: " + newLocation);
+            //Log.i("MAPS DEBUG: ", "Not valid distance: " + newLocation);
         }
     }
     private void drawLine(LatLng origin, LatLng end){
@@ -172,22 +196,21 @@ public class RunningMapsActivity extends FragmentActivity implements OnMapReadyC
             this.marker.remove();
         this.marker = mMap.addMarker(new MarkerOptions()
                 .icon(
-                        BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_MAGENTA)
+                        BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_VIOLET)
                 )
                 .position(end).title("Punto de partida"));
-        mMap.addPolyline(new PolylineOptions().color(R.color.main_purple).add(origin, end));
+        mMap.addPolyline(new PolylineOptions().color(Color.argb(255,96,224,190)).add(origin, end));
     }
 
     private double getDistance(LatLng l1, LatLng l2){
-        double RADIUS_OF_EARTH_KM = 6371; // metres
+        double RADIUS_OF_EARTH_KM = 6371;
         double latDistance = Math.toRadians(l2.latitude - l1.latitude);
         double lngDistance = Math.toRadians(l2.longitude - l1.longitude);
         double a = Math.sin(latDistance / 2) * Math.sin(latDistance / 2)
                 + Math.cos(Math.toRadians(l2.latitude)) * Math.cos(Math.toRadians(l1.latitude))
                 * Math.sin(lngDistance / 2) * Math.sin(lngDistance / 2);
         double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-        double result = RADIUS_OF_EARTH_KM * c;
-        return result*100.0;
+        return RADIUS_OF_EARTH_KM * c * 1000;
     }
 
     private boolean validDistance(LatLng p, LatLng n){
@@ -201,10 +224,11 @@ public class RunningMapsActivity extends FragmentActivity implements OnMapReadyC
         distance = pLoc.distanceTo(nLoc);
         Log.i("MAPS DEBUG: ", "Distance: " + distance + " nostros: " + d2);*/
         distance = this.getDistance(p, n);
-        Log.i("MAPS DEBUG: ", "Distance: " + distance);
+        //Log.i("MAPS DEBUG: ", "Distance: " + distance);
+
         currentDistance += distance;
+        // Log.i("MAPS DEBUG: ", "Total distance: " + currentDistance);
         if (distance > VALID_DISTANCE_THRESHOLD){
-            updateDistanceIndicator(currentDistance);
             return true;
         } else{
             return false;

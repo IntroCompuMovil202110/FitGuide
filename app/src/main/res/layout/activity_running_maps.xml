@@ -149,14 +149,13 @@
                 android:textColor="@color/main_green"
                 android:textSize="18dp" />
 
-            <TextView
-                android:id="@+id/labelTimeInfo"
+            <Chronometer
+                android:id="@+id/chronometer"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="15dp"
                 android:fontFamily="@font/roboto_bold"
                 android:gravity="center"
-                android:text="00:10:28"
                 android:textColor="@color/main_purple"
                 android:textSize="25dp" />
 
