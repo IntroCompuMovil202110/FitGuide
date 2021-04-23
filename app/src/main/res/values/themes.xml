@@ -171,6 +171,14 @@
     <style name="Widget.App.EvenIcon" parent="Widget.App.OddIcon">
         <item name="android:tint">@color/main_green</item>
     </style>
+    <style name = "Widget.App.OutlinedButton" parent="Widget.MaterialComponents.Button.OutlinedButton">
+        <item name="strokeColor">@color/main_purple</item>
+        <item name="strokeWidth">2dp</item>
+    </style>
+    <style name = "Widget.App.SelectedOutlineButton" parent="Widget.MaterialComponents.Button.OutlinedButton">
+        <item name="android:background">@color/main_purple</item>
+        <item name="android:textColor">@color/white</item>
+    </style>
 
 
 </resources>
