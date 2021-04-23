@@ -108,9 +108,10 @@ public class RunningMapsActivity extends FragmentActivity implements OnMapReadyC
     private double EXERCISE_CALORIES_CONSTANT_MET;
     private double currentDistance;
     private double totalTime;
-    private double avrgBPM;
+    private String oxigeno;
     private double burnedCalories;
     private double weight;
+    private double currentAltitut;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -172,7 +173,7 @@ public class RunningMapsActivity extends FragmentActivity implements OnMapReadyC
     public void endDataGathering() {
         this.chronometer.stop();
         this.totalTime = (SystemClock.elapsedRealtime() - this.chronometer.getBase()) / 1000;
-        this.avrgBPM = this.getAvrgBPM();
+        this.oxigeno = this.getOxigeno();
         this.burnedCalories = this.calcCalories();
     }
 
@@ -181,8 +182,14 @@ public class RunningMapsActivity extends FragmentActivity implements OnMapReadyC
         return kkalmin * this.totalTime/60;
     }
 
-    private double getAvrgBPM() {
-        return 142;
+    private String getOxigeno() {
+        if (this.currentAltitut < this.ALTITUT_THRESHOLD_A){
+            return "ALTO";
+        }else if (this.currentAltitut < this.ALTITUT_THRESHOLD_B){
+            return "MEDIO";
+        }else{
+            return "BAJO";
+        }
     }
 
     public void sendIntent() {
@@ -193,8 +200,9 @@ public class RunningMapsActivity extends FragmentActivity implements OnMapReadyC
                 Intent intent = new Intent(getApplicationContext(), FinishActivity.class);
                 intent.putExtra("time", totalTime);
                 intent.putExtra("distance", currentDistance);
-                intent.putExtra("bpm", avrgBPM);
+                intent.putExtra("oxigeno", oxigeno);
                 intent.putExtra("calories", burnedCalories);
+                intent.putExtra("snapshot", snapshot);
                 startActivity(intent);
             }
         };
@@ -248,7 +256,7 @@ public class RunningMapsActivity extends FragmentActivity implements OnMapReadyC
                 this.bpmIndicator.setText("BAJA");
                 this.bpmIndicator.setTextColor(getColor(R.color.low_alert));
             }
-
+            this.currentAltitut = altitut;
         }
     }
 
