@@ -172,12 +172,13 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
+            android:id="@+id/textVPoints"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="2dp"
             android:layout_marginEnd="2dp"
             android:elevation="16dp"
-            android:text="1000"
+            android:text=""
             android:textAppearance="?android:attr/textAppearanceMedium"
             android:textColor="@android:color/white"
             android:textSize="15dp"
@@ -223,14 +224,14 @@
             tools:ignore="MissingConstraints" />
 
         <TextView
-            android:id="@+id/textView5"
+            android:id="@+id/textVRank"
             android:layout_width="74dp"
             android:layout_height="40dp"
             android:layout_marginStart="5dp"
             android:layout_marginEnd="5dp"
             android:layout_marginBottom="4dp"
             android:gravity="center"
-            android:text="NIVEL:     DIAMANTE"
+            android:text="NIVEL:    "
             android:textColor="@color/main_purple"
             android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -239,12 +240,13 @@
             app:layout_constraintStart_toStartOf="parent" />
 
         <TextView
+            android:id="@+id/levelVText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="2dp"
             android:layout_marginEnd="2dp"
             android:elevation="16dp"
-            android:text="100"
+            android:text=""
             android:textAppearance="?android:attr/textAppearanceMedium"
             android:textColor="@color/main_purple"
             app:layout_constraintBottom_toBottomOf="@+id/floatingActionButton5"
@@ -269,9 +271,10 @@
         tools:ignore="MissingConstraints">
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/floatingActionButton7"
+            android:id="@+id/logOutButton"
             android:layout_width="112dp"
             android:layout_height="121dp"
+            android:onClick="logOut"
             android:layout_alignParentBottom="true"
             android:layout_centerInParent="true"
             android:layout_gravity="bottom|center"
@@ -299,10 +302,10 @@
             android:text="100"
             android:textAppearance="?android:attr/textAppearanceMedium"
             android:textColor="@color/main_purple"
-            app:layout_constraintBottom_toBottomOf="@+id/floatingActionButton7"
-            app:layout_constraintEnd_toEndOf="@+id/floatingActionButton7"
-            app:layout_constraintStart_toStartOf="@+id/floatingActionButton7"
-            app:layout_constraintTop_toTopOf="@+id/floatingActionButton7"
+            app:layout_constraintBottom_toBottomOf="@+id/logOutButton"
+            app:layout_constraintEnd_toEndOf="@+id/logOutButton"
+            app:layout_constraintStart_toStartOf="@+id/logOutButton"
+            app:layout_constraintTop_toTopOf="@+id/logOutButton"
             tools:ignore="MissingConstraints"
             app:srcCompat="@drawable/w2b" />
 
@@ -319,19 +322,19 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.494"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/floatingActionButton7" />
+            app:layout_constraintTop_toBottomOf="@+id/logOutButton" />
 
         <TextView
-            android:id="@+id/textView11"
+            android:id="@+id/textNameV"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:text="DANIELA"
+            android:text=""
             android:textColor="@color/white"
             android:textSize="25dp"
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.567"
+            app:layout_constraintHorizontal_bias="0.496"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textView10" />
 

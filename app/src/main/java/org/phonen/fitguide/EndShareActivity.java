@@ -9,6 +9,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.media.MediaScannerConnection;
@@ -32,6 +33,7 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
 public class EndShareActivity extends AppCompatActivity {
+
 
     //para evaluar si tomo la foto desde la aplicacion
     private boolean tookPhoto = false;
@@ -57,6 +59,7 @@ public class EndShareActivity extends AppCompatActivity {
         setContentView(R.layout.activity_end_share);
         //inflate
         final_imageView = (ImageView) findViewById(R.id.final_imageView);
+
         buttonOpenCamera = (Button) findViewById(R.id.buttonOpenCamera);
         buttonGallery = (Button) findViewById(R.id.buttonGallery);
         buttonShare = (Button) findViewById(R.id.buttonShare); //save image
@@ -82,6 +85,7 @@ public class EndShareActivity extends AppCompatActivity {
     public void share(View view) {
         request_permission(this, SAVE_PHOTO_NAME, "Se necesita acceder al album de fotos", SAVE_PHOTO_ID);
         if(ContextCompat.checkSelfPermission(this, SAVE_PHOTO_NAME) == PackageManager.PERMISSION_GRANTED) {
+
             if(tookPhoto){
                 saveToGallery();
             }
@@ -100,11 +104,13 @@ public class EndShareActivity extends AppCompatActivity {
         }
     }
 
+
     private void pick_image(){
         Intent pick_imag_intent = new Intent(Intent.ACTION_PICK);
         pick_imag_intent.setType("image/*");
         startActivityForResult(pick_imag_intent, IMAGE_PICKER_PERMISSION_ID);
     }
+
 
     private void saveToGallery() {
         //obtener la imagen
@@ -127,6 +133,7 @@ public class EndShareActivity extends AppCompatActivity {
         try {
             FileOutputStream out = new FileOutputStream(filename);
             bm.compress(Bitmap.CompressFormat.PNG, 100, out);
+
             out.flush();
             out.close();
             isImageCreated(filename);
@@ -145,17 +152,20 @@ public class EndShareActivity extends AppCompatActivity {
     }
 
     private void isImageCreated(File dir){
+
         MediaScannerConnection.scanFile(this,
                 new String[]{dir.toString()}, null,
                 new MediaScannerConnection.OnScanCompletedListener() {
                     @Override
                     public void onScanCompleted(String path, Uri uri) {
 
+
                     }
                 });
     }
 
     private void savedSuccessfully(){
+
         Toast.makeText(this, "Imagen guardada con exito en la galeria", Toast.LENGTH_SHORT).show();
     }
 
@@ -169,6 +179,7 @@ public class EndShareActivity extends AppCompatActivity {
             Bundle extras = data.getExtras();
             Bitmap bm = (Bitmap) extras.get("data");
             final_imageView.setImageBitmap(bm);
+
         }else if(request_code == IMAGE_PICKER_PERMISSION_ID && result_code == RESULT_OK){
             try{
                 final Uri imageUri = data.getData();
@@ -192,6 +203,7 @@ public class EndShareActivity extends AppCompatActivity {
 
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+
         if (requestCode == CAMERA_PERMISSION_ID) {
             if(ContextCompat.checkSelfPermission(this, CAMERA_NAME) == PackageManager.PERMISSION_GRANTED){
                 tookPhoto = true;

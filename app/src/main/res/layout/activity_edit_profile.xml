@@ -187,7 +187,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginVertical="10dp"
                 android:fontFamily="@font/roboto_bold"
-                android:text="CONTRASEÑA"
+                android:text="CONTRASEÑA ACTUAL"
                 android:textColor="@color/white" />
 
             <EditText
@@ -210,7 +210,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginVertical="10dp"
                 android:fontFamily="@font/roboto_bold"
-                android:text="CONFIRMAR CONTRASEÑA"
+                android:text="NUEVA CONTRASEÑA"
                 android:textColor="@color/white" />
 
             <EditText

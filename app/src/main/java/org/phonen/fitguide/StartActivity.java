@@ -11,8 +11,26 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
+import org.phonen.fitguide.Utils.References;
+import org.phonen.fitguide.model.User;
+import org.w3c.dom.Text;
 
 public class StartActivity extends AppCompatActivity {
+    private FirebaseAuth mAuth;
+    FirebaseDatabase database;
+    DatabaseReference myRef;
+    User user;
+
+    TextView userHeader;
+    TextView level;
+    TextView weight;
     BottomNavigationView bottomNavigationView;
 
     Button walkButton;
@@ -29,9 +47,36 @@ public class StartActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_start);
         navBarSettings();
-        walkButton = findViewById(R.id.buttonWalk);
+
+        userHeader = findViewById(R.id.titleComeon);
+        level = findViewById(R.id.labelLevel);
+        weight = findViewById(R.id.labelWeight);
+      walkButton = findViewById(R.id.buttonWalk);
         runButton = findViewById(R.id.buttonRun);
         bikeButton = findViewById(R.id.buttonBici);
+        //firebase
+        mAuth = FirebaseAuth.getInstance();
+        database = FirebaseDatabase.getInstance();
+        String uId =mAuth.getUid();
+        myRef = database.getReference(References.PATH_USERS+uId);
+        myRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                user = snapshot.getValue(User.class);
+                userHeader.setText("¡VAMOS "+ user.getName().toUpperCase()+ "!");
+                level.setText("NIVEL:"+user.getRank());
+                weight.setText(weight.getText()+user.getWeight()+"KG");
+
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+
+       
         walkButton.setOnClickListener(v -> {
             deselectButtons();
             this.isWalkClicked = true;

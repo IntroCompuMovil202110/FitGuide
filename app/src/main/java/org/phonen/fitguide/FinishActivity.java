@@ -29,7 +29,11 @@ public class FinishActivity extends AppCompatActivity {
     }
 
     public void sharePhoto(View view) {
-        startActivity(new Intent(getApplicationContext(), EndShareActivity.class));
+        request_permission(this, CAMERA_NAME, "Se necesita la camara", CAMERA_PERMISSION_ID);
+        if(ContextCompat.checkSelfPermission(this,CAMERA_NAME)==PackageManager.PERMISSION_GRANTED) {
+            startActivity(new Intent(getApplicationContext(), EndShareActivity.class));
+        }
+
     }
 
     public void finishActivity(View view) {
