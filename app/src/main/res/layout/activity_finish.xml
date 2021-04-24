@@ -244,6 +244,19 @@
                     app:rippleColor="@color/white" />
 
                 <Button
+                    android:id="@+id/buttonSave"
+                    android:layout_width="200dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="10dp"
+                    android:drawableTint="@color/white"
+                    android:fontFamily="@font/roboto_bold"
+                    android:onClick="saveMap"
+                    android:text="GUARDAR EN LA GALERIA"
+                    android:textColor="@color/white"
+                    app:rippleColor="@color/white" />
+
+                <Button
                     android:id="@+id/buttonFinalFinish"
                     android:layout_width="200dp"
                     android:layout_height="wrap_content"
