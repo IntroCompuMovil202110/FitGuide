@@ -123,12 +123,10 @@
 
             <Button
                 android:id="@+id/buttonWalk"
-                style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                style="@style/Widget.App.OutlinedButton"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="CAMINAR"
-                app:strokeColor="@color/main_purple"
-                app:strokeWidth="2dp"/>
+                android:text="CAMINAR" />
 
             <Button
                 android:id="@+id/buttonBici"

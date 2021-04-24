@@ -40,21 +40,8 @@ public class FinishActivity extends AppCompatActivity {
         startActivity(new Intent(getApplicationContext(), ProfileActivity.class));
     }
 
-    private void request_permission(Activity context, String permiso, String justificacion, int idCode){
-        if(ContextCompat.checkSelfPermission(context, permiso) != PackageManager.PERMISSION_GRANTED){
-            if(ActivityCompat.shouldShowRequestPermissionRationale(context, permiso)){
-                Toast.makeText(context, justificacion, Toast.LENGTH_SHORT).show();
-            }
-            ActivityCompat.requestPermissions(context, new String[]{permiso}, idCode);
-        }
-    }
-
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        if (requestCode == CAMERA_PERMISSION_ID) {
-            if(ContextCompat.checkSelfPermission(this,CAMERA_NAME)==PackageManager.PERMISSION_GRANTED) {
-                startActivity(new Intent(getApplicationContext(), EndShareActivity.class));
-            }
-        }
+
     }
 }

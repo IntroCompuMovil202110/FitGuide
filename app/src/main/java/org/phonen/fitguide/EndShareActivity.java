@@ -9,6 +9,8 @@ import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+
+import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.media.MediaScannerConnection;
 import android.net.Uri;
@@ -26,20 +28,28 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
 public class EndShareActivity extends AppCompatActivity {
 
+
+    //para evaluar si tomo la foto desde la aplicacion
+    private boolean tookPhoto = false;
+
     //permisos
     private static final int CAMERA_PERMISSION_ID = 1;
-    private static final int SAVE_PHOTO_ID = 2;
-    private static final int OPEN_ALBUM_ID = 3;
+    private static final int IMAGE_PICKER_PERMISSION_ID = 2;
+    private static final int SAVE_PHOTO_ID = 3;
+
     private static final String CAMERA_NAME = Manifest.permission.CAMERA;
     private static final String SAVE_PHOTO_NAME = Manifest.permission.WRITE_EXTERNAL_STORAGE;
-    private static final String OPEN_ALBUM_NAME = Manifest.permission.READ_EXTERNAL_STORAGE;
+    private static final String IMAGE_PICKER_NAME = Manifest.permission.READ_EXTERNAL_STORAGE;
 
     ImageView final_imageView;
+    Button buttonOpenCamera;
+    Button buttonGallery;
     Button buttonShare;
     Button buttonFinishShare;
 
@@ -49,18 +59,37 @@ public class EndShareActivity extends AppCompatActivity {
         setContentView(R.layout.activity_end_share);
         //inflate
         final_imageView = (ImageView) findViewById(R.id.final_imageView);
+
+        buttonOpenCamera = (Button) findViewById(R.id.buttonOpenCamera);
+        buttonGallery = (Button) findViewById(R.id.buttonGallery);
         buttonShare = (Button) findViewById(R.id.buttonShare); //save image
         buttonFinishShare = (Button) findViewById(R.id.buttonFinishShare);
-Log.i("entre a end", "entre a end sin querer");
-        //si estoy en esta pantalla significa que ya di permiso a la camara, tomare la foto
-        take_picture();
 
+    }
+    public void camera(View view) {
+        request_permission(this, CAMERA_NAME, "Se necesita la camara", CAMERA_PERMISSION_ID);
+        if(ContextCompat.checkSelfPermission(this, CAMERA_NAME) == PackageManager.PERMISSION_GRANTED) {
+            tookPhoto = true;
+            take_picture();
+        }
+    }
+
+    public void uploadPicture(View view) {
+        request_permission(this, IMAGE_PICKER_NAME, "Se neceista acceder al album de fotos", IMAGE_PICKER_PERMISSION_ID);
+        if(ContextCompat.checkSelfPermission(this, IMAGE_PICKER_NAME) == PackageManager.PERMISSION_GRANTED){
+            tookPhoto = false;
+            pick_image();
+        }
     }
 
     public void share(View view) {
         request_permission(this, SAVE_PHOTO_NAME, "Se necesita acceder al album de fotos", SAVE_PHOTO_ID);
         if(ContextCompat.checkSelfPermission(this, SAVE_PHOTO_NAME) == PackageManager.PERMISSION_GRANTED) {
-            saveToGallery();
+
+            if(tookPhoto){
+                saveToGallery();
+            }
+            startActivity(new Intent(getApplicationContext(), FeedActivity.class));
         }
     }
 
@@ -74,6 +103,14 @@ Log.i("entre a end", "entre a end sin querer");
             startActivityForResult(take_picture_intent, CAMERA_PERMISSION_ID);
         }
     }
+
+
+    private void pick_image(){
+        Intent pick_imag_intent = new Intent(Intent.ACTION_PICK);
+        pick_imag_intent.setType("image/*");
+        startActivityForResult(pick_imag_intent, IMAGE_PICKER_PERMISSION_ID);
+    }
+
 
     private void saveToGallery() {
         //obtener la imagen
@@ -92,24 +129,19 @@ Log.i("entre a end", "entre a end sin querer");
         }
 
         File filename = new File(dir, name + current_date + ".png") ;
-        Log.i("PATH FINAL:", filename.toString());
 
         try {
             FileOutputStream out = new FileOutputStream(filename);
             bm.compress(Bitmap.CompressFormat.PNG, 100, out);
-            Log.i("bm.compress","despues del compress!!");
+
             out.flush();
-            Log.i("flush","despues del flush");
             out.close();
-            Log.i("close","despues del close");
             isImageCreated(filename);
             savedSuccessfully();
         }catch (FileNotFoundException e){
             unableToSave();
-            Log.i("EXCEPTION:","FILE NOT FOUND!!!!");
         } catch (IOException e){
             unableToSave();
-            Log.i("EXCEPTION2:","IO EXCEPTION");
         }
     }
 
@@ -120,19 +152,20 @@ Log.i("entre a end", "entre a end sin querer");
     }
 
     private void isImageCreated(File dir){
-        Log.i("isImageCreated", "ENTRE");
+
         MediaScannerConnection.scanFile(this,
                 new String[]{dir.toString()}, null,
                 new MediaScannerConnection.OnScanCompletedListener() {
                     @Override
                     public void onScanCompleted(String path, Uri uri) {
-                        Log.i("onScanCompleted","LLEGUE A onScanCompleted");
+
+
                     }
                 });
     }
 
     private void savedSuccessfully(){
-        Log.i("savedSuccesfully","ENTRE");
+
         Toast.makeText(this, "Imagen guardada con exito en la galeria", Toast.LENGTH_SHORT).show();
     }
 
@@ -146,6 +179,16 @@ Log.i("entre a end", "entre a end sin querer");
             Bundle extras = data.getExtras();
             Bitmap bm = (Bitmap) extras.get("data");
             final_imageView.setImageBitmap(bm);
+
+        }else if(request_code == IMAGE_PICKER_PERMISSION_ID && result_code == RESULT_OK){
+            try{
+                final Uri imageUri = data.getData();
+                final InputStream imageStream = getContentResolver().openInputStream(imageUri);
+                final Bitmap selectedImage = BitmapFactory.decodeStream(imageStream);
+                final_imageView.setImageBitmap(selectedImage);
+            }catch (FileNotFoundException e){
+                e.printStackTrace();
+            }
         }
     }
 
@@ -160,12 +203,27 @@ Log.i("entre a end", "entre a end sin querer");
 
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        if (requestCode == SAVE_PHOTO_ID){
 
-            if(ContextCompat.checkSelfPermission(this, SAVE_PHOTO_NAME) == PackageManager.PERMISSION_GRANTED) {
-                saveToGallery();
+        if (requestCode == CAMERA_PERMISSION_ID) {
+            if(ContextCompat.checkSelfPermission(this, CAMERA_NAME) == PackageManager.PERMISSION_GRANTED){
+                tookPhoto = true;
+                take_picture();
             }
         }
-    }
+        if(requestCode == IMAGE_PICKER_PERMISSION_ID){
+            if(ContextCompat.checkSelfPermission(this, IMAGE_PICKER_NAME) == PackageManager.PERMISSION_GRANTED){
+                tookPhoto = false;
+                pick_image();
+            }
+        }
+       if (requestCode == SAVE_PHOTO_ID){
+           if(ContextCompat.checkSelfPermission(this, SAVE_PHOTO_NAME) == PackageManager.PERMISSION_GRANTED){
+               if(tookPhoto){
+                   saveToGallery();
+               }
+               startActivity(new Intent(getApplicationContext(), FeedActivity.class));
+           }
+        }
 
+    }
 }
