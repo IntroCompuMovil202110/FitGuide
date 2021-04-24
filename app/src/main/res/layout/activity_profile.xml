@@ -261,7 +261,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/constraintLayout4"
         android:layout_width="157dp"
-        android:layout_height="200dp"
+        android:layout_height="wrap_content"
         android:layout_marginStart="30dp"
         android:layout_marginTop="32dp"
         android:layout_marginEnd="30dp"
@@ -274,7 +274,6 @@
             android:id="@+id/logOutButton"
             android:layout_width="112dp"
             android:layout_height="121dp"
-            android:onClick="logOut"
             android:layout_alignParentBottom="true"
             android:layout_centerInParent="true"
             android:layout_gravity="bottom|center"
@@ -282,6 +281,7 @@
             android:layout_marginTop="4dp"
             android:layout_marginEnd="14dp"
             android:backgroundTint="@color/white"
+            android:onClick="logOut"
             app:backgroundTint="@color/main_purple"
             app:borderWidth="6dp"
             app:layout_constraintEnd_toEndOf="parent"
@@ -306,8 +306,8 @@
             app:layout_constraintEnd_toEndOf="@+id/logOutButton"
             app:layout_constraintStart_toStartOf="@+id/logOutButton"
             app:layout_constraintTop_toTopOf="@+id/logOutButton"
-            tools:ignore="MissingConstraints"
-            app:srcCompat="@drawable/w2b" />
+            app:srcCompat="@drawable/w2b"
+            tools:ignore="MissingConstraints" />
 
         <TextView
             android:id="@+id/textView10"

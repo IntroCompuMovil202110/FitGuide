@@ -51,8 +51,10 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 
-import org.phonen.fitguide.utils.PermissionManager;
 
+import org.phonen.fitguide.Utils.PermissionManager;
+
+import java.io.ByteArrayOutputStream;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -196,13 +198,15 @@ public class RunningMapsActivity extends FragmentActivity implements OnMapReadyC
         SnapshotReadyCallback callBack = new SnapshotReadyCallback() {
             @Override
             public void onSnapshotReady(Bitmap bitmap) {
-                snapshot = bitmap;
+                ByteArrayOutputStream stream = new ByteArrayOutputStream();
+                bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
+                byte[] bytes = stream.toByteArray();
                 Intent intent = new Intent(getApplicationContext(), FinishActivity.class);
                 intent.putExtra("time", totalTime);
                 intent.putExtra("distance", currentDistance);
                 intent.putExtra("oxigeno", oxigeno);
                 intent.putExtra("calories", burnedCalories);
-                intent.putExtra("snapshot", snapshot);
+                 intent.putExtra("BMP",bytes);
                 startActivity(intent);
             }
         };
@@ -453,12 +457,16 @@ public class RunningMapsActivity extends FragmentActivity implements OnMapReadyC
     @Override
     protected void onResume() {
         super.onResume();
+    if(lightSensor!= null)
+    {
         sensorManagerLight.registerListener(this, lightSensor, SensorManager.SENSOR_DELAY_NORMAL);
         sensorManagerPressure.registerListener(this, pressureSensor, SensorManager.SENSOR_DELAY_NORMAL);
         sensorManagerTemperature.registerListener(this, tempSensor, SensorManager.SENSOR_DELAY_NORMAL);
         /*if (PermissionManager.checkPermission(this, pBody))
             sensorManagerBody.registerListener(this, bodySensor, SensorManager.SENSOR_DELAY_FASTEST);*/
         startLocationUpdates();
+    }
+
     }
 
     @Override

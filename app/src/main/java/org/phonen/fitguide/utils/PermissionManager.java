@@ -1,4 +1,4 @@
-package org.phonen.fitguide.utils;
+package org.phonen.fitguide.Utils;
 
 import android.app.Activity;
 import android.content.pm.PackageManager;

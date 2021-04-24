@@ -59,7 +59,6 @@ public class EndShareActivity extends AppCompatActivity {
         setContentView(R.layout.activity_end_share);
         //inflate
         final_imageView = (ImageView) findViewById(R.id.final_imageView);
-
         buttonOpenCamera = (Button) findViewById(R.id.buttonOpenCamera);
         buttonGallery = (Button) findViewById(R.id.buttonGallery);
         buttonShare = (Button) findViewById(R.id.buttonShare); //save image
@@ -133,7 +132,6 @@ public class EndShareActivity extends AppCompatActivity {
         try {
             FileOutputStream out = new FileOutputStream(filename);
             bm.compress(Bitmap.CompressFormat.PNG, 100, out);
-
             out.flush();
             out.close();
             isImageCreated(filename);
@@ -152,14 +150,11 @@ public class EndShareActivity extends AppCompatActivity {
     }
 
     private void isImageCreated(File dir){
-
         MediaScannerConnection.scanFile(this,
                 new String[]{dir.toString()}, null,
                 new MediaScannerConnection.OnScanCompletedListener() {
                     @Override
                     public void onScanCompleted(String path, Uri uri) {
-
-
                     }
                 });
     }
@@ -179,7 +174,6 @@ public class EndShareActivity extends AppCompatActivity {
             Bundle extras = data.getExtras();
             Bitmap bm = (Bitmap) extras.get("data");
             final_imageView.setImageBitmap(bm);
-
         }else if(request_code == IMAGE_PICKER_PERMISSION_ID && result_code == RESULT_OK){
             try{
                 final Uri imageUri = data.getData();
