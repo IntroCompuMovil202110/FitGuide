@@ -130,7 +130,7 @@
                     android:layout_weight="1"
                     android:fontFamily="@font/roboto_bold"
                     android:gravity="center"
-                    android:text="RITMO PROM."
+                    android:text="NIVEL DEL OXÍGENO"
                     android:textColor="@color/white"
                     android:textSize="15dp" />
 
@@ -138,6 +138,7 @@
                     android:id="@+id/labelTotalCalories"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginRight="30dp"
                     android:layout_weight="1"
                     android:fontFamily="@font/roboto_bold"
                     android:gravity="center"
@@ -169,7 +170,7 @@
                     android:layout_weight="1"
                     android:fontFamily="@font/roboto_bold"
                     android:gravity="center"
-                    android:text="30 CAL"
+                    android:text="30 KCAL"
                     android:textColor="@color/white"
                     android:textSize="25dp" />
 

@@ -20,6 +20,7 @@ import com.google.firebase.database.ValueEventListener;
 
 import org.phonen.fitguide.Utils.References;
 import org.phonen.fitguide.model.User;
+import org.w3c.dom.DOMImplementation;
 import org.w3c.dom.Text;
 
 public class StartActivity extends AppCompatActivity {
@@ -139,7 +140,8 @@ public class StartActivity extends AppCompatActivity {
     }
 
     public void startActivity(View view) {
-        double weight = getIntent().getDoubleExtra("weight", 70);
+        double weight = Double.parseDouble(user.getWeight());
+       // double weight = getIntent().getDoubleExtra("weight", 70);
         Intent intent = new Intent(getApplicationContext(), RunningMapsActivity.class);
         Bundle bundle = new Bundle();
         bundle.putDouble("weight", weight);
