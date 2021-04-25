@@ -56,20 +56,21 @@ public class FinishActivity extends AppCompatActivity {
         byte[] bytes = intent.getByteArrayExtra("BMP");
         Log.i("BYTES",bytes.toString());
         Bitmap bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+        Bitmap resizeBitmap =Bitmap.createScaledBitmap(bitmap,400,300,true);
 
-        //Bitmap bitmap = (Bitmap) intent.getParcelableExtra("BitmapImage");
        double time = intent.getDoubleExtra("time",1);
-        double distance = intent.getDoubleExtra("distance",1);
+       String timeS = calcularTiempo(time);
+       double distance = intent.getDoubleExtra("distance",1);
 
         String oxygen =  intent.getStringExtra("oxigeno");
         double calories = intent.getDoubleExtra("calories",1);
 
        // setters
-        this.time.setText(decimalFormat.format(time));
-        this.distance.setText(decimalFormat.format(distance)+" m");
+        this.time.setText(timeS);
+        this.distance.setText(decimalFormat.format(distance)+" M");
         this.oxygen.setText(oxygen);
-        this.calories.setText(decimalFormat.format(calories)+ " CAL");
-        imagV.setImageBitmap(bitmap);
+        this.calories.setText(decimalFormat.format(calories)+ " KCAL");
+        imagV.setImageBitmap(resizeBitmap);
 
     }
 
@@ -122,6 +123,43 @@ public class FinishActivity extends AppCompatActivity {
         } catch (IOException e){
             unableToSave();
         }
+    }
+
+    private String calcularTiempo( double time)
+    {
+        int horas = ((int)time / 3600);
+        int minutos = (int) ((time-horas*3600)/60);
+        int segundos = (int) (time-(horas*3600+minutos*60));
+        String h="";
+        String m="";
+        String s="";
+        String result;
+        if(horas<10)
+        {
+            h="0"+Integer.toString(horas);
+
+        }
+        else
+        {
+            h=Integer.toString(horas);
+        }
+        if(minutos<10)
+        {
+            m="0"+Integer.toString(minutos);
+        }
+        else
+        {
+            m=Integer.toString(minutos);
+        }
+        if(segundos<10)
+        {
+            s="0"+Integer.toString(segundos);
+        }
+        else {
+           s = Integer.toString(segundos);
+        }
+        result = h+ ":" + m + ":" + s;
+        return result;
     }
 
     private String getCurrentTime(){
