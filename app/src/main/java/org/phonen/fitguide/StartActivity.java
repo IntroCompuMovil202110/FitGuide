@@ -20,8 +20,6 @@ import com.google.firebase.database.ValueEventListener;
 
 import org.phonen.fitguide.Utils.References;
 import org.phonen.fitguide.model.User;
-import org.w3c.dom.DOMImplementation;
-import org.w3c.dom.Text;
 
 public class StartActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;
@@ -31,7 +29,7 @@ public class StartActivity extends AppCompatActivity {
 
     TextView userHeader;
     TextView level;
-    TextView weight;
+    TextView weightLabel;
     BottomNavigationView bottomNavigationView;
 
     Button walkButton;
@@ -41,7 +39,7 @@ public class StartActivity extends AppCompatActivity {
     private boolean isBikeClicked = false;
     private boolean isRunClicked = false;
 
-    int activityType;
+    int activityType = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,7 +49,7 @@ public class StartActivity extends AppCompatActivity {
 
         userHeader = findViewById(R.id.titleComeon);
         level = findViewById(R.id.labelLevel);
-        weight = findViewById(R.id.labelWeight);
+        weightLabel = findViewById(R.id.labelWeight);
       walkButton = findViewById(R.id.buttonWalk);
         runButton = findViewById(R.id.buttonRun);
         bikeButton = findViewById(R.id.buttonBici);
@@ -66,7 +64,7 @@ public class StartActivity extends AppCompatActivity {
                 user = snapshot.getValue(User.class);
                 userHeader.setText("¡VAMOS "+ user.getName().toUpperCase()+ "!");
                 level.setText("NIVEL:"+user.getRank());
-                weight.setText(weight.getText()+user.getWeight()+"KG");
+                weightLabel.setText(weightLabel.getText()+user.getWeight()+"KG");
 
 
             }
@@ -140,7 +138,10 @@ public class StartActivity extends AppCompatActivity {
     }
 
     public void startActivity(View view) {
-        double weight = Double.parseDouble(user.getWeight());
+        double weight = 60;
+        if (user != null)
+            weight = Double.parseDouble(user.getWeight());
+
        // double weight = getIntent().getDoubleExtra("weight", 70);
         Intent intent = new Intent(getApplicationContext(), RunningMapsActivity.class);
         Bundle bundle = new Bundle();

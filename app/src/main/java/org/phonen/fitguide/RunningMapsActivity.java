@@ -1,9 +1,5 @@
 package org.phonen.fitguide;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.fragment.app.FragmentActivity;
-
 import android.Manifest;
 import android.content.Intent;
 import android.content.IntentSender;
@@ -23,9 +19,16 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.FragmentActivity;
+
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.common.api.CommonStatusCodes;
 import com.google.android.gms.common.api.ResolvableApiException;
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationCallback;
+import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.location.LocationSettingsRequest;
@@ -34,23 +37,21 @@ import com.google.android.gms.location.LocationSettingsStatusCodes;
 import com.google.android.gms.location.SettingsClient;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.GoogleMap.SnapshotReadyCallback;
+import com.google.android.gms.maps.GoogleMapOptions;
+import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
-import com.google.android.gms.maps.GoogleMap.SnapshotReadyCallback;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.MapStyleOptions;
-import com.google.android.gms.location.FusedLocationProviderClient;
-import com.google.android.gms.location.LocationCallback;
-import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PolylineOptions;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
-
 
 import org.phonen.fitguide.Utils.PermissionManager;
 
@@ -77,31 +78,23 @@ public class RunningMapsActivity extends FragmentActivity implements OnMapReadyC
     //Permissions
     private static final int LOCATION_PERMISSION_ID = 0;
     private static final String pLocation = Manifest.permission.ACCESS_FINE_LOCATION;
-    private static final int BODY_PERMISSION_ID = 1;
-    private static final String pBody = Manifest.permission.BODY_SENSORS;
     // Sensors
-    private SensorManager sensorManagerBody;
     private SensorManager sensorManagerLight;
     private SensorManager sensorManagerPressure;
     private SensorManager sensorManagerTemperature;
     Sensor lightSensor;
     Sensor pressureSensor;
-    Sensor bodySensor;
     Sensor tempSensor;
     private double currentTemp = -999;
     private double currentPressure = -999;
     private static final double SEA_LEVEL_PRESSURE = 1013.25;
-    private static final double PRESSURE_EXPONENT = 1/5.257;
+    private static final double PRESSURE_EXPONENT = 1 / 5.257;
     private static final double TEMP_ADDITION_CONSTANT = 273.15;
     private static final double DIVITION_CONSTANT = 0.0065;
     private static final double ALTITUT_THRESHOLD_A = 1000;
     private static final double ALTITUT_THRESHOLD_B = 2000;
-    /*
-    SensorEventListener lightSEL;
-    SensorEventListener bodySEL;
-    SensorEventListener pressureSEL;*/
     //Layout
-    private DecimalFormat df = new DecimalFormat("##.###");
+    private final DecimalFormat df = new DecimalFormat("##.###");
     private TextView distanceIndicator;
     private TextView bpmIndicator;
     private ImageView pepitoRunning;
@@ -122,27 +115,25 @@ public class RunningMapsActivity extends FragmentActivity implements OnMapReadyC
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
+
         distanceIndicator = findViewById(R.id.labelKM);
         bpmIndicator = findViewById(R.id.labelBPM);
         chronometer = findViewById(R.id.chronometer);
         pepitoRunning = findViewById(R.id.pepitoRunning);
         currentDistance = 0;
+        routeCoords = new ArrayList<>();
+        this.getIntentData(getIntent().getBundleExtra("bundle"));
+
+        initLightSensor();
+        initPressureSensor();
+        initTempSensor();
+
         PermissionManager.requestPermission(
                 this,
                 pLocation,
                 "Se necesita el permiso para realizar seguimiento de su actividad física.",
                 LOCATION_PERMISSION_ID);
-        PermissionManager.requestPermission(
-                this,
-                pBody,
-                "Se necesita el permiso para realizar seguimiento de tu ritmo cardiaco durante la actividad física.",
-                BODY_PERMISSION_ID
-        );
-        locationClient = LocationServices.getFusedLocationProviderClient(this);
-        mLocationRequest = createLocationRequest();
         this.initView();
-        routeCoords = new ArrayList<>();
-        this.getIntentData(getIntent().getBundleExtra("bundle"));
     }
 
     private void getIntentData(Bundle bundle) {
@@ -180,16 +171,16 @@ public class RunningMapsActivity extends FragmentActivity implements OnMapReadyC
     }
 
     private double calcCalories() {
-        double kkalmin = this.EXERCISE_CALORIES_CONSTANT_MET*3.5*this.weight/200;
-        return kkalmin * this.totalTime/60;
+        double kkalmin = this.EXERCISE_CALORIES_CONSTANT_MET * 3.5 * this.weight / 200;
+        return kkalmin * this.totalTime / 60;
     }
 
     private String getOxigeno() {
-        if (this.currentAltitut < this.ALTITUT_THRESHOLD_A){
+        if (this.currentAltitut < ALTITUT_THRESHOLD_A) {
             return "ALTO";
-        }else if (this.currentAltitut < this.ALTITUT_THRESHOLD_B){
+        } else if (this.currentAltitut < ALTITUT_THRESHOLD_B) {
             return "MEDIO";
-        }else{
+        } else {
             return "BAJO";
         }
     }
@@ -206,15 +197,23 @@ public class RunningMapsActivity extends FragmentActivity implements OnMapReadyC
                 intent.putExtra("distance", currentDistance);
                 intent.putExtra("oxigeno", oxigeno);
                 intent.putExtra("calories", burnedCalories);
-                 intent.putExtra("BMP",bytes);
+                intent.putExtra("BMP", bytes);
+                intent.putExtra("width", bitmap.getWidth());
+                intent.putExtra("height", bitmap.getHeight());
                 startActivity(intent);
             }
         };
-        this.moveCameraToMarkers(initialLocation, prevLocation);
-        mMap.snapshot(callBack);
+        if (mMap != null){
+            this.moveCameraToMarkers(initialLocation, prevLocation);
+            mMap.snapshot(callBack);
+        }else {
+            Intent intent = new Intent(getApplicationContext(), FinishActivity.class);
+            startActivity(intent);
+        }
     }
 
     private void moveCameraToMarkers(LatLng a, LatLng b) {
+
         LatLngBounds.Builder builder = new LatLngBounds.Builder();
         builder.include(a);
         builder.include(b);
@@ -227,36 +226,34 @@ public class RunningMapsActivity extends FragmentActivity implements OnMapReadyC
         }
     }
 
-    private void initBodySensor() {
-        sensorManagerBody = (SensorManager) getSystemService(SENSOR_SERVICE);
-        bodySensor = sensorManagerBody.getDefaultSensor(Sensor.TYPE_HEART_RATE);
-    }
-
     private void initLightSensor() {
         sensorManagerLight = (SensorManager) getSystemService(SENSOR_SERVICE);
         lightSensor = sensorManagerLight.getDefaultSensor(Sensor.TYPE_LIGHT);
     }
+
     private void initPressureSensor() {
         sensorManagerPressure = (SensorManager) getSystemService(SENSOR_SERVICE);
         pressureSensor = sensorManagerPressure.getDefaultSensor(Sensor.TYPE_PRESSURE);
     }
+
     private void initTempSensor() {
         sensorManagerTemperature = (SensorManager) getSystemService(SENSOR_SERVICE);
         tempSensor = sensorManagerTemperature.getDefaultSensor(Sensor.TYPE_AMBIENT_TEMPERATURE);
     }
-    private void updateAltituteAlert(){
-        if (this.currentPressure != -999 && this.currentPressure != -999 ){
+
+    private void updateAltituteAlert() {
+        if (this.currentPressure != -999 && this.currentPressure != -999) {
             //Hyosometric formula
             double altitut = (
-                    Math.pow((this.SEA_LEVEL_PRESSURE/this.currentPressure),this.PRESSURE_EXPONENT) - 1)
-                    *(this.currentTemp+this.TEMP_ADDITION_CONSTANT)/this.DIVITION_CONSTANT;
-            if (altitut < this.ALTITUT_THRESHOLD_A){
+                    Math.pow((SEA_LEVEL_PRESSURE / this.currentPressure), PRESSURE_EXPONENT) - 1)
+                    * (this.currentTemp + TEMP_ADDITION_CONSTANT) / DIVITION_CONSTANT;
+            if (altitut < ALTITUT_THRESHOLD_A) {
                 this.bpmIndicator.setText("ALTA");
                 this.bpmIndicator.setTextColor(getColor(R.color.main_green));
-            }else if (altitut < this.ALTITUT_THRESHOLD_B){
+            } else if (altitut < ALTITUT_THRESHOLD_B) {
                 this.bpmIndicator.setText("MEDIO");
                 this.bpmIndicator.setTextColor(getColor(R.color.mid_alert));
-            }else{
+            } else {
                 this.bpmIndicator.setText("BAJA");
                 this.bpmIndicator.setTextColor(getColor(R.color.low_alert));
             }
@@ -276,10 +273,10 @@ public class RunningMapsActivity extends FragmentActivity implements OnMapReadyC
             }
         } else if (event.sensor.getType() == Sensor.TYPE_HEART_RATE) {
             Log.i("DEBUG: ", "NONITOOOOOOO");
-        } else if (event.sensor.getType() == Sensor.TYPE_PRESSURE){
+        } else if (event.sensor.getType() == Sensor.TYPE_PRESSURE) {
             this.currentPressure = event.values[0];
             updateAltituteAlert();
-        } else if (event.sensor.getType() == Sensor.TYPE_AMBIENT_TEMPERATURE){
+        } else if (event.sensor.getType() == Sensor.TYPE_AMBIENT_TEMPERATURE) {
             this.currentTemp = event.values[0];
             updateAltituteAlert();
         }
@@ -299,11 +296,8 @@ public class RunningMapsActivity extends FragmentActivity implements OnMapReadyC
 
     private void initView() {
         if (PermissionManager.checkPermission(this, pLocation)) {
-            initLightSensor();
-            initPressureSensor();
-            initTempSensor();
-            /*if (PermissionManager.checkPermission(this, pBody))
-                initBodySensor();*/
+            locationClient = LocationServices.getFusedLocationProviderClient(this);
+            mLocationRequest = createLocationRequest();
             checkSettingsLocation();
             mLocationCallback = new LocationCallback() {
                 @Override
@@ -329,7 +323,6 @@ public class RunningMapsActivity extends FragmentActivity implements OnMapReadyC
     }
 
 
-
     private void startChronometer() {
         this.chronometer.setBase(SystemClock.elapsedRealtime());
         this.chronometer.start();
@@ -343,14 +336,11 @@ public class RunningMapsActivity extends FragmentActivity implements OnMapReadyC
 
     private void updateRoute(LatLng prLocation, LatLng newLocation) {
         if (validDistance(prLocation, newLocation)) {
-            //Log.i("MAPS DEBUG: ", "Valid distance: " + newLocation);
             updateDistanceIndicator(currentDistance);
             mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(newLocation, 18));
             routeCoords.add(newLocation);
             drawLine(prLocation, newLocation);
             this.prevLocation = new LatLng(newLocation.latitude, newLocation.longitude);
-        } else {
-            //Log.i("MAPS DEBUG: ", "Not valid distance: " + newLocation);
         }
     }
 
@@ -382,11 +372,7 @@ public class RunningMapsActivity extends FragmentActivity implements OnMapReadyC
         //Log.i("MAPS DEBUG: ", "Distance: " + distance);
         currentDistance += distance;
         // Log.i("MAPS DEBUG: ", "Total distance: " + currentDistance);
-        if (distance > VALID_DISTANCE_THRESHOLD) {
-            return true;
-        } else {
-            return false;
-        }
+        return distance > VALID_DISTANCE_THRESHOLD;
     }
 
     private void updateDistanceIndicator(double currentDistance) {
@@ -395,13 +381,12 @@ public class RunningMapsActivity extends FragmentActivity implements OnMapReadyC
     }
 
     private void startLocationUpdates() {
-        if (mLocationCallback != null && mLocationRequest != null && PermissionManager.checkPermission(this, pLocation)) {
+        if (mLocationCallback != null && mLocationRequest != null && PermissionManager.checkPermission(this, pLocation))
             locationClient.requestLocationUpdates(mLocationRequest, mLocationCallback, null);
-        }
     }
 
     private void stopLocationUpdates() {
-        if (mLocationCallback != null && mLocationRequest != null)
+        if (mLocationCallback != null && mLocationRequest != null && PermissionManager.checkPermission(this, pLocation))
             locationClient.removeLocationUpdates(mLocationCallback);
     }
 
@@ -448,35 +433,30 @@ public class RunningMapsActivity extends FragmentActivity implements OnMapReadyC
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         if (requestCode == LOCATION_PERMISSION_ID) {
             this.initView();
-        } else if (requestCode == BODY_PERMISSION_ID) {
-            Log.i("PERMISSIONS DEBUG ", "Permission granted");
-            this.initBodySensor();
         }
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-    if(lightSensor!= null)
-    {
-        sensorManagerLight.registerListener(this, lightSensor, SensorManager.SENSOR_DELAY_NORMAL);
-        sensorManagerPressure.registerListener(this, pressureSensor, SensorManager.SENSOR_DELAY_NORMAL);
-        sensorManagerTemperature.registerListener(this, tempSensor, SensorManager.SENSOR_DELAY_NORMAL);
-        /*if (PermissionManager.checkPermission(this, pBody))
-            sensorManagerBody.registerListener(this, bodySensor, SensorManager.SENSOR_DELAY_FASTEST);*/
+        if (lightSensor != null && sensorManagerLight != null)
+            sensorManagerLight.registerListener(this, lightSensor, SensorManager.SENSOR_DELAY_NORMAL);
+        if (pressureSensor != null && sensorManagerPressure != null)
+            sensorManagerPressure.registerListener(this, pressureSensor, SensorManager.SENSOR_DELAY_NORMAL);
+        if (tempSensor != null && sensorManagerTemperature != null)
+            sensorManagerTemperature.registerListener(this, tempSensor, SensorManager.SENSOR_DELAY_NORMAL);
         startLocationUpdates();
-    }
-
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        sensorManagerLight.unregisterListener(this);
-        sensorManagerPressure.unregisterListener(this);
-        sensorManagerTemperature.unregisterListener(this);
-        /*if (PermissionManager.checkPermission(this, pBody))
-            sensorManagerBody.unregisterListener(bodySEL);*/
+        if (lightSensor != null && sensorManagerLight != null)
+            sensorManagerLight.unregisterListener(this);
+        if (pressureSensor != null && sensorManagerPressure != null)
+            sensorManagerPressure.unregisterListener(this);
+        if (tempSensor != null && sensorManagerTemperature != null)
+            sensorManagerTemperature.unregisterListener(this);
         stopLocationUpdates();
     }
 

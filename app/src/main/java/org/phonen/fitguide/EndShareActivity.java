@@ -9,9 +9,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
-
 import android.graphics.BitmapFactory;
-import android.graphics.drawable.BitmapDrawable;
 import android.media.MediaScannerConnection;
 import android.net.Uri;
 import android.os.Bundle;
@@ -31,6 +29,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+
+import org.phonen.fitguide.Utils.PermissionManager;
 
 public class EndShareActivity extends AppCompatActivity {
 
@@ -65,27 +65,42 @@ public class EndShareActivity extends AppCompatActivity {
         buttonFinishShare = (Button) findViewById(R.id.buttonFinishShare);
 
     }
+
     public void camera(View view) {
-        request_permission(this, CAMERA_NAME, "Se necesita la camara", CAMERA_PERMISSION_ID);
-        if(ContextCompat.checkSelfPermission(this, CAMERA_NAME) == PackageManager.PERMISSION_GRANTED) {
+        PermissionManager.requestPermission(
+                this,
+                CAMERA_NAME,
+                "Se necesita la cámara para capturar la foto",
+                CAMERA_PERMISSION_ID
+        );
+        if (PermissionManager.checkPermission(this, CAMERA_NAME)) {
             tookPhoto = true;
             take_picture();
         }
     }
 
     public void uploadPicture(View view) {
-        request_permission(this, IMAGE_PICKER_NAME, "Se neceista acceder al album de fotos", IMAGE_PICKER_PERMISSION_ID);
-        if(ContextCompat.checkSelfPermission(this, IMAGE_PICKER_NAME) == PackageManager.PERMISSION_GRANTED){
+        PermissionManager.requestPermission(
+                this,
+                IMAGE_PICKER_NAME,
+                "Se necesita acceder al album de fotos",
+                IMAGE_PICKER_PERMISSION_ID
+        );
+        if (PermissionManager.checkPermission(this, IMAGE_PICKER_NAME)) {
             tookPhoto = false;
             pick_image();
         }
     }
 
     public void share(View view) {
-        request_permission(this, SAVE_PHOTO_NAME, "Se necesita acceder al album de fotos", SAVE_PHOTO_ID);
-        if(ContextCompat.checkSelfPermission(this, SAVE_PHOTO_NAME) == PackageManager.PERMISSION_GRANTED) {
-
-            if(tookPhoto){
+        PermissionManager.requestPermission(
+                this,
+                SAVE_PHOTO_NAME,
+                "Se necesita acceder al album de fotos",
+                SAVE_PHOTO_ID
+        );
+        if (PermissionManager.checkPermission(this, SAVE_PHOTO_NAME)) {
+            if (tookPhoto) {
                 saveToGallery();
             }
             startActivity(new Intent(getApplicationContext(), FeedActivity.class));
@@ -93,18 +108,16 @@ public class EndShareActivity extends AppCompatActivity {
     }
 
     public void endSocialShare(View view) {
-        startActivity(new Intent(getApplicationContext(),FeedActivity.class));
+        startActivity(new Intent(getApplicationContext(), FeedActivity.class));
     }
 
-    private void take_picture(){
+    private void take_picture() {
         Intent take_picture_intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        if(take_picture_intent.resolveActivity(getPackageManager()) != null){
-            startActivityForResult(take_picture_intent, CAMERA_PERMISSION_ID);
-        }
+        startActivityForResult(take_picture_intent, CAMERA_PERMISSION_ID);
     }
 
 
-    private void pick_image(){
+    private void pick_image() {
         Intent pick_imag_intent = new Intent(Intent.ACTION_PICK);
         pick_imag_intent.setType("image/*");
         startActivityForResult(pick_imag_intent, IMAGE_PICKER_PERMISSION_ID);
@@ -123,11 +136,11 @@ public class EndShareActivity extends AppCompatActivity {
 
         //comprueba si ya existe el folder, si no, lo crea
         File dir = new File(path);
-        if(!dir.exists()) {
+        if (!dir.exists()) {
             dir.mkdirs();
         }
 
-        File filename = new File(dir, name + current_date + ".png") ;
+        File filename = new File(dir, name + current_date + ".png");
 
         try {
             FileOutputStream out = new FileOutputStream(filename);
@@ -136,20 +149,20 @@ public class EndShareActivity extends AppCompatActivity {
             out.close();
             isImageCreated(filename);
             savedSuccessfully();
-        }catch (FileNotFoundException e){
+        } catch (FileNotFoundException e) {
             unableToSave();
-        } catch (IOException e){
+        } catch (IOException e) {
             unableToSave();
         }
     }
 
-    private String getCurrentTime(){
+    private String getCurrentTime() {
         Calendar c = Calendar.getInstance();
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd-HH-mm-ss");
         return dateFormat.format(c.getTime());
     }
 
-    private void isImageCreated(File dir){
+    private void isImageCreated(File dir) {
         MediaScannerConnection.scanFile(this,
                 new String[]{dir.toString()}, null,
                 new MediaScannerConnection.OnScanCompletedListener() {
@@ -159,65 +172,57 @@ public class EndShareActivity extends AppCompatActivity {
                 });
     }
 
-    private void savedSuccessfully(){
+    private void savedSuccessfully() {
 
         Toast.makeText(this, "Imagen guardada con exito en la galeria", Toast.LENGTH_SHORT).show();
     }
 
-    private void unableToSave(){
-        Toast.makeText(this,"No se ha podido guardar la imagen!", Toast.LENGTH_SHORT).show();
+    private void unableToSave() {
+        Toast.makeText(this, "No se ha podido guardar la imagen!", Toast.LENGTH_SHORT).show();
     }
 
+    @Override
     protected void onActivityResult(int request_code, int result_code, Intent data) {
         super.onActivityResult(request_code, result_code, data);
         if (request_code == CAMERA_PERMISSION_ID && result_code == RESULT_OK) {
             Bundle extras = data.getExtras();
             Bitmap bm = (Bitmap) extras.get("data");
             final_imageView.setImageBitmap(bm);
-        }else if(request_code == IMAGE_PICKER_PERMISSION_ID && result_code == RESULT_OK){
-            try{
+        } else if (request_code == IMAGE_PICKER_PERMISSION_ID && result_code == RESULT_OK) {
+            try {
                 final Uri imageUri = data.getData();
                 final InputStream imageStream = getContentResolver().openInputStream(imageUri);
                 final Bitmap selectedImage = BitmapFactory.decodeStream(imageStream);
                 final_imageView.setImageBitmap(selectedImage);
-            }catch (FileNotFoundException e){
+            } catch (FileNotFoundException e) {
                 e.printStackTrace();
             }
         }
     }
 
-    private void request_permission(Activity context, String permiso, String justificacion, int idCode){
-        if(ContextCompat.checkSelfPermission(context, permiso) != PackageManager.PERMISSION_GRANTED){
-            if(ActivityCompat.shouldShowRequestPermissionRationale(context, permiso)){
-                Toast.makeText(context, justificacion, Toast.LENGTH_SHORT).show();
-            }
-            ActivityCompat.requestPermissions(context, new String[]{permiso}, idCode);
-        }
-    }
-
+    @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
 
         if (requestCode == CAMERA_PERMISSION_ID) {
-            if(ContextCompat.checkSelfPermission(this, CAMERA_NAME) == PackageManager.PERMISSION_GRANTED){
+            if (PermissionManager.checkPermission(this, CAMERA_NAME)) {
                 tookPhoto = true;
                 take_picture();
             }
         }
-        if(requestCode == IMAGE_PICKER_PERMISSION_ID){
-            if(ContextCompat.checkSelfPermission(this, IMAGE_PICKER_NAME) == PackageManager.PERMISSION_GRANTED){
+        if (requestCode == IMAGE_PICKER_PERMISSION_ID) {
+            if (PermissionManager.checkPermission(this, IMAGE_PICKER_NAME)) {
                 tookPhoto = false;
                 pick_image();
             }
         }
-       if (requestCode == SAVE_PHOTO_ID){
-           if(ContextCompat.checkSelfPermission(this, SAVE_PHOTO_NAME) == PackageManager.PERMISSION_GRANTED){
-               if(tookPhoto){
-                   saveToGallery();
-               }
-               startActivity(new Intent(getApplicationContext(), FeedActivity.class));
-           }
+        if (requestCode == SAVE_PHOTO_ID) {
+            if (PermissionManager.checkPermission(this, SAVE_PHOTO_NAME)) {
+                if (tookPhoto) {
+                    saveToGallery();
+                }
+                startActivity(new Intent(getApplicationContext(), FeedActivity.class));
+            }
         }
-
     }
 }

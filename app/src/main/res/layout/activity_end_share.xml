@@ -24,14 +24,15 @@
 
         <ImageView
             android:id="@+id/final_imageView"
-            android:layout_width="358dp"
-            android:layout_height="349dp"
-            android:layout_marginTop="40dp"
+            android:layout_width="350dp"
+            android:layout_height="350dp"
+            android:layout_marginTop="25dp"
+            android:contentDescription="TODO"
+            android:scaleType="fitCenter"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.49"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            android:contentDescription="TODO" />
+            app:layout_constraintTop_toTopOf="parent" />
 
         <ScrollView
             android:layout_width="match_parent"
