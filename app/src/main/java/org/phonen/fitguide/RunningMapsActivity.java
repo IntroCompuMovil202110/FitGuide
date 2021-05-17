@@ -1,3 +1,4 @@
+
 package org.phonen.fitguide;
 
 import android.Manifest;
@@ -107,6 +108,7 @@ public class RunningMapsActivity extends FragmentActivity implements OnMapReadyC
     private double burnedCalories;
     private double weight;
     private double currentAltitut;
+    private int exerType;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -137,8 +139,8 @@ public class RunningMapsActivity extends FragmentActivity implements OnMapReadyC
     }
 
     private void getIntentData(Bundle bundle) {
-
-        switch (bundle.getInt("Type", 0)) {
+        this.exerType = bundle.getInt("Type", 0);
+        switch (this.exerType) {
             case 0: //caminar
                 this.EXERCISE_CALORIES_CONSTANT_MET = 9.8;
                 break;
@@ -200,6 +202,9 @@ public class RunningMapsActivity extends FragmentActivity implements OnMapReadyC
                 intent.putExtra("BMP", bytes);
                 intent.putExtra("width", bitmap.getWidth());
                 intent.putExtra("height", bitmap.getHeight());
+                intent.putExtra("temperature", currentTemp);
+                intent.putExtra("pressure", currentPressure);
+                intent.putExtra("exerType", exerType );
                 startActivity(intent);
             }
         };
