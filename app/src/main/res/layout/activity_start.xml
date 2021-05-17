@@ -10,30 +10,13 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_margin="5dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         tools:layout_editor_absoluteX="4dp">
 
-        <com.google.android.material.bottomnavigation.BottomNavigationView
-            android:id="@+id/bottomNavigationView"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="#ffff"
-            app:itemIconTint="@drawable/selector"
-            app:itemTextColor="@drawable/selector"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="1.0"
-            app:menu="@menu/bottom_menu">
-
-        </com.google.android.material.bottomnavigation.BottomNavigationView>
-
         <LinearLayout
+            android:id="@+id/linearLayout3"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginVertical="30dp"
@@ -48,8 +31,8 @@
 
             <ImageView
                 android:id="@+id/imageViewLogo"
-                android:layout_width="146dp"
-                android:layout_height="117dp"
+                android:layout_width="150dp"
+                android:layout_height="120dp"
                 android:contentDescription="working to be icon"
                 app:srcCompat="@drawable/w2b" />
 
@@ -105,9 +88,9 @@
             android:id="@+id/linearLayout2"
             android:layout_width="346dp"
             android:layout_height="0dp"
-            android:layout_marginBottom="100dp"
+            android:layout_marginBottom="24dp"
             android:orientation="vertical"
-            app:layout_constraintBottom_toTopOf="@+id/bottomNavigationView"
+            app:layout_constraintBottom_toTopOf="@+id/buttonStart"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent">
 
@@ -136,7 +119,7 @@
                 android:layout_marginVertical="50dp"
                 android:text="BICICLETA"
                 app:strokeColor="@color/main_purple"
-                app:strokeWidth="2dp"/>
+                app:strokeWidth="2dp" />
 
             <Button
                 android:id="@+id/buttonRun"
@@ -145,7 +128,7 @@
                 android:layout_height="wrap_content"
                 android:text="CORRER"
                 app:strokeColor="@color/main_purple"
-                app:strokeWidth="2dp"/>
+                app:strokeWidth="2dp" />
         </LinearLayout>
 
         <Button
@@ -153,12 +136,29 @@
             android:layout_width="220dp"
             android:layout_height="56dp"
             android:layout_marginTop="24dp"
-            android:text="INICIAR"
             android:onClick="startActivity"
+            android:text="INICIAR"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.502"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/linearLayout2" />
+
+        <com.google.android.material.bottomnavigation.BottomNavigationView
+            android:id="@+id/bottomNavigationView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#ffff"
+            app:itemIconTint="@drawable/selector"
+            app:itemTextColor="@drawable/selector"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="1.0"
+            app:menu="@menu/bottom_menu">
+
+        </com.google.android.material.bottomnavigation.BottomNavigationView>
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>
