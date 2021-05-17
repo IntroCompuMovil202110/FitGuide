@@ -10,31 +10,27 @@
 
     <ImageView
         android:id="@+id/imageViewLogo"
-        android:layout_width="171dp"
-        android:layout_height="111dp"
-        android:layout_marginTop="48dp"
-        android:layout_marginBottom="6dp"
+        android:layout_width="150dp"
+        android:layout_height="150dp"
         android:contentDescription="@string/no_text_logo"
         app:layout_constraintBottom_toTopOf="@+id/titleViewRegister"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.551"
         app:srcCompat="@drawable/w2b" />
 
     <TextView
         android:id="@+id/titleViewRegister"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="188dp"
         android:fontFamily="@font/roboto_bold"
         android:text="REGISTRARSE"
         android:textColor="@color/white"
         android:textSize="36sp"
+        app:layout_constraintBottom_toTopOf="@+id/scrollView2"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/imageViewLogo" />
 
     <ScrollView
         android:id="@+id/scrollView2"
@@ -42,10 +38,8 @@
         android:layout_height="401dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.466"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.875">
+        app:layout_constraintTop_toBottomOf="@+id/titleViewRegister">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -70,9 +64,13 @@
                 android:ems="10"
                 android:fontFamily="@font/roboto"
                 android:hint="Pepito"
+                android:paddingStart="10dp"
+                android:paddingTop="18dp"
+                android:paddingEnd="10dp"
+                android:paddingBottom="18dp"
                 android:textColor="@color/main_purple"
                 android:textColorHighlight="#FFFFFF"
-                android:textColorHint="@color/purple_200" />
+                android:textColorHint="@color/soft_purple" />
 
             <TextView
                 android:id="@+id/textViewLastName"
@@ -92,8 +90,13 @@
                 android:ems="10"
                 android:fontFamily="@font/roboto"
                 android:hint="Perez"
+                android:paddingStart="10dp"
+                android:paddingTop="18dp"
+                android:paddingEnd="10dp"
+                android:paddingBottom="18dp"
                 android:textColor="@color/main_purple"
-                android:textColorHint="@color/purple_200" />
+                android:textColorHighlight="#FFFFFF"
+                android:textColorHint="@color/soft_purple" />
 
             <TextView
                 android:id="@+id/textViewEmail"
@@ -114,8 +117,13 @@
                 android:fontFamily="@font/roboto"
                 android:hint="pepito@w2b.com"
                 android:inputType="textEmailAddress"
+                android:paddingStart="10dp"
+                android:paddingTop="18dp"
+                android:paddingEnd="10dp"
+                android:paddingBottom="18dp"
                 android:textColor="@color/main_purple"
-                android:textColorHint="@color/purple_200" />
+                android:textColorHighlight="#FFFFFF"
+                android:textColorHint="@color/soft_purple" />
 
             <TextView
                 android:id="@+id/textViewUsername"
@@ -135,8 +143,13 @@
                 android:ems="10"
                 android:fontFamily="@font/roboto"
                 android:hint="pepitofit"
+                android:paddingStart="10dp"
+                android:paddingTop="18dp"
+                android:paddingEnd="10dp"
+                android:paddingBottom="18dp"
                 android:textColor="@color/main_purple"
-                android:textColorHint="@color/purple_200" />
+                android:textColorHighlight="#FFFFFF"
+                android:textColorHint="@color/soft_purple" />
 
             <TextView
                 android:id="@+id/textViewPhone"
@@ -157,8 +170,13 @@
                 android:fontFamily="@font/roboto"
                 android:hint="3011234567"
                 android:inputType="phone"
+                android:paddingStart="10dp"
+                android:paddingTop="18dp"
+                android:paddingEnd="10dp"
+                android:paddingBottom="18dp"
                 android:textColor="@color/main_purple"
-                android:textColorHint="@color/purple_200" />
+                android:textColorHighlight="#FFFFFF"
+                android:textColorHint="@color/soft_purple" />
 
             <TextView
                 android:id="@+id/textViewPassword"
@@ -179,8 +197,13 @@
                 android:fontFamily="@font/roboto"
                 android:hint="password"
                 android:inputType="textPassword"
+                android:paddingStart="10dp"
+                android:paddingTop="18dp"
+                android:paddingEnd="10dp"
+                android:paddingBottom="18dp"
                 android:textColor="@color/main_purple"
-                android:textColorHint="@color/purple_200" />
+                android:textColorHighlight="#FFFFFF"
+                android:textColorHint="@color/soft_purple" />
 
             <TextView
                 android:id="@+id/textViewBirthdate"
@@ -198,11 +221,17 @@
                 android:background="@drawable/border_style_purple"
                 android:drawableRight="@android:drawable/ic_menu_my_calendar"
                 android:ems="10"
+                android:focusable="false"
                 android:fontFamily="@font/roboto"
                 android:hint="DD/MM/AAAA"
                 android:inputType="date"
+                android:paddingStart="10dp"
+                android:paddingTop="18dp"
+                android:paddingEnd="10dp"
+                android:paddingBottom="18dp"
                 android:textColor="@color/main_purple"
-                android:textColorHint="@color/purple_200" />
+                android:textColorHighlight="#FFFFFF"
+                android:textColorHint="@color/soft_purple" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -227,16 +256,22 @@
 
                     <EditText
                         android:id="@+id/editTexHeight"
-                        android:layout_width="139dp"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:layout_marginRight="15dp"
                         android:layout_weight="1"
                         android:background="@drawable/border_style_purple"
                         android:ems="10"
                         android:fontFamily="@font/roboto"
                         android:hint="1.80m"
                         android:inputType="numberDecimal"
+                        android:paddingStart="10dp"
+                        android:paddingTop="18dp"
+                        android:paddingEnd="10dp"
+                        android:paddingBottom="18dp"
                         android:textColor="@color/main_purple"
-                        android:textColorHint="@color/purple_200" />
+                        android:textColorHighlight="#FFFFFF"
+                        android:textColorHint="@color/soft_purple" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -249,6 +284,7 @@
                         android:id="@+id/textViewWeight"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:layout_marginLeft="10dp"
                         android:layout_weight="1"
                         android:fontFamily="@font/roboto_bold"
                         android:text="PESO"
@@ -256,16 +292,22 @@
 
                     <EditText
                         android:id="@+id/editTextWeight"
-                        android:layout_width="139dp"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:layout_marginLeft="10dp"
                         android:layout_weight="1"
                         android:background="@drawable/border_style_purple"
                         android:ems="10"
                         android:fontFamily="@font/roboto"
                         android:hint="60 kg"
                         android:inputType="numberDecimal"
+                        android:paddingStart="10dp"
+                        android:paddingTop="18dp"
+                        android:paddingEnd="10dp"
+                        android:paddingBottom="18dp"
                         android:textColor="@color/main_purple"
-                        android:textColorHint="@color/purple_200" />
+                        android:textColorHighlight="#FFFFFF"
+                        android:textColorHint="@color/soft_purple" />
                 </LinearLayout>
 
             </LinearLayout>
