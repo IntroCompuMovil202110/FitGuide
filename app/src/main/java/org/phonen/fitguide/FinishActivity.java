@@ -2,13 +2,9 @@ package org.phonen.fitguide;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
 
 import android.Manifest;
-import android.app.Activity;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.media.MediaScannerConnection;
@@ -21,6 +17,11 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -30,18 +31,26 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
 import org.phonen.fitguide.Utils.PermissionManager;
+import org.phonen.fitguide.model.Session;
+import org.phonen.fitguide.utils.Constants;
 
 public class FinishActivity extends AppCompatActivity {
 
     //permisos
     private static final int SAVE_PHOTO_ID = 3;
     private static final String SAVE_PHOTO_NAME = Manifest.permission.WRITE_EXTERNAL_STORAGE;
-
+    //View
     TextView time;
     TextView distance;
     TextView calories;
     TextView oxygen;
     ImageView imagV;
+    //Data
+    private Session session;
+    //Google
+    private FirebaseAuth mAuth;
+    private FirebaseDatabase mDB;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,36 +61,56 @@ public class FinishActivity extends AppCompatActivity {
         calories = findViewById(R.id.labelTotalCaloriesInfo);
         oxygen = findViewById(R.id.labelAveragePaceInfo);
         imagV = findViewById(R.id.imageViewFinalMap);
+        this.mAuth = FirebaseAuth.getInstance();
+        this.mDB = FirebaseDatabase.getInstance();
+        //Recover data from intent
         Intent intent = getIntent();
-
         DecimalFormat decimalFormat = new DecimalFormat("#.00");
-
         byte[] bytes = intent.getByteArrayExtra("BMP");
         Log.i("BYTES", bytes.toString());
         Bitmap bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
-        Bitmap resizeBitmap = Bitmap.createScaledBitmap(bitmap, getIntent().getIntExtra("width", 1080), getIntent().getIntExtra("height",2160), true);
-
+        Bitmap resizeBitmap = Bitmap.createScaledBitmap(
+                bitmap,
+                getIntent().getIntExtra("width", 1080),
+                getIntent().getIntExtra("height",2160),
+                true);
         double time = intent.getDoubleExtra("time", 1);
         String timeS = calcularTiempo(time);
         double distance = intent.getDoubleExtra("distance", 1);
-
         String oxygen = intent.getStringExtra("oxigeno");
         double calories = intent.getDoubleExtra("calories", 1);
-
-        // setters
+        int type = intent.getIntExtra("exerType", 0);
+        double temp = intent.getDoubleExtra("temperature", 30);
+        double pressure = intent.getDoubleExtra("pressure", 1000);
+        // Set View
         this.time.setText(timeS);
         this.distance.setText(decimalFormat.format(distance) + " M");
         this.oxygen.setText(oxygen);
         this.calories.setText(decimalFormat.format(calories) + " KCAL");
         imagV.setImageBitmap(resizeBitmap);
+        //Save data
+        this.session = new Session();
+        this.session.setType(type);
+        this.session.setCalories(calories);
+        this.session.setDistanceTraveled(distance);
+        this.session.setTime(time);
+        this.session.setTemperature(temp);
+        this.session.setPressure(pressure);
+        this.session.setOxygenLevel(oxygen);
+        this.session.setScore((int)calories);
+
+
     }
 
     public void shareFeed(View view) {
         startActivity(new Intent(getApplicationContext(), FeedActivity.class));
+        //save to firebase and storage
+        //Create Post
     }
 
     public void sharePhoto(View view) {
         startActivity(new Intent(getApplicationContext(), EndShareActivity.class));
+        //Queeeee
     }
 
     public void saveMap(View view) {
@@ -96,7 +125,16 @@ public class FinishActivity extends AppCompatActivity {
     }
 
     public void finishActivity(View view) {
-        startActivity(new Intent(getApplicationContext(), ProfileActivity.class));
+        DatabaseReference myRef = this.mDB.getReference(
+    Constants.SESSIONS_PATH +
+          this.mAuth.getCurrentUser().getUid());
+        myRef.push().setValue(session).addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void aVoid) {
+                startActivity(new Intent(getApplicationContext(), ProfileActivity.class));
+            }
+        });
+
     }
 
     private void saveToGallery() {
