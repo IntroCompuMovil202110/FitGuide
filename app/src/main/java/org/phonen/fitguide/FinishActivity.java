@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.Manifest;
+import android.app.PendingIntent;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -16,9 +17,12 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.storage.FirebaseStorage;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -26,10 +30,12 @@ import java.io.IOException;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 
 import org.phonen.fitguide.utils.PermissionManager;
 import org.phonen.fitguide.model.Session;
 import org.phonen.fitguide.utils.Constants;
+import org.phonen.fitguide.utils.PostUploader;
 
 public class FinishActivity extends AppCompatActivity {
 
@@ -44,6 +50,7 @@ public class FinishActivity extends AppCompatActivity {
     ImageView imagV;
     //Data
     private Session session;
+    private byte[] imgData;
     //Google
     private FirebaseAuth mAuth;
     private FirebaseDatabase mDB;
@@ -63,9 +70,8 @@ public class FinishActivity extends AppCompatActivity {
         //Recover data from intent
         Intent intent = getIntent();
         DecimalFormat decimalFormat = new DecimalFormat("#.00");
-        byte[] bytes = intent.getByteArrayExtra("BMP");
-        Log.i("BYTES", bytes.toString());
-        Bitmap bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+        this.imgData = intent.getByteArrayExtra("BMP");
+        Bitmap bitmap = BitmapFactory.decodeByteArray(this.imgData, 0, this.imgData.length);
         Bitmap resizeBitmap = Bitmap.createScaledBitmap(
                 bitmap,
                 getIntent().getIntExtra("width", 1080),
@@ -95,14 +101,38 @@ public class FinishActivity extends AppCompatActivity {
         this.session.setPressure(pressure);
         this.session.setOxygenLevel(oxygen);
         this.session.setScore((int)calories);
+        this.session.setDate(new Date());
 
 
     }
 
     public void shareFeed(View view) {
+        DatabaseReference myRef = this.mDB.getReference(
+                Constants.SESSIONS_PATH +
+                        this.mAuth.getCurrentUser().getUid());
+        myRef = myRef.push();
+        String sessionID = myRef.getKey();
+        myRef.setValue(session).addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void aVoid) {
+                Intent intent = new Intent(getApplicationContext(), FeedActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                PostUploader.uploadPost(PostUploader.createPostFromSession(
+                        session,
+                        mAuth.getCurrentUser().getUid(),
+                        Constants.POSTS_IMAGES +
+                                mAuth.getCurrentUser().getUid() +
+                                "/" +
+                                sessionID +
+                                ".jpeg"),
+                    imgData,
+                    mDB,
+                    FirebaseStorage.getInstance(),
+                    intent,
+                    getApplicationContext());
+            }
+        });
         startActivity(new Intent(getApplicationContext(), FeedActivity.class));
-        //save to firebase and storage
-        //Create Post
     }
 
     public void sharePhoto(View view) {
