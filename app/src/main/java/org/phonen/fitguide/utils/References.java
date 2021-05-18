@@ -1,4 +1,4 @@
-package org.phonen.fitguide.Utils;
+package org.phonen.fitguide.utils;
 
 public class References
 {

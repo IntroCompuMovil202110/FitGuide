@@ -8,7 +8,6 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.media.MediaScannerConnection;
-import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.util.Log;
@@ -17,20 +16,18 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
-import org.phonen.fitguide.Utils.PermissionManager;
+import org.phonen.fitguide.utils.PermissionManager;
 import org.phonen.fitguide.model.Session;
 import org.phonen.fitguide.utils.Constants;
 
@@ -128,12 +125,7 @@ public class FinishActivity extends AppCompatActivity {
         DatabaseReference myRef = this.mDB.getReference(
     Constants.SESSIONS_PATH +
           this.mAuth.getCurrentUser().getUid());
-        myRef.push().setValue(session).addOnSuccessListener(new OnSuccessListener<Void>() {
-            @Override
-            public void onSuccess(Void aVoid) {
-                startActivity(new Intent(getApplicationContext(), ProfileActivity.class));
-            }
-        });
+        myRef.push().setValue(session).addOnSuccessListener(aVoid -> startActivity(new Intent(getApplicationContext(), ProfileActivity.class)));
 
     }
 
@@ -162,8 +154,6 @@ public class FinishActivity extends AppCompatActivity {
             out.close();
             isImageCreated(filename);
             savedSuccessfully();
-        } catch (FileNotFoundException e) {
-            unableToSave();
         } catch (IOException e) {
             unableToSave();
         }
@@ -189,10 +179,7 @@ public class FinishActivity extends AppCompatActivity {
     private void isImageCreated(File dir) {
         MediaScannerConnection.scanFile(this,
                 new String[]{dir.toString()}, null,
-                new MediaScannerConnection.OnScanCompletedListener() {
-                    @Override
-                    public void onScanCompleted(String path, Uri uri) {
-                    }
+                (path, uri) -> {
                 });
     }
 
