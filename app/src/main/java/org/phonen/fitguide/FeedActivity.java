@@ -62,7 +62,7 @@ public class FeedActivity extends AppCompatActivity {
                    Log.i("Arrived", a.toString());
                    if(a.getValue() != null){
                        for(DataSnapshot ds: a.getChildren()){
-                           if(postIndexed.get(ds.getKey() == null)){
+                           if(postIndexed.get(ds.getKey()) == null){
                                postIndexed.put(ds.getKey(), true);
                                postsList.add(ds.getValue(Post.class));
                            }

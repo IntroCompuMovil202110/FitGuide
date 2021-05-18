@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
 import android.media.MediaScannerConnection;
 import android.net.Uri;
 import android.os.Bundle;
@@ -17,6 +18,10 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.storage.FirebaseStorage;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -25,28 +30,33 @@ import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
+import org.phonen.fitguide.model.Session;
+import org.phonen.fitguide.utils.Constants;
+import org.phonen.fitguide.utils.ImageGenerator;
 import org.phonen.fitguide.utils.PermissionManager;
+import org.phonen.fitguide.utils.PostUploader;
 
 public class EndShareActivity extends AppCompatActivity {
 
 
-    //para evaluar si tomo la foto desde la aplicacion
-    private boolean tookPhoto = false;
-
-    //permisos
+    //Data
+    private Session session;
+    private String sessionID;
+    //Permissions
     private static final int CAMERA_PERMISSION_ID = 1;
     private static final int IMAGE_PICKER_PERMISSION_ID = 2;
     private static final int SAVE_PHOTO_ID = 3;
-
     private static final String CAMERA_NAME = Manifest.permission.CAMERA;
     private static final String SAVE_PHOTO_NAME = Manifest.permission.WRITE_EXTERNAL_STORAGE;
     private static final String IMAGE_PICKER_NAME = Manifest.permission.READ_EXTERNAL_STORAGE;
-
+    //View
     ImageView final_imageView;
     Button buttonOpenCamera;
     Button buttonGallery;
     Button buttonShare;
     Button buttonFinishShare;
+    //Google
+    private FirebaseAuth mAuth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,7 +68,10 @@ public class EndShareActivity extends AppCompatActivity {
         buttonGallery = (Button) findViewById(R.id.buttonGallery);
         buttonShare = (Button) findViewById(R.id.buttonShare); //save image
         buttonFinishShare = (Button) findViewById(R.id.buttonFinishShare);
-
+        mAuth = FirebaseAuth.getInstance();
+        Bundle bundle = getIntent().getBundleExtra("sessionBundle");
+        this.session = (Session)bundle.getSerializable("sessionObject");
+        this.sessionID = bundle.getString("sessionID");
     }
 
     public void camera(View view) {
@@ -69,7 +82,6 @@ public class EndShareActivity extends AppCompatActivity {
                 CAMERA_PERMISSION_ID
         );
         if (PermissionManager.checkPermission(this, CAMERA_NAME)) {
-            tookPhoto = true;
             take_picture();
         }
     }
@@ -82,23 +94,40 @@ public class EndShareActivity extends AppCompatActivity {
                 IMAGE_PICKER_PERMISSION_ID
         );
         if (PermissionManager.checkPermission(this, IMAGE_PICKER_NAME)) {
-            tookPhoto = false;
             pick_image();
         }
     }
 
     public void share(View view) {
-        PermissionManager.requestPermission(
-                this,
-                SAVE_PHOTO_NAME,
-                "Se necesita acceder al album de fotos",
-                SAVE_PHOTO_ID
-        );
-        if (PermissionManager.checkPermission(this, SAVE_PHOTO_NAME)) {
-            if (tookPhoto) {
-                saveToGallery();
-            }
-            startActivity(new Intent(getApplicationContext(), FeedActivity.class));
+        Intent intent = new Intent(getApplicationContext(), FeedActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        if (this.final_imageView.getDrawable() != null){
+            String imagePath = Constants.POSTS_IMAGES +
+                    mAuth.getCurrentUser().getUid() +
+                    "/" +
+                    sessionID +
+                    ".jpeg";
+            PostUploader.uploadPost(
+                    PostUploader.createPostFromSession(
+                            session, mAuth.getCurrentUser().getUid(),imagePath
+                    ),
+                    ImageGenerator.bytesFromBitmap(((BitmapDrawable)this.final_imageView.getDrawable()).getBitmap()),
+                    FirebaseDatabase.getInstance(),
+                    FirebaseStorage.getInstance(),
+                    intent,
+                    getApplicationContext()
+            );
+        }else {
+            PostUploader.uploadPost(
+                    PostUploader.createPostFromSession(
+                            session, mAuth.getCurrentUser().getUid(), ""
+                    ),
+                    null,
+                    FirebaseDatabase.getInstance(),
+                    FirebaseStorage.getInstance(),
+                    intent,
+                    getApplicationContext()
+            );
         }
     }
 
@@ -111,64 +140,10 @@ public class EndShareActivity extends AppCompatActivity {
         startActivityForResult(take_picture_intent, CAMERA_PERMISSION_ID);
     }
 
-
     private void pick_image() {
         Intent pick_imag_intent = new Intent(Intent.ACTION_PICK);
         pick_imag_intent.setType("image/*");
         startActivityForResult(pick_imag_intent, IMAGE_PICKER_PERMISSION_ID);
-    }
-
-
-    private void saveToGallery() {
-        //obtener la imagen
-        final_imageView.buildDrawingCache();
-        Bitmap bm = final_imageView.getDrawingCache();
-
-        //crea un album en el carrete
-        String name = "fitguide";
-        String current_date = getCurrentTime();
-        String path = Environment.getExternalStorageDirectory() + File.separator + Environment.DIRECTORY_DCIM + File.separator + "FitGuide/";
-
-        //comprueba si ya existe el folder, si no, lo crea
-        File dir = new File(path);
-        if (!dir.exists()) {
-            dir.mkdirs();
-        }
-
-        File filename = new File(dir, name + current_date + ".png");
-
-        try {
-            FileOutputStream out = new FileOutputStream(filename);
-            bm.compress(Bitmap.CompressFormat.PNG, 100, out);
-            out.flush();
-            out.close();
-            isImageCreated(filename);
-            savedSuccessfully();
-        } catch (IOException e) {
-            unableToSave();
-        }
-    }
-
-    private String getCurrentTime() {
-        Calendar c = Calendar.getInstance();
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd-HH-mm-ss");
-        return dateFormat.format(c.getTime());
-    }
-
-    private void isImageCreated(File dir) {
-        MediaScannerConnection.scanFile(this,
-                new String[]{dir.toString()}, null,
-                (path, uri) -> {
-                });
-    }
-
-    private void savedSuccessfully() {
-
-        Toast.makeText(this, "Imagen guardada con exito en la galeria", Toast.LENGTH_SHORT).show();
-    }
-
-    private void unableToSave() {
-        Toast.makeText(this, "No se ha podido guardar la imagen!", Toast.LENGTH_SHORT).show();
     }
 
     @Override
@@ -196,22 +171,12 @@ public class EndShareActivity extends AppCompatActivity {
 
         if (requestCode == CAMERA_PERMISSION_ID) {
             if (PermissionManager.checkPermission(this, CAMERA_NAME)) {
-                tookPhoto = true;
                 take_picture();
             }
         }
         if (requestCode == IMAGE_PICKER_PERMISSION_ID) {
             if (PermissionManager.checkPermission(this, IMAGE_PICKER_NAME)) {
-                tookPhoto = false;
                 pick_image();
-            }
-        }
-        if (requestCode == SAVE_PHOTO_ID) {
-            if (PermissionManager.checkPermission(this, SAVE_PHOTO_NAME)) {
-                if (tookPhoto) {
-                    saveToGallery();
-                }
-                startActivity(new Intent(getApplicationContext(), FeedActivity.class));
             }
         }
     }

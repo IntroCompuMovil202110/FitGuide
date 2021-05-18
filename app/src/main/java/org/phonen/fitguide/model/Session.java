@@ -1,8 +1,9 @@
 package org.phonen.fitguide.model;
 
+import java.io.Serializable;
 import java.util.Date;
 
-public class Session {
+public class Session implements Serializable {
     private int type;
     private double calories;
     private double distanceTraveled;
