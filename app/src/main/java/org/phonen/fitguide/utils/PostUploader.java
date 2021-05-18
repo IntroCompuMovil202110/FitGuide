@@ -20,12 +20,16 @@ public class PostUploader {
             mDatabase.getReference(Constants.POSTS_PATH + post.getUserUID()).push().setValue(post).addOnSuccessListener(new OnSuccessListener<Void>() {
                 @Override
                 public void onSuccess(Void aVoid) {
-                    mStorage.getReference(post.getImagePath()).putBytes(imgData).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                        @Override
-                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                            context.startActivity(targetIntent);
-                        }
-                    });
+                    if (!post.getImagePath().equals("")){
+                        mStorage.getReference(post.getImagePath()).putBytes(imgData).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                            @Override
+                            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                                context.startActivity(targetIntent);
+                            }
+                        });
+                    }else{
+                        context.startActivity(targetIntent);
+                    }
                 }
             });
         }
@@ -35,7 +39,9 @@ public class PostUploader {
             mDatabase.getReference(Constants.POSTS_PATH + post.getUserUID()).push().setValue(post).addOnSuccessListener(new OnSuccessListener<Void>() {
                 @Override
                 public void onSuccess(Void aVoid) {
-                    mStorage.getReference(post.getImagePath()).putBytes(imgData);
+                    if(!post.getImagePath().equals("")){
+                        mStorage.getReference(post.getImagePath()).putBytes(imgData);
+                    }
                 }
             });
         }
@@ -79,7 +85,7 @@ public class PostUploader {
         return stringBuilder.toString();
     }
 
-    private static String getNaturalTime(double time) {
+    public static String getNaturalTime(double time) {
         Date date = new Date((long) time * 1000L);
         SimpleDateFormat df = new SimpleDateFormat("HH:mm:ss");
         return df.format(date);

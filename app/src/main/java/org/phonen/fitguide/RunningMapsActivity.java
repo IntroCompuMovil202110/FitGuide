@@ -50,6 +50,7 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PolylineOptions;
 import com.google.android.gms.tasks.Task;
 
+import org.phonen.fitguide.utils.ImageGenerator;
 import org.phonen.fitguide.utils.PermissionManager;
 
 import java.io.ByteArrayOutputStream;
@@ -185,9 +186,7 @@ public class RunningMapsActivity extends FragmentActivity implements OnMapReadyC
 
     public void sendIntent() {
         SnapshotReadyCallback callBack = bitmap -> {
-            ByteArrayOutputStream stream = new ByteArrayOutputStream();
-            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream);
-            byte[] bytes = stream.toByteArray();
+            byte[] bytes = ImageGenerator.bytesFromBitmap(bitmap);
             Intent intent = new Intent(getApplicationContext(), FinishActivity.class);
             intent.putExtra("time", totalTime);
             intent.putExtra("distance", currentDistance);
