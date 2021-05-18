@@ -39,8 +39,6 @@ import com.google.android.gms.location.SettingsClient;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.GoogleMap.SnapshotReadyCallback;
-import com.google.android.gms.maps.GoogleMapOptions;
-import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
@@ -50,11 +48,9 @@ import com.google.android.gms.maps.model.MapStyleOptions;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PolylineOptions;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 
-import org.phonen.fitguide.Utils.PermissionManager;
+import org.phonen.fitguide.utils.PermissionManager;
 
 import java.io.ByteArrayOutputStream;
 import java.text.DecimalFormat;
@@ -188,25 +184,22 @@ public class RunningMapsActivity extends FragmentActivity implements OnMapReadyC
     }
 
     public void sendIntent() {
-        SnapshotReadyCallback callBack = new SnapshotReadyCallback() {
-            @Override
-            public void onSnapshotReady(Bitmap bitmap) {
-                ByteArrayOutputStream stream = new ByteArrayOutputStream();
-                bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
-                byte[] bytes = stream.toByteArray();
-                Intent intent = new Intent(getApplicationContext(), FinishActivity.class);
-                intent.putExtra("time", totalTime);
-                intent.putExtra("distance", currentDistance);
-                intent.putExtra("oxigeno", oxigeno);
-                intent.putExtra("calories", burnedCalories);
-                intent.putExtra("BMP", bytes);
-                intent.putExtra("width", bitmap.getWidth());
-                intent.putExtra("height", bitmap.getHeight());
-                intent.putExtra("temperature", currentTemp);
-                intent.putExtra("pressure", currentPressure);
-                intent.putExtra("exerType", exerType );
-                startActivity(intent);
-            }
+        SnapshotReadyCallback callBack = bitmap -> {
+            ByteArrayOutputStream stream = new ByteArrayOutputStream();
+            bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
+            byte[] bytes = stream.toByteArray();
+            Intent intent = new Intent(getApplicationContext(), FinishActivity.class);
+            intent.putExtra("time", totalTime);
+            intent.putExtra("distance", currentDistance);
+            intent.putExtra("oxigeno", oxigeno);
+            intent.putExtra("calories", burnedCalories);
+            intent.putExtra("BMP", bytes);
+            intent.putExtra("width", bitmap.getWidth());
+            intent.putExtra("height", bitmap.getHeight());
+            intent.putExtra("temperature", currentTemp);
+            intent.putExtra("pressure", currentPressure);
+            intent.putExtra("exerType", exerType );
+            startActivity(intent);
         };
         if (mMap != null){
             this.moveCameraToMarkers(initialLocation, prevLocation);
@@ -399,30 +392,22 @@ public class RunningMapsActivity extends FragmentActivity implements OnMapReadyC
         LocationSettingsRequest.Builder builder = new LocationSettingsRequest.Builder().addAllLocationRequests(Collections.singleton(mLocationRequest));
         SettingsClient client = LocationServices.getSettingsClient(this);
         Task<LocationSettingsResponse> task = client.checkLocationSettings(builder.build());
-        task.addOnFailureListener(this, new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                int statusCode = ((ApiException) e).getStatusCode();
-                switch (statusCode) {
-                    case CommonStatusCodes.RESOLUTION_REQUIRED:
-                        try {
-                            ResolvableApiException resolvable = (ResolvableApiException) e;
-                            resolvable.startResolutionForResult(RunningMapsActivity.this,
-                                    SETTINGS_GPS);
-                        } catch (IntentSender.SendIntentException sendEx) {
-                        }
-                        break;
-                    case LocationSettingsStatusCodes.SETTINGS_CHANGE_UNAVAILABLE:
-                        break;
-                }
+        task.addOnFailureListener(this, e -> {
+            int statusCode = ((ApiException) e).getStatusCode();
+            switch (statusCode) {
+                case CommonStatusCodes.RESOLUTION_REQUIRED:
+                    try {
+                        ResolvableApiException resolvable = (ResolvableApiException) e;
+                        resolvable.startResolutionForResult(RunningMapsActivity.this,
+                                SETTINGS_GPS);
+                    } catch (IntentSender.SendIntentException sendEx) {
+                    }
+                    break;
+                case LocationSettingsStatusCodes.SETTINGS_CHANGE_UNAVAILABLE:
+                    break;
             }
         });
-        task.addOnSuccessListener(this, new OnSuccessListener<LocationSettingsResponse>() {
-            @Override
-            public void onSuccess(LocationSettingsResponse locationSettingsResponse) {
-                startLocationUpdates();
-            }
-        });
+        task.addOnSuccessListener(this, locationSettingsResponse -> startLocationUpdates());
 
     }
 

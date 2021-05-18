@@ -4,15 +4,10 @@ import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.DatePicker;
 import android.widget.EditText;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
@@ -27,7 +22,7 @@ import java.util.Locale;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import static org.phonen.fitguide.Utils.References.PATH_USERS;
+import static org.phonen.fitguide.utils.References.PATH_USERS;
 
 public class RegisterActivity extends AppCompatActivity {
 
@@ -51,14 +46,11 @@ public class RegisterActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
 
-        DatePickerDialog.OnDateSetListener dateDialog = new DatePickerDialog.OnDateSetListener() {
-            @Override
-            public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-                calendarInstance.set(Calendar.YEAR, year);
-                calendarInstance.set(Calendar.MONTH, month);
-                calendarInstance.set(Calendar.DAY_OF_MONTH, dayOfMonth);
-                updateLabel();
-            }
+        DatePickerDialog.OnDateSetListener dateDialog = (view, year, month, dayOfMonth) -> {
+            calendarInstance.set(Calendar.YEAR, year);
+            calendarInstance.set(Calendar.MONTH, month);
+            calendarInstance.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+            updateLabel();
         };
 
         mAuth = FirebaseAuth.getInstance();
@@ -75,13 +67,11 @@ public class RegisterActivity extends AppCompatActivity {
         weight = findViewById(R.id.editTextWeight);
         date = findViewById(R.id.editTextDate);
 
-        date.setOnClickListener(v -> {
-            new DatePickerDialog(RegisterActivity.this, dateDialog,
-                    calendarInstance.get(Calendar.YEAR),
-                    calendarInstance.get(Calendar.MONTH),
-                    calendarInstance.get(Calendar.DAY_OF_MONTH))
-                        .show();
-        });
+        date.setOnClickListener(v -> new DatePickerDialog(RegisterActivity.this, dateDialog,
+                calendarInstance.get(Calendar.YEAR),
+                calendarInstance.get(Calendar.MONTH),
+                calendarInstance.get(Calendar.DAY_OF_MONTH))
+                    .show());
 
 
     }
@@ -177,26 +167,23 @@ public class RegisterActivity extends AppCompatActivity {
         String we = weight.getText().toString();
         String date = this.date.getText().toString();
         if (validateForm(emails, passwords, names, lastNames, userNames, phones, he, we, date)) {
-            mAuth.createUserWithEmailAndPassword(emails, passwords).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-                @Override
-                public void onComplete(@NonNull Task<AuthResult> task) {
-                    FirebaseUser user = mAuth.getCurrentUser();
-                    if (user != null) {
-                        User userN = new User();
-                        userN.setName(names);
-                        userN.setLastName(lastNames);
-                        userN.setPhone(phones);
-                        userN.setDate(date);
-                        userN.setHeight(he);
-                        userN.setUserName(userNames);
-                        userN.setWeight(we);
-                        String key = user.getUid();
-                        myRef = database.getReference(PATH_USERS + key);
-                        myRef.setValue(userN);
-                        startActivity(new Intent(getApplicationContext(), ProfileActivity.class));
-                    }
-
+            mAuth.createUserWithEmailAndPassword(emails, passwords).addOnCompleteListener(task -> {
+                FirebaseUser user = mAuth.getCurrentUser();
+                if (user != null) {
+                    User userN = new User();
+                    userN.setName(names);
+                    userN.setLastName(lastNames);
+                    userN.setPhone(phones);
+                    userN.setDate(date);
+                    userN.setHeight(he);
+                    userN.setUserName(userNames);
+                    userN.setWeight(we);
+                    String key = user.getUid();
+                    myRef = database.getReference(PATH_USERS + key);
+                    myRef.setValue(userN);
+                    startActivity(new Intent(getApplicationContext(), ProfileActivity.class));
                 }
+
             });
 
 

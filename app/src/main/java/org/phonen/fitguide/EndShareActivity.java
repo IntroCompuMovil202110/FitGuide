@@ -2,12 +2,8 @@ package org.phonen.fitguide;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
 
-import android.app.Activity;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.media.MediaScannerConnection;
@@ -15,7 +11,6 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
-import android.util.Log;
 import android.view.View;
 import android.Manifest;
 import android.widget.Button;
@@ -30,7 +25,7 @@ import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
-import org.phonen.fitguide.Utils.PermissionManager;
+import org.phonen.fitguide.utils.PermissionManager;
 
 public class EndShareActivity extends AppCompatActivity {
 
@@ -149,8 +144,6 @@ public class EndShareActivity extends AppCompatActivity {
             out.close();
             isImageCreated(filename);
             savedSuccessfully();
-        } catch (FileNotFoundException e) {
-            unableToSave();
         } catch (IOException e) {
             unableToSave();
         }
@@ -165,10 +158,7 @@ public class EndShareActivity extends AppCompatActivity {
     private void isImageCreated(File dir) {
         MediaScannerConnection.scanFile(this,
                 new String[]{dir.toString()}, null,
-                new MediaScannerConnection.OnScanCompletedListener() {
-                    @Override
-                    public void onScanCompleted(String path, Uri uri) {
-                    }
+                (path, uri) -> {
                 });
     }
 

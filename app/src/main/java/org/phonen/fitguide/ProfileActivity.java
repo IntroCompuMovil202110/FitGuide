@@ -1,34 +1,21 @@
 package org.phonen.fitguide;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.constraintlayout.solver.state.Reference;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentTransaction;
-import androidx.navigation.Navigation;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 
-import org.phonen.fitguide.Utils.References;
+import org.phonen.fitguide.utils.References;
 import org.phonen.fitguide.model.User;
-
-import java.security.PublicKey;
 
 public class ProfileActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;
@@ -59,19 +46,16 @@ public class ProfileActivity extends AppCompatActivity {
         String uId =mAuth.getUid();
         Log.i("DEBUG uID",uId);
         myRef = FirebaseDatabase.getInstance().getReference();
-        myRef.child(References.PATH_USERS).child(uId).get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<DataSnapshot> task) {
-                if (!task.isSuccessful()) {
-                    Log.e("firebase", "Error getting data", task.getException());
-                }
-                else {
-                    user = task.getResult().getValue(User.class);
-                    textViewN.setText(user.getName().toUpperCase());
-                    textLevel.setText(String.valueOf(user.getLevel()));
-                    textVPoint.setText(String.valueOf(user.getPoints()));
-                    textVRank.setText("NIVEL:     "+user.getRank());
-                }
+        myRef.child(References.PATH_USERS).child(uId).get().addOnCompleteListener(task -> {
+            if (!task.isSuccessful()) {
+                Log.e("firebase", "Error getting data", task.getException());
+            }
+            else {
+                user = task.getResult().getValue(User.class);
+                textViewN.setText(user.getName().toUpperCase());
+                textLevel.setText(String.valueOf(user.getLevel()));
+                textVPoint.setText(String.valueOf(user.getPoints()));
+                textVRank.setText("NIVEL:     "+user.getRank());
             }
         });
 
@@ -97,27 +81,24 @@ public class ProfileActivity extends AppCompatActivity {
     public void navBarSettings(){
         bottomNavigationView = findViewById(R.id.bottomNavigationView);
         bottomNavigationView.setSelectedItemId(R.id.profileActivity);
-        bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
-            @Override
-            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                switch (item.getItemId()) {
-                    case R.id.challengesActivity:
-                        startActivity(new Intent(getApplicationContext(), ChallengesActivity.class));
-                        overridePendingTransition(0, 0);
-                        return true;
-                    case R.id.feedActivity:
-                        startActivity(new Intent(getApplicationContext(), FeedActivity.class));
-                        overridePendingTransition(0, 0);
-                        return true;
-                    case R.id.profileActivity:
-                        return true;
-                    case R.id.startActivity:
-                        startActivity(new Intent(getApplicationContext(), StartActivity.class));
-                        overridePendingTransition(0, 0);
-                        return true;
-                }
-                return false;
+        bottomNavigationView.setOnNavigationItemSelectedListener(item -> {
+            switch (item.getItemId()) {
+                case R.id.challengesActivity:
+                    startActivity(new Intent(getApplicationContext(), ChallengesActivity.class));
+                    overridePendingTransition(0, 0);
+                    return true;
+                case R.id.feedActivity:
+                    startActivity(new Intent(getApplicationContext(), FeedActivity.class));
+                    overridePendingTransition(0, 0);
+                    return true;
+                case R.id.profileActivity:
+                    return true;
+                case R.id.startActivity:
+                    startActivity(new Intent(getApplicationContext(), StartActivity.class));
+                    overridePendingTransition(0, 0);
+                    return true;
             }
+            return false;
         });
     }
 

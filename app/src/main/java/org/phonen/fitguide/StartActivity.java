@@ -5,7 +5,6 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -18,7 +17,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-import org.phonen.fitguide.Utils.References;
+import org.phonen.fitguide.utils.References;
 import org.phonen.fitguide.model.User;
 
 public class StartActivity extends AppCompatActivity {
@@ -113,27 +112,24 @@ public class StartActivity extends AppCompatActivity {
     public void navBarSettings() {
         bottomNavigationView = findViewById(R.id.bottomNavigationView);
         bottomNavigationView.setSelectedItemId(R.id.startActivity);
-        bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
-            @Override
-            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                switch (item.getItemId()) {
-                    case R.id.challengesActivity:
-                        startActivity(new Intent(getApplicationContext(), ChallengesActivity.class));
-                        overridePendingTransition(0, 0);
-                        return true;
-                    case R.id.feedActivity:
-                        startActivity(new Intent(getApplicationContext(), FeedActivity.class));
-                        overridePendingTransition(0, 0);
-                        return true;
-                    case R.id.profileActivity:
-                        startActivity(new Intent(getApplicationContext(), ProfileActivity.class));
-                        overridePendingTransition(0, 0);
-                        return true;
-                    case R.id.startActivity:
-                        return true;
-                }
-                return false;
+        bottomNavigationView.setOnNavigationItemSelectedListener(item -> {
+            switch (item.getItemId()) {
+                case R.id.challengesActivity:
+                    startActivity(new Intent(getApplicationContext(), ChallengesActivity.class));
+                    overridePendingTransition(0, 0);
+                    return true;
+                case R.id.feedActivity:
+                    startActivity(new Intent(getApplicationContext(), FeedActivity.class));
+                    overridePendingTransition(0, 0);
+                    return true;
+                case R.id.profileActivity:
+                    startActivity(new Intent(getApplicationContext(), ProfileActivity.class));
+                    overridePendingTransition(0, 0);
+                    return true;
+                case R.id.startActivity:
+                    return true;
             }
+            return false;
         });
     }
 

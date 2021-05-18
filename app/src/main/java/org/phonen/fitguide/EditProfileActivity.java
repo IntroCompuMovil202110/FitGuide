@@ -3,7 +3,6 @@ package org.phonen.fitguide;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -11,8 +10,6 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.EmailAuthProvider;
@@ -24,13 +21,13 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-import org.phonen.fitguide.Utils.References;
+import org.phonen.fitguide.utils.References;
 import org.phonen.fitguide.model.User;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import static org.phonen.fitguide.Utils.References.PATH_USERS;
+import static org.phonen.fitguide.utils.References.PATH_USERS;
 
 public class EditProfileActivity extends AppCompatActivity {
 
@@ -106,29 +103,26 @@ public class EditProfileActivity extends AppCompatActivity {
     private void navBarSettings() {
         bottomNavigationView = findViewById(R.id.bottomNavigationView);
         bottomNavigationView.setSelectedItemId(R.id.profileActivity);
-        bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
-            @Override
-            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                switch (item.getItemId()) {
-                    case R.id.challengesActivity:
-                        startActivity(new Intent(getApplicationContext(), ChallengesActivity.class));
-                        overridePendingTransition(0, 0);
-                        return true;
-                    case R.id.feedActivity:
-                        startActivity(new Intent(getApplicationContext(), FeedActivity.class));
-                        overridePendingTransition(0, 0);
-                        return true;
-                    case R.id.profileActivity:
-                        startActivity(new Intent(getApplicationContext(), ProfileActivity.class));
-                        overridePendingTransition(0, 0);
-                        return true;
-                    case R.id.startActivity:
-                        startActivity(new Intent(getApplicationContext(), StartActivity.class));
-                        overridePendingTransition(0, 0);
-                        return true;
-                }
-                return false;
+        bottomNavigationView.setOnNavigationItemSelectedListener(item -> {
+            switch (item.getItemId()) {
+                case R.id.challengesActivity:
+                    startActivity(new Intent(getApplicationContext(), ChallengesActivity.class));
+                    overridePendingTransition(0, 0);
+                    return true;
+                case R.id.feedActivity:
+                    startActivity(new Intent(getApplicationContext(), FeedActivity.class));
+                    overridePendingTransition(0, 0);
+                    return true;
+                case R.id.profileActivity:
+                    startActivity(new Intent(getApplicationContext(), ProfileActivity.class));
+                    overridePendingTransition(0, 0);
+                    return true;
+                case R.id.startActivity:
+                    startActivity(new Intent(getApplicationContext(), StartActivity.class));
+                    overridePendingTransition(0, 0);
+                    return true;
             }
+            return false;
         });
     }
 
@@ -242,28 +236,22 @@ public class EditProfileActivity extends AppCompatActivity {
                     {
 
                         AuthCredential credential = EmailAuthProvider.getCredential(email, passwords);
-                        fUser.reauthenticate(credential).addOnCompleteListener(new OnCompleteListener<Void>() {
-                        @Override
-                        public void onComplete(@NonNull Task<Void> task) {
+                        fUser.reauthenticate(credential).addOnCompleteListener(task -> {
                             if (task.isSuccessful()) {
-                                fUser.updatePassword(password2).addOnCompleteListener(new OnCompleteListener<Void>() {
-                                    @Override
-                                    public void onComplete(@NonNull Task<Void> task) {
-                                        if (!task.isSuccessful()) {
-                                            Toast.makeText(EditProfileActivity.this, "Autenticación fallida", Toast.LENGTH_SHORT).show();
-                                            password.setError("Contraseña inválida");
-                                        } else {
-                                            changePass = true;
-                                            Toast.makeText(EditProfileActivity.this, "Contraseña actualizada", Toast.LENGTH_SHORT).show();
-                                        }
+                                fUser.updatePassword(password2).addOnCompleteListener(task12 -> {
+                                    if (!task12.isSuccessful()) {
+                                        Toast.makeText(EditProfileActivity.this, "Autenticación fallida", Toast.LENGTH_SHORT).show();
+                                        password.setError("Contraseña inválida");
+                                    } else {
+                                        changePass = true;
+                                        Toast.makeText(EditProfileActivity.this, "Contraseña actualizada", Toast.LENGTH_SHORT).show();
                                     }
                                 });
                             } else {
                                 Toast.makeText(EditProfileActivity.this, "Autenticación fallida", Toast.LENGTH_SHORT).show();
                                 password.setError("Contraseña inválida");
                             }
-                        }
-                    });
+                        });
                 }
 
                 }
@@ -275,27 +263,21 @@ public class EditProfileActivity extends AppCompatActivity {
                         AuthCredential credential = EmailAuthProvider.getCredential(email, passwords);
                         if(!fUser.reauthenticate(credential).isSuccessful())
                         {
-                            fUser.reauthenticate(credential).addOnCompleteListener(new OnCompleteListener<Void>() {
-                                @Override
-                                public void onComplete(@NonNull Task<Void> task) {
-                                    if (task.isSuccessful()) {
-                                        fUser.updateEmail(emails).addOnCompleteListener(new OnCompleteListener<Void>() {
-                                            @Override
-                                            public void onComplete(@NonNull Task<Void> task) {
-                                                pasVerif=true;
-                                                if (!task.isSuccessful()) {
-                                                    Toast.makeText(EditProfileActivity.this, "Autenticación fallida", Toast.LENGTH_SHORT).show();
-                                                } else {
-                                                    pasVerif=true;
-                                                    Toast.makeText(EditProfileActivity.this, "Correo actualizado", Toast.LENGTH_SHORT).show();
+                            fUser.reauthenticate(credential).addOnCompleteListener(task -> {
+                                if (task.isSuccessful()) {
+                                    fUser.updateEmail(emails).addOnCompleteListener(task1 -> {
+                                        pasVerif = true;
+                                        if (!task1.isSuccessful()) {
+                                            Toast.makeText(EditProfileActivity.this, "Autenticación fallida", Toast.LENGTH_SHORT).show();
+                                        } else {
+                                            pasVerif = true;
+                                            Toast.makeText(EditProfileActivity.this, "Correo actualizado", Toast.LENGTH_SHORT).show();
 
-                                                }
-                                            }
-                                        });
+                                        }
+                                    });
 
-                                    } else {
-                                        Toast.makeText(EditProfileActivity.this, "Autenticación fallida", Toast.LENGTH_SHORT).show();
-                                    }
+                                } else {
+                                    Toast.makeText(EditProfileActivity.this, "Autenticación fallida", Toast.LENGTH_SHORT).show();
                                 }
                             });
 
