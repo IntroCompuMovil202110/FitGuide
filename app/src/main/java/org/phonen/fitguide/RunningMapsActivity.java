@@ -186,7 +186,7 @@ public class RunningMapsActivity extends FragmentActivity implements OnMapReadyC
     public void sendIntent() {
         SnapshotReadyCallback callBack = bitmap -> {
             ByteArrayOutputStream stream = new ByteArrayOutputStream();
-            bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream);
             byte[] bytes = stream.toByteArray();
             Intent intent = new Intent(getApplicationContext(), FinishActivity.class);
             intent.putExtra("time", totalTime);

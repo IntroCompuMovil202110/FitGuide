@@ -1,5 +1,7 @@
 package org.phonen.fitguide.model;
 
+import java.util.Date;
+
 public class Session {
     private int type;
     private double calories;
@@ -9,6 +11,7 @@ public class Session {
     private double pressure;
     private String oxygenLevel;
     private int score;
+    private Date date;
 
     public Session() {
     }
@@ -75,5 +78,13 @@ public class Session {
 
     public void setScore(int score) {
         this.score = score;
+    }
+
+    public Date getDate() {
+        return date;
+    }
+
+    public void setDate(Date date) {
+        this.date = date;
     }
 }
