@@ -1,5 +1,6 @@
 package org.phonen.fitguide;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
@@ -28,6 +29,10 @@ import java.util.List;
 import java.util.Map;
 
 public class FeedActivity extends AppCompatActivity {
+    private final String STATE_LIST = "State Adapter List";
+    private final String _LIST = "State Adapter List";
+
+
     BottomNavigationView bottomNavigationView;
     private FirebaseUser user;
     private DatabaseReference ref;
@@ -48,13 +53,14 @@ public class FeedActivity extends AppCompatActivity {
         postsList = new ArrayList<>();
         postIndexed = new HashMap<>();
         friendsMap = new HashMap<>();
+        user = FirebaseAuth.getInstance().getCurrentUser();
         list = findViewById(R.id.feed_list_view);
-        feedAdapter = new FeedAdapter(this, postsList, friendsMap);
+        feedAdapter = new FeedAdapter(this, postsList, friendsMap, user.getUid());
         feedAdapter.sort(new Comparator<Post>() {
-                @Override
-                public int compare(Post o1, Post o2) {
-                    return o1.getDate().compareTo(o2.getDate());
-                }
+            @Override
+            public int compare(Post o1, Post o2) {
+                return o1.getDate().compareTo(o2.getDate());
+            }
 
         });
         list.setAdapter(feedAdapter);
@@ -63,7 +69,6 @@ public class FeedActivity extends AppCompatActivity {
     }
 
     private void getFeedForUser() {
-        user = FirebaseAuth.getInstance().getCurrentUser();
         ref = FirebaseDatabase.getInstance().getReference("friends/" + user.getUid());
         ref.get().addOnSuccessListener(v -> {
             // Get all user friends
@@ -123,5 +128,11 @@ public class FeedActivity extends AppCompatActivity {
             }
             return false;
         });
+    }
+
+    @Override
+    protected void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+
     }
 }

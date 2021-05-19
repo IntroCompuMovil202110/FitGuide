@@ -37,10 +37,10 @@ public class FeedAdapter extends ArrayAdapter<Post> {
     private Map<String, Bitmap> cachedImages;
     private String uid;
 
-    public FeedAdapter(@NonNull Context context, List<Post> posts, Map<String, User> users) {
+    public FeedAdapter(@NonNull Context context, List<Post> posts, Map<String, User> users, String userUID) {
         super(context, 0, posts);
         this.users = users;
-        this.uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        this.uid = userUID;
         this.cachedImages = new HashMap<>();
 
     }
@@ -75,7 +75,7 @@ public class FeedAdapter extends ArrayAdapter<Post> {
                     cachedImages.put(post.getImagePath(), bm);
                 });
             }else {
-                Log.i("CACHE HIT", "Already cached image, using this one");
+                Log.i("CACHE HIT", "Already cached image, using this instead");
                 image.setImageBitmap(cachedImages.get(post.getImagePath()));
             }
         }
