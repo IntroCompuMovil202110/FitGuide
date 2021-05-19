@@ -75,7 +75,7 @@ public class FinishActivity extends AppCompatActivity {
         Bitmap resizeBitmap = Bitmap.createScaledBitmap(
                 bitmap,
                 getIntent().getIntExtra("width", 1080),
-                getIntent().getIntExtra("height",2160),
+                getIntent().getIntExtra("height", 2160),
                 true);
         double time = intent.getDoubleExtra("time", 1);
         String timeS = calcularTiempo(time);
@@ -100,7 +100,7 @@ public class FinishActivity extends AppCompatActivity {
         this.session.setTemperature(temp);
         this.session.setPressure(pressure);
         this.session.setOxygenLevel(oxygen);
-        this.session.setScore((int)calories);
+        this.session.setScore((int) calories);
         this.session.setDate(new Date());
 
 
@@ -125,19 +125,33 @@ public class FinishActivity extends AppCompatActivity {
                                 "/" +
                                 sessionID +
                                 ".jpeg"),
-                    imgData,
-                    mDB,
-                    FirebaseStorage.getInstance(),
-                    intent,
-                    getApplicationContext());
+                        imgData,
+                        mDB,
+                        FirebaseStorage.getInstance(),
+                        intent,
+                        getApplicationContext());
             }
         });
-        startActivity(new Intent(getApplicationContext(), FeedActivity.class));
     }
 
     public void sharePhoto(View view) {
-        startActivity(new Intent(getApplicationContext(), EndShareActivity.class));
-        //Queeeee
+
+        DatabaseReference myRef = this.mDB.getReference(
+                Constants.SESSIONS_PATH +
+                        this.mAuth.getCurrentUser().getUid());
+        myRef = myRef.push();
+        String sessionID = myRef.getKey();
+        myRef.setValue(session).addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void aVoid) {
+                Intent intent = new Intent(getApplicationContext(), EndShareActivity.class);
+                Bundle bundle = new Bundle();
+                bundle.putString("sessionID", sessionID);
+                bundle.putSerializable("sessionObject", session);
+                intent.putExtra("sessionBundle", bundle);
+                startActivity(intent);
+            }
+        });
     }
 
     public void saveMap(View view) {
@@ -153,8 +167,8 @@ public class FinishActivity extends AppCompatActivity {
 
     public void finishActivity(View view) {
         DatabaseReference myRef = this.mDB.getReference(
-    Constants.SESSIONS_PATH +
-          this.mAuth.getCurrentUser().getUid());
+                Constants.SESSIONS_PATH +
+                        this.mAuth.getCurrentUser().getUid());
         myRef.push().setValue(session).addOnSuccessListener(aVoid -> startActivity(new Intent(getApplicationContext(), ProfileActivity.class)));
 
     }
@@ -179,7 +193,7 @@ public class FinishActivity extends AppCompatActivity {
 
         try {
             FileOutputStream out = new FileOutputStream(filename);
-            bm.compress(Bitmap.CompressFormat.PNG, 100, out);
+            bm.compress(Bitmap.CompressFormat.JPEG, 100, out);
             out.flush();
             out.close();
             isImageCreated(filename);
@@ -190,14 +204,7 @@ public class FinishActivity extends AppCompatActivity {
     }
 
     private String calcularTiempo(double time) {
-        StringBuilder sb = new StringBuilder();
-        int horas = ((int) time / 3600);
-        int minutos = (int) ((time - horas * 3600) / 60);
-        int segundos = (int) (time - (horas * 3600 + minutos * 60));
-        sb.append(horas < 10 ? "0" + horas : horas).append(":");
-        sb.append(minutos < 10 ? "0" + minutos : minutos).append(":");
-        sb.append(segundos < 10 ? "0" + segundos : segundos);
-        return sb.toString();
+        return PostUploader.getNaturalTime(time);
     }
 
     private String getCurrentTime() {
@@ -225,7 +232,7 @@ public class FinishActivity extends AppCompatActivity {
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         if (requestCode == SAVE_PHOTO_ID) {
-            if (PermissionManager.checkPermission(this,SAVE_PHOTO_NAME)) {
+            if (PermissionManager.checkPermission(this, SAVE_PHOTO_NAME)) {
                 saveToGallery();
             }
         }
