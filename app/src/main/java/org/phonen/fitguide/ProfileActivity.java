@@ -59,23 +59,6 @@ public class ProfileActivity extends AppCompatActivity {
             }
         });
 
-       /* myRef = database.getReference(References.PATH_USERS+uId);
-        myRef.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                user = snapshot.getValue(User.class);
-                if(user!= null)
-                {
-
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-
-            }
-        });
-*/
     }
 
     public void navBarSettings(){
