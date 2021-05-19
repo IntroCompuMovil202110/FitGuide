@@ -76,7 +76,9 @@
             android:layout_height="wrap_content"
             android:background="@drawable/text_feed_border"
             android:orientation="vertical"
-            android:padding="20dp">
+            android:paddingStart="20dp"
+            android:paddingEnd="20dp"
+            android:paddingBottom="20dp">
 
             <ImageView
                 android:id="@+id/feed_image_post"
