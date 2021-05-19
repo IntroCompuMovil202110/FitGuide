@@ -124,45 +124,19 @@
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
-        <ScrollView
-            android:id="@+id/friendsScrollView"
+        <ListView
+            android:id="@+id/friendsList"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="0dp"
+            android:divider="@null"
+            android:dividerHeight="10dp"
             android:paddingHorizontal="48dp"
             android:paddingVertical="8dp"
+            android:paddingTop="10dp"
             app:layout_constraintBottom_toTopOf="@+id/bottomNavigationView"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/constraintLayout5"
-            app:layout_constraintVertical_bias="0.04000002">
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical">
-
-                <LinearLayout style="@style/Widget.App.AddFriendSnippet">
-
-                    <LinearLayout style="@style/Widget.App.AddFriendInfo">
-
-                        <TextView
-                            android:id="@+id/add_friend_option_name"
-                            style="@style/Widget.App.NameText"
-                            android:text="@string/sample_add_friend_name" />
-
-                        <TextView
-                            android:id="@+id/add_friend_option_username"
-                            style="@style/Widget.App.UsernameText"
-                            android:text="@string/sample_add_friend_username" />
-                    </LinearLayout>
-
-                    <ImageView
-                        android:id="@+id/imageView6"
-                        style="@style/Widget.App.OddIcon"
-                        app:srcCompat="@drawable/delete_icon" />
-                </LinearLayout>
-            </LinearLayout>
-        </ScrollView>
+            app:layout_constraintTop_toBottomOf="@+id/constraintLayout5" />
 
         <com.google.android.material.bottomnavigation.BottomNavigationView
             android:id="@+id/bottomNavigationView"
