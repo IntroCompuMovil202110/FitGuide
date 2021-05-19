@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="#000000">
+    android:background="#00FFFFFF">
 
     <LinearLayout
         android:layout_width="0dp"
@@ -16,8 +16,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:fontFamily="@font/roboto_bold"
-            android:paddingStart="30dp"
-            android:text="Nombre Amigo"
             android:textColor="#FFFFFF"
             android:textSize="18sp" />
 
@@ -26,9 +24,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:fontFamily="@font/roboto"
-            android:paddingStart="30dp"
-            android:paddingEnd="10dp"
-            android:text="Username"
             android:textColor="#FFFFFF"
             android:textSize="18sp" />
     </LinearLayout>
