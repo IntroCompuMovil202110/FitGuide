@@ -17,9 +17,12 @@ import com.google.firebase.database.FirebaseDatabase;
 
 import org.phonen.fitguide.helpers.FeedAdapter;
 import org.phonen.fitguide.model.Post;
+import org.phonen.fitguide.model.User;
 import org.phonen.fitguide.utils.Constants;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -32,6 +35,7 @@ public class FeedActivity extends AppCompatActivity {
     private List<String> friendsUids;
     private List<Post> postsList;
     private Map<String, Boolean> postIndexed;
+    private Map<String, User> friendsMap;
     private FeedAdapter feedAdapter;
 
     @Override
@@ -43,7 +47,17 @@ public class FeedActivity extends AppCompatActivity {
         friendsUids = new ArrayList<>();
         postsList = new ArrayList<>();
         postIndexed = new HashMap<>();
+        friendsMap = new HashMap<>();
         list = findViewById(R.id.feed_list_view);
+        feedAdapter = new FeedAdapter(this, postsList, friendsMap);
+        feedAdapter.sort(new Comparator<Post>() {
+                @Override
+                public int compare(Post o1, Post o2) {
+                    return o1.getDate().compareTo(o2.getDate());
+                }
+
+        });
+        list.setAdapter(feedAdapter);
 
         this.getFeedForUser();
     }
@@ -51,26 +65,35 @@ public class FeedActivity extends AppCompatActivity {
     private void getFeedForUser() {
         user = FirebaseAuth.getInstance().getCurrentUser();
         ref = FirebaseDatabase.getInstance().getReference("friends/" + user.getUid());
-        ref.get().addOnSuccessListener( v -> {
-            for(DataSnapshot ds : v.getChildren()){
+        ref.get().addOnSuccessListener(v -> {
+            // Get all user friends
+            for (DataSnapshot ds : v.getChildren())
                 friendsUids.add(ds.getKey());
-            }
+            friendsUids.add(user.getUid());
 
-            for(String user: friendsUids){
+            //Iterate over friends
+            for (String user : friendsUids) {
                 DatabaseReference posts = FirebaseDatabase.getInstance().getReference(Constants.POSTS_PATH + user);
-                posts.get().addOnSuccessListener( a -> {
-                   Log.i("Arrived", a.toString());
-                   if(a.getValue() != null){
-                       for(DataSnapshot ds: a.getChildren()){
-                           if(postIndexed.get(ds.getKey()) == null){
-                               postIndexed.put(ds.getKey(), true);
-                               postsList.add(ds.getValue(Post.class));
-                           }
-                       }
-                   }
+                //Iterate over posts
+                posts.get().addOnSuccessListener(a -> {
+                    // If the user does have post
+                    Log.i("USERS", "Inside");
+                    if (a.getValue() != null) {
+                        FirebaseDatabase.getInstance().getReference(Constants.USERS_PATH + a.getKey())
+                                .get()
+                                .addOnSuccessListener(b -> {
+                                    Log.i("POSTS", "Inside");
+                                    friendsMap.put(a.getKey(), b.getValue(User.class));
+                                    for (DataSnapshot ds : a.getChildren()) {
+                                        if (postIndexed.get(ds.getKey()) == null) {
+                                            postIndexed.put(ds.getKey(), true);
+                                            feedAdapter.add(ds.getValue(Post.class));
+                                        }
+                                    }
+                                });
+                    }
                 });
             }
-            //feedAdapter = new FeedAdapter(this, postsList, )
 
 
         });

@@ -48,7 +48,20 @@ public class Post {
         return date;
     }
 
+    @Override
+    public String toString() {
+        return "Post{" +
+                "type=" + type +
+                ", userUID='" + userUID + '\'' +
+                ", description='" + description + '\'' +
+                ", imagePath='" + imagePath + '\'' +
+                ", date=" + date +
+                '}';
+    }
+
     public void setDate(Date date) {
         this.date = date;
     }
+
+
 }
