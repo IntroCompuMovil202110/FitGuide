@@ -102,7 +102,7 @@ public class LoginActivity extends AppCompatActivity {
     {
         if(currentUser!=null)
         {
-            startActivity(new Intent(getApplicationContext(), FeedActivity.class));
+            startActivity(new Intent(getApplicationContext(), ProfileActivity.class));
         }
         else
         {

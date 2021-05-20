@@ -29,7 +29,7 @@ public class RequestsListAdapter extends ArrayAdapter<String> {
 
     private String currentUserUid;
     private FirebaseDatabase mDB;
-    private SimpleDateFormat formatter = new SimpleDateFormat("HH:mm:ss");
+    private SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
     private List<String> reqNames;
     private String currentUserName;
 
