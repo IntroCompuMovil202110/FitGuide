@@ -41,21 +41,9 @@ public class FriendsListAdapter extends ArrayAdapter<String> {
             ImageButton btn = convertView.findViewById(R.id.removeFriendBtn);
             btn.setTag(position);
             btn.setOnClickListener(view -> {
-                int pos = (int)view.getTag();
-                mDB.getReference(Constants.FRIENDS_LIST +
-                                getItem(pos) +
-                                "/" +
-                                currentUserUid)
-                        .setValue(null).addOnSuccessListener(v -> {
-                            mDB.getReference(Constants.FRIENDS_LIST +
-                                    currentUserUid +
-                                    "/" +
-                                    getItem(pos))
-                                .setValue(null).addOnSuccessListener(v2 -> {
-                                remove(getItem(pos));
-                            });
-                });
+                this.removeFriend(view);
             });
+            //Recover friend's data.
             DatabaseReference dbRef = FirebaseDatabase.getInstance()
                     .getReference(Constants.USERS_PATH + uid);
             dbRef.get().addOnSuccessListener(v-> {
@@ -66,5 +54,24 @@ public class FriendsListAdapter extends ArrayAdapter<String> {
         }
         return convertView;
     }
+
+    private void removeFriend(View view){
+        //Delete friend in both user's and friend's list.
+        int pos = (int)view.getTag();
+        mDB.getReference(Constants.FRIENDS_LIST +
+                getItem(pos) +
+                "/" +
+                currentUserUid)
+                .setValue(null).addOnSuccessListener(v -> {
+            mDB.getReference(Constants.FRIENDS_LIST +
+                    currentUserUid +
+                    "/" +
+                    getItem(pos))
+                    .setValue(null).addOnSuccessListener(v2 -> {
+                remove(getItem(pos));
+            });
+        });
+    }
+
 
 }

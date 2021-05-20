@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/clear_color"
+    android:orientation="vertical">
+
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/card"
+        style="@style/Widget.App.CardView">
+
+        <LinearLayout style="@style/Widget.App.OddFriendRequestMainLayout">
+
+            <LinearLayout style="@style/Widget.App.FriendRequestInfo">
+
+                <TextView
+                    android:id="@+id/reqName"
+                    style="@style/Widget.App.NameText" />
+
+                <TextView
+                    android:id="@+id/reqUsrname"
+                    style="@style/Widget.App.UsernameText" />
+            </LinearLayout>
+
+            <ImageButton
+                android:id="@+id/acceptRequestBtn"
+                style="@style/Widget.App.OddIcon"
+                android:backgroundTint="#00FFFFFF"
+                android:src="@drawable/accept_icon" />
+
+            <ImageButton
+                android:id="@+id/declineRequestBtn"
+                style="@style/Widget.App.OddIcon"
+                android:backgroundTint="#00FFFFFF"
+                android:src="@drawable/reject_icon" />
+        </LinearLayout>
+    </com.google.android.material.card.MaterialCardView>
+
+</LinearLayout>

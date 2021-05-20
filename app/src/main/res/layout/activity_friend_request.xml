@@ -38,79 +38,18 @@
             app:layout_constraintTop_toBottomOf="@+id/imageView" />
 
 
-        <ScrollView
+        <ListView
+            android:id="@+id/requestListView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:paddingHorizontal="30dp"
             android:paddingVertical="8dp"
             app:layout_constraintBottom_toTopOf="@+id/bottomNavigationView"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textView2"
-            app:layout_constraintVertical_bias="0.16000003">
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical">
-
-                <com.google.android.material.card.MaterialCardView
-                    android:id="@+id/card"
-                    style="@style/Widget.App.CardView">
-
-                    <LinearLayout style="@style/Widget.App.OddFriendRequestMainLayout">
-
-                        <LinearLayout style="@style/Widget.App.FriendRequestInfo">
-
-                            <TextView
-                                style="@style/Widget.App.NameText"
-                                android:text="@string/sample_add_friend_name" />
-
-                            <TextView
-                                style="@style/Widget.App.UsernameText"
-                                android:text="@string/sample_add_friend_username" />
-                        </LinearLayout>
-
-                        <ImageView
-                            android:id="@+id/imageView4"
-                            style="@style/Widget.App.OddIcon"
-                            app:srcCompat="@drawable/accept_icon" />
-
-                        <ImageView
-                            android:id="@+id/imageView5"
-                            style="@style/Widget.App.OddIcon"
-                            app:srcCompat="@drawable/reject_icon" />
-                    </LinearLayout>
-                </com.google.android.material.card.MaterialCardView>
-
-                <com.google.android.material.card.MaterialCardView
-                    android:id="@+id/card2"
-                    style="@style/Widget.App.CardView">
-
-                    <LinearLayout style="@style/Widget.App.EvenFriendRequestMainLayout">
-
-                        <LinearLayout style="@style/Widget.App.FriendRequestInfo">
-
-                            <TextView
-                                style="@style/Widget.App.EvenNameText"
-                                android:text="@string/sample_add_friend_name_2" />
-
-                            <TextView
-                                style="@style/Widget.App.EvenUsernameText"
-                                android:text="@string/sample_add_friend_username_2" />
-                        </LinearLayout>
-
-                        <ImageView
-                            android:id="@+id/imageView42"
-                            style="@style/Widget.App.EvenIcon"
-                            app:srcCompat="@drawable/accept_icon" />
-
-                        <ImageView
-                            android:id="@+id/imageView52"
-                            style="@style/Widget.App.EvenIcon"
-                            app:srcCompat="@drawable/reject_icon" />
-                    </LinearLayout>
-                </com.google.android.material.card.MaterialCardView>
-            </LinearLayout>
-        </ScrollView>
+            app:layout_constraintVertical_bias="0.0">
+        </ListView>
 
         <com.google.android.material.bottomnavigation.BottomNavigationView
             android:id="@+id/bottomNavigationView"

@@ -81,7 +81,7 @@
                             android:text="CHALLENGE 20K GOLD" />
 
                         <ImageView
-                            android:id="@+id/imageView4"
+                            android:id="@+id/acceptRequestBtn"
                             style="@style/Widget.App.CardMainIcon"
                             app:srcCompat="@drawable/accept_icon" />
                     </LinearLayout>
