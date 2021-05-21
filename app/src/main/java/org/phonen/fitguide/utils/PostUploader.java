@@ -84,6 +84,9 @@ public class PostUploader {
         }
         return stringBuilder.toString();
     }
+    private static String generateNewFriendDescription(String userAName, String userBName) {
+        return userAName + " ahora es amigo de " + userBName + "!";
+    }
 
     public static String getNaturalTime(double time) {
         Date date = new Date((long) time * 1000L);
@@ -100,4 +103,16 @@ public class PostUploader {
         newPost.setImagePath(imagePath);
         return newPost;
     }
+
+    public static Post createNewFriendPost(String userUID, String userAName, String userBName) {
+        Post newPost = new Post();
+        newPost.setType(2);
+        newPost.setDate(new Date());
+        newPost.setDescription(generateNewFriendDescription(userAName, userBName));
+        newPost.setUserUID(userUID);
+        newPost.setImagePath("");
+        return newPost;
+
+    }
+
 }
