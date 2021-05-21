@@ -23,11 +23,13 @@ import java.util.List;
 public class FriendsListAdapter extends ArrayAdapter<String> {
     private final String currentUserUid;
     private final FirebaseDatabase mDB;
+    private final TextView emptyText;
 
-    public FriendsListAdapter(@NonNull Context context, List<String> friendsUids, String currentUid) {
+    public FriendsListAdapter(@NonNull Context context, List<String> friendsUids, String currentUid, TextView emptyText) {
         super(context, 0, friendsUids);
         this.currentUserUid = currentUid;
         this.mDB = FirebaseDatabase.getInstance();
+        this.emptyText = emptyText;
     }
 
     @NonNull
@@ -56,6 +58,13 @@ public class FriendsListAdapter extends ArrayAdapter<String> {
         return convertView;
     }
 
+    @Override
+    public void notifyDataSetChanged() {
+        super.notifyDataSetChanged();
+        if (this.getCount() < 1)
+            emptyText.setText("No tienes amigos...");
+    }
+
     private void removeFriend(View view) {
         //Delete friend in both user's and friend's list.
         int pos = (int) view.getTag();
@@ -73,6 +82,7 @@ public class FriendsListAdapter extends ArrayAdapter<String> {
             });
         });
     }
+
 
 
 }
