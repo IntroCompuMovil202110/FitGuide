@@ -204,7 +204,14 @@ public class FinishActivity extends AppCompatActivity {
     }
 
     private String calcularTiempo(double time) {
-        return PostUploader.getNaturalTime(time);
+        StringBuilder sb = new StringBuilder();
+        int horas = ((int) time / 3600);
+        int minutos = (int) ((time - horas * 3600) / 60);
+        int segundos = (int) (time - (horas * 3600 + minutos * 60));
+        sb.append(horas < 10 ? "0" + horas : horas).append(":");
+        sb.append(minutos < 10 ? "0" + minutos : minutos).append(":");
+        sb.append(segundos < 10 ? "0" + segundos : segundos);
+        return sb.toString();
     }
 
     private String getCurrentTime() {
