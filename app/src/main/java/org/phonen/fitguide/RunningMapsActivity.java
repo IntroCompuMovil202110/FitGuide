@@ -165,6 +165,7 @@ public class RunningMapsActivity extends FragmentActivity implements OnMapReadyC
     public void endDataGathering() {
         this.chronometer.stop();
         this.totalTime = (SystemClock.elapsedRealtime() - this.chronometer.getBase()) / 1000;
+
         this.oxigeno = this.getOxigeno();
         this.burnedCalories = this.calcCalories();
     }

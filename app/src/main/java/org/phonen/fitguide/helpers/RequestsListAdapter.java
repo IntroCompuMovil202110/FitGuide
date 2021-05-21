@@ -107,9 +107,9 @@ public class RequestsListAdapter extends ArrayAdapter<String> {
 
     private void createNewFriendPost(int pos) {
         Post postA = PostUploader.createNewFriendPost(currentUserUid, currentUserName, reqNames.get(pos));
-        Post postB = PostUploader.createNewFriendPost(getItem(pos), reqNames.get(pos), currentUserName);
+        //Post postB = PostUploader.createNewFriendPost(getItem(pos), reqNames.get(pos), currentUserName);
         PostUploader.uploadPost(postA, null, FirebaseDatabase.getInstance(), null);
-        PostUploader.uploadPost(postB, null, FirebaseDatabase.getInstance(), null);
+        //PostUploader.uploadPost(postB, null, FirebaseDatabase.getInstance(), null);
         remove(getItem(pos));
         notifyDataSetChanged();
     }
