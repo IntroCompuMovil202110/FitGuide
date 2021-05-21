@@ -146,6 +146,7 @@ public class AddFriendActivity extends AppCompatActivity {
                             Toast.makeText(getApplicationContext(),
                                     "Ya has enviado solicitud de amistad a " +friendUsrName + "!",
                                     Toast.LENGTH_LONG).show();
+                            usrNameField.setText("");
                         }
                     }
                     @Override
@@ -166,6 +167,7 @@ public class AddFriendActivity extends AppCompatActivity {
             public void onSuccess(Void aVoid) {
                 Toast.makeText(getApplicationContext(),
                         "Solicitud enviada!", Toast.LENGTH_LONG).show();
+                usrNameField.setText("");
             }
         });
     }

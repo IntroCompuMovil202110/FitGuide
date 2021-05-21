@@ -7,6 +7,7 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -27,10 +28,10 @@ import java.util.List;
 
 public class RequestsListAdapter extends ArrayAdapter<String> {
 
-    private String currentUserUid;
-    private FirebaseDatabase mDB;
-    private SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
-    private List<String> reqNames;
+    private final String currentUserUid;
+    private final FirebaseDatabase mDB;
+    private final SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
+    private final List<String> reqNames;
     private String currentUserName;
 
     public RequestsListAdapter(@NonNull Context context, List<String> friendsUids, String currentUid) {
@@ -45,42 +46,43 @@ public class RequestsListAdapter extends ArrayAdapter<String> {
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
         if (convertView == null) {
             convertView = LayoutInflater.from(getContext()).inflate(R.layout.request_item, parent, false);
-            String uid = getItem(position);
-            TextView name = convertView.findViewById(R.id.reqName);
-            TextView username = convertView.findViewById(R.id.reqUsrname);
-            ImageButton btnAccept = convertView.findViewById(R.id.acceptRequestBtn);
-            ImageButton btnDecline = convertView.findViewById(R.id.declineRequestBtn);
-            btnAccept.setTag(position);
-            btnDecline.setTag(position);
-            btnAccept.setOnClickListener(view -> {
-                this.acceptRequest(view);
-            });
-            btnDecline.setOnClickListener(view -> {
-                this.declineRequest(view);
-            });
-            //Recover data
-            DatabaseReference dbRef = FirebaseDatabase.getInstance()
-                    .getReference(Constants.USERS_PATH + uid);
-            dbRef.get().addOnSuccessListener(v-> {
-                User user =  v.getValue(User.class);
-                reqNames.add(user.getName());
-                name.setText(user.getName());
-                username.setText(user.getUserName());
-            });
-            DatabaseReference dbRef2 = FirebaseDatabase.getInstance()
-                    .getReference(Constants.USERS_PATH + uid).child("name");
-            dbRef2.get().addOnSuccessListener(v -> {
-               currentUserName = v.getValue(String.class);
-            });
         }
+        String uid = getItem(position);
+        TextView name = convertView.findViewById(R.id.reqName);
+        TextView username = convertView.findViewById(R.id.reqUsrname);
+        ImageButton btnAccept = convertView.findViewById(R.id.acceptRequestBtn);
+        ImageButton btnDecline = convertView.findViewById(R.id.declineRequestBtn);
+        btnAccept.setTag(position);
+        btnDecline.setTag(position);
+        btnAccept.setOnClickListener(view -> {
+            this.acceptRequest(view);
+        });
+        btnDecline.setOnClickListener(view -> {
+            this.declineRequest(view);
+        });
+        //Recover data
+        DatabaseReference dbRef = FirebaseDatabase.getInstance()
+                .getReference(Constants.USERS_PATH + uid);
+        dbRef.get().addOnSuccessListener(v -> {
+            User user = v.getValue(User.class);
+            reqNames.add(user.getName());
+            name.setText(user.getName());
+            username.setText(user.getUserName());
+        });
+        DatabaseReference dbRef2 = FirebaseDatabase.getInstance()
+                .getReference(Constants.USERS_PATH + uid).child("name");
+        dbRef2.get().addOnSuccessListener(v -> {
+            currentUserName = v.getValue(String.class);
+        });
+
         return convertView;
     }
 
-    private void acceptRequest(View view){
+    private void acceptRequest(View view) {
         //Delete request element in user's list.
         //Create friend element in both user's and friend's list.
         //CreatePost
-        int pos = (int)view.getTag();
+        int pos = (int) view.getTag();
         mDB.getReference(Constants.FRIENDS_REQUEST +
                 currentUserUid +
                 "/" +
@@ -96,7 +98,8 @@ public class RequestsListAdapter extends ArrayAdapter<String> {
                         "/" +
                         currentUserUid)
                         .setValue(formatter.format(new Date())).addOnSuccessListener(v3 -> {
-                            createNewFriendPost(pos);
+                    createNewFriendPost(pos);
+                    Toast.makeText(getContext(), "Solicitud aceptada!", Toast.LENGTH_LONG).show();
                 });
             });
         });
@@ -108,17 +111,20 @@ public class RequestsListAdapter extends ArrayAdapter<String> {
         PostUploader.uploadPost(postA, null, FirebaseDatabase.getInstance(), null);
         PostUploader.uploadPost(postB, null, FirebaseDatabase.getInstance(), null);
         remove(getItem(pos));
+        notifyDataSetChanged();
     }
 
-    private void declineRequest(View view){
+    private void declineRequest(View view) {
         //Delete request element in user's list.
-        int pos = (int)view.getTag();
+        int pos = (int) view.getTag();
         mDB.getReference(Constants.FRIENDS_REQUEST +
-            currentUserUid +
-            "/" +
-            getItem(pos))
-            .setValue(null).addOnSuccessListener(v -> {
-                remove(getItem(pos));
+                currentUserUid +
+                "/" +
+                getItem(pos))
+                .setValue(null).addOnSuccessListener(v -> {
+            Toast.makeText(getContext(), "Solicitud denegada...", Toast.LENGTH_LONG).show();
+            remove(getItem(pos));
+            notifyDataSetChanged();
         });
     }
 
