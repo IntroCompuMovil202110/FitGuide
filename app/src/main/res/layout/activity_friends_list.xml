@@ -170,7 +170,7 @@
                 android:dividerHeight="10dp"
                 android:paddingHorizontal="48dp"
                 android:paddingVertical="8dp"
-                android:paddingTop="10dp"></ListView>
+                android:paddingTop="10dp" />
 
 
         </LinearLayout>

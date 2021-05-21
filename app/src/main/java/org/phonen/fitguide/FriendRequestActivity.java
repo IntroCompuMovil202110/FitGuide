@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.auth.FirebaseAuth;
@@ -27,6 +28,7 @@ public class FriendRequestActivity extends AppCompatActivity {
     BottomNavigationView bottomNavigationView;
     ListView requestsListView;
     private RequestsListAdapter adapter;
+    private TextView emptyText;
     //Data
     private List<String> requestsUids;
     private String currentUserUid;
@@ -37,6 +39,7 @@ public class FriendRequestActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_friend_request);
+        this.emptyText = findViewById(R.id.emptyTextReq);
         navBarSettings();
         this.requestsListView = findViewById(R.id.requestListView);
         this.requestsUids = new ArrayList<>();
@@ -65,7 +68,7 @@ public class FriendRequestActivity extends AppCompatActivity {
 
 
     private void loadAdapter() {
-        this.adapter = new RequestsListAdapter(this, this.requestsUids, currentUserUid);
+        this.adapter = new RequestsListAdapter(this, this.requestsUids, currentUserUid, emptyText);
         this.requestsListView.setAdapter(this.adapter);
     }
 

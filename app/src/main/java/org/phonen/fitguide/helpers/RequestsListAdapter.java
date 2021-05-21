@@ -33,12 +33,14 @@ public class RequestsListAdapter extends ArrayAdapter<String> {
     private final SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
     private final List<String> reqNames;
     private String currentUserName;
+    private final TextView emptyText;
 
-    public RequestsListAdapter(@NonNull Context context, List<String> friendsUids, String currentUid) {
+    public RequestsListAdapter(@NonNull Context context, List<String> friendsUids, String currentUid, TextView emptyText) {
         super(context, 0, friendsUids);
         this.currentUserUid = currentUid;
         this.mDB = FirebaseDatabase.getInstance();
-        reqNames = new ArrayList<>();
+        this.reqNames = new ArrayList<>();
+        this.emptyText = emptyText;
     }
 
     @NonNull
@@ -128,4 +130,11 @@ public class RequestsListAdapter extends ArrayAdapter<String> {
         });
     }
 
+    @Override
+    public void notifyDataSetChanged() {
+        super.notifyDataSetChanged();
+        if (getCount() < 1){
+            emptyText.setText("No tienes solicitudes.");
+        }
+    }
 }
