@@ -73,7 +73,7 @@ public class PostUploader {
                 stringBuilder.append("Genial!");
                 break;
             case 1:
-                stringBuilder.append("Espéctacular!");
+                stringBuilder.append("Espectacular!");
                 break;
             case 2:
                 stringBuilder.append("Asombroso!");
