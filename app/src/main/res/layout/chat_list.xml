@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="350dp"
+        android:layout_height="76dp"
+        android:layout_margin="10dp"
+        android:elevation="10dp"
+        app:cardBackgroundColor="@color/white"
+        app:cardCornerRadius="10dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <LinearLayout
+            style="@style/Widget.App.OddFriendRequestMainLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <LinearLayout style="@style/Widget.App.FriendRequestInfo">
+
+                <TextView
+                    android:id="@+id/nameandlast"
+                    style="@style/Widget.App.NameText"
+                    android:text="@string/sample_add_friend_name" />
+
+                <TextView
+                    android:id="@+id/nickname"
+                    style="@style/Widget.App.UsernameText"
+                    android:text="@string/sample_add_friend_username" />
+
+            </LinearLayout>
+
+            <ImageButton
+                android:id="@+id/runningButton"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_gravity="end"
+                android:layout_marginRight="3dp"
+                android:background="@drawable/circlebutton"
+                android:clickable="true"
+                android:src="@drawable/ic_baseline_directions_run_24" />
+
+            <ImageButton
+                android:id="@+id/messageButton"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_gravity="end"
+                android:background="@drawable/circlebutton"
+                android:clickable="true"
+                android:foregroundGravity="right"
+                android:src="@drawable/ic_chat"
+                app:backgroundTint="@color/white"
+                app:rippleColor="#FFFFFF"
+                app:tint="@color/main_purple" />
+
+
+        </LinearLayout>
+    </androidx.cardview.widget.CardView>
+</androidx.constraintlayout.widget.ConstraintLayout>

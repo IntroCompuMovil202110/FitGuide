@@ -14,6 +14,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import org.phonen.fitguide.utils.Constants;
 import org.phonen.fitguide.utils.References;
 import org.phonen.fitguide.model.User;
 
@@ -46,7 +47,7 @@ public class ProfileActivity extends AppCompatActivity {
         String uId =mAuth.getUid();
         Log.i("DEBUG uID",uId);
         myRef = FirebaseDatabase.getInstance().getReference();
-        myRef.child(References.PATH_USERS).child(uId).get().addOnCompleteListener(task -> {
+        myRef.child(Constants.USERS_PATH).child(uId).get().addOnCompleteListener(task -> {
             if (!task.isSuccessful()) {
                 Log.e("firebase", "Error getting data", task.getException());
             }
@@ -78,6 +79,10 @@ public class ProfileActivity extends AppCompatActivity {
                     return true;
                 case R.id.startActivity:
                     startActivity(new Intent(getApplicationContext(), StartActivity.class));
+                    overridePendingTransition(0, 0);
+                    return true;
+                case R.id.chatActivity:
+                    startActivity(new Intent(getApplicationContext(), ChatActivity.class));
                     overridePendingTransition(0, 0);
                     return true;
             }

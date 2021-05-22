@@ -35,6 +35,10 @@ public class ChallengesActivity extends AppCompatActivity {
                     startActivity(new Intent(getApplicationContext(), StartActivity.class));
                     overridePendingTransition(0, 0);
                     return true;
+                case R.id.chatActivity:
+                    startActivity(new Intent(getApplicationContext(), ChatActivity.class));
+                    overridePendingTransition(0, 0);
+                    return true;
             }
             return false;
         });

@@ -7,4 +7,5 @@ public class Constants {
     public static final String POSTS_IMAGES = "images/posts/";
     public static final String FRIENDS_REQUEST = "requests/";
     public static final String FRIENDS_LIST = "friends/";
+    public  static  final  String CHAT_PATH = "chat/";
 }

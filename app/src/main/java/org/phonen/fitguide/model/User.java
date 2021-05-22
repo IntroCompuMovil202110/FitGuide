@@ -14,6 +14,7 @@ public class User
     int points;
     String rank;
 
+
     public User() {
     level=1;
     points=0;

@@ -17,4 +17,8 @@
         android:title="Challenges"
         android:icon="@drawable/emoji_events_white_18dp"
         android:id="@+id/challengesActivity"/>
+    <item
+        android:title="Chat"
+        android:icon="@drawable/ic_chat"
+        android:id="@+id/chatActivity"/>
 </menu>

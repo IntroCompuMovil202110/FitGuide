@@ -128,6 +128,10 @@ public class StartActivity extends AppCompatActivity {
                     return true;
                 case R.id.startActivity:
                     return true;
+                case R.id.chatActivity:
+                    startActivity(new Intent(getApplicationContext(), ChatActivity.class));
+                    overridePendingTransition(0, 0);
+                    return true;
             }
             return false;
         });
