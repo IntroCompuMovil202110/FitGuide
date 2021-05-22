@@ -56,12 +56,8 @@ public class RequestsListAdapter extends ArrayAdapter<String> {
         ImageButton btnDecline = convertView.findViewById(R.id.declineRequestBtn);
         btnAccept.setTag(position);
         btnDecline.setTag(position);
-        btnAccept.setOnClickListener(view -> {
-            this.acceptRequest(view);
-        });
-        btnDecline.setOnClickListener(view -> {
-            this.declineRequest(view);
-        });
+        btnAccept.setOnClickListener(this::acceptRequest);
+        btnDecline.setOnClickListener(this::declineRequest);
         //Recover data
         DatabaseReference dbRef = FirebaseDatabase.getInstance()
                 .getReference(Constants.USERS_PATH + uid);
@@ -73,9 +69,7 @@ public class RequestsListAdapter extends ArrayAdapter<String> {
         });
         DatabaseReference dbRef2 = FirebaseDatabase.getInstance()
                 .getReference(Constants.USERS_PATH + uid).child("name");
-        dbRef2.get().addOnSuccessListener(v -> {
-            currentUserName = v.getValue(String.class);
-        });
+        dbRef2.get().addOnSuccessListener(v -> currentUserName = v.getValue(String.class));
 
         return convertView;
     }
@@ -89,22 +83,18 @@ public class RequestsListAdapter extends ArrayAdapter<String> {
                 currentUserUid +
                 "/" +
                 getItem(pos))
-                .setValue(null).addOnSuccessListener(v -> {
-            mDB.getReference(Constants.FRIENDS_LIST +
-                    currentUserUid +
-                    "/" +
-                    getItem(pos))
-                    .setValue(formatter.format(new Date())).addOnSuccessListener(v2 -> {
-                mDB.getReference(Constants.FRIENDS_LIST +
-                        getItem(pos) +
+                .setValue(null).addOnSuccessListener(v -> mDB.getReference(Constants.FRIENDS_LIST +
+                        currentUserUid +
                         "/" +
-                        currentUserUid)
-                        .setValue(formatter.format(new Date())).addOnSuccessListener(v3 -> {
-                    createNewFriendPost(pos);
-                    Toast.makeText(getContext(), "Solicitud aceptada!", Toast.LENGTH_LONG).show();
-                });
-            });
-        });
+                        getItem(pos))
+                        .setValue(formatter.format(new Date())).addOnSuccessListener(v2 -> mDB.getReference(Constants.FRIENDS_LIST +
+                            getItem(pos) +
+                            "/" +
+                            currentUserUid)
+                            .setValue(formatter.format(new Date())).addOnSuccessListener(v3 -> {
+                        createNewFriendPost(pos);
+                        Toast.makeText(getContext(), "Solicitud aceptada!", Toast.LENGTH_LONG).show();
+                    })));
     }
 
     private void createNewFriendPost(int pos) {

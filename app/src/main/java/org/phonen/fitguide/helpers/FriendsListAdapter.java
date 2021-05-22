@@ -43,9 +43,7 @@ public class FriendsListAdapter extends ArrayAdapter<String> {
         TextView username = convertView.findViewById(R.id.friendUser);
         ImageButton btn = convertView.findViewById(R.id.removeFriendBtn);
         btn.setTag(position);
-        btn.setOnClickListener(view -> {
-            this.removeFriend(view);
-        });
+        btn.setOnClickListener(this::removeFriend);
         //Recover friend's data.
         DatabaseReference dbRef = FirebaseDatabase.getInstance()
                 .getReference(Constants.USERS_PATH + uid);
@@ -72,15 +70,11 @@ public class FriendsListAdapter extends ArrayAdapter<String> {
                 getItem(pos) +
                 "/" +
                 currentUserUid)
-                .setValue(null).addOnSuccessListener(v -> {
-            mDB.getReference(Constants.FRIENDS_LIST +
-                    currentUserUid +
-                    "/" +
-                    getItem(pos))
-                    .setValue(null).addOnSuccessListener(v2 -> {
-                remove(getItem(pos));
-            });
-        });
+                .setValue(null).addOnSuccessListener(v -> mDB.getReference(Constants.FRIENDS_LIST +
+                        currentUserUid +
+                        "/" +
+                        getItem(pos))
+                        .setValue(null).addOnSuccessListener(v2 -> remove(getItem(pos))));
     }
 
 

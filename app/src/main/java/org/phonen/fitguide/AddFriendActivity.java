@@ -162,13 +162,10 @@ public class AddFriendActivity extends AppCompatActivity {
                 "/" +
                 mAuth.getCurrentUser().getUid()).setValue(
                         formatter.format(new Date())
-        ).addOnSuccessListener(new OnSuccessListener<Void>() {
-            @Override
-            public void onSuccess(Void aVoid) {
-                Toast.makeText(getApplicationContext(),
-                        "Solicitud enviada!", Toast.LENGTH_LONG).show();
-                usrNameField.setText("");
-            }
+        ).addOnSuccessListener(aVoid -> {
+            Toast.makeText(getApplicationContext(),
+                    "Solicitud enviada!", Toast.LENGTH_LONG).show();
+            usrNameField.setText("");
         });
     }
 

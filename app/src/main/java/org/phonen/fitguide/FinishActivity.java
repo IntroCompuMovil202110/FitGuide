@@ -112,25 +112,22 @@ public class FinishActivity extends AppCompatActivity {
                         this.mAuth.getCurrentUser().getUid());
         myRef = myRef.push();
         String sessionID = myRef.getKey();
-        myRef.setValue(session).addOnSuccessListener(new OnSuccessListener<Void>() {
-            @Override
-            public void onSuccess(Void aVoid) {
-                Intent intent = new Intent(getApplicationContext(), FeedActivity.class);
-                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                PostUploader.uploadPost(PostUploader.createPostFromSession(
-                        session,
-                        mAuth.getCurrentUser().getUid(),
-                        Constants.POSTS_IMAGES +
-                                mAuth.getCurrentUser().getUid() +
-                                "/" +
-                                sessionID +
-                                ".jpeg"),
-                        imgData,
-                        mDB,
-                        FirebaseStorage.getInstance(),
-                        intent,
-                        getApplicationContext());
-            }
+        myRef.setValue(session).addOnSuccessListener(aVoid -> {
+            Intent intent = new Intent(getApplicationContext(), FeedActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            PostUploader.uploadPost(PostUploader.createPostFromSession(
+                    session,
+                    mAuth.getCurrentUser().getUid(),
+                    Constants.POSTS_IMAGES +
+                            mAuth.getCurrentUser().getUid() +
+                            "/" +
+                            sessionID +
+                            ".jpeg"),
+                    imgData,
+                    mDB,
+                    FirebaseStorage.getInstance(),
+                    intent,
+                    getApplicationContext());
         });
     }
 
@@ -141,16 +138,13 @@ public class FinishActivity extends AppCompatActivity {
                         this.mAuth.getCurrentUser().getUid());
         myRef = myRef.push();
         String sessionID = myRef.getKey();
-        myRef.setValue(session).addOnSuccessListener(new OnSuccessListener<Void>() {
-            @Override
-            public void onSuccess(Void aVoid) {
-                Intent intent = new Intent(getApplicationContext(), EndShareActivity.class);
-                Bundle bundle = new Bundle();
-                bundle.putString("sessionID", sessionID);
-                bundle.putSerializable("sessionObject", session);
-                intent.putExtra("sessionBundle", bundle);
-                startActivity(intent);
-            }
+        myRef.setValue(session).addOnSuccessListener(aVoid -> {
+            Intent intent = new Intent(getApplicationContext(), EndShareActivity.class);
+            Bundle bundle = new Bundle();
+            bundle.putString("sessionID", sessionID);
+            bundle.putSerializable("sessionObject", session);
+            intent.putExtra("sessionBundle", bundle);
+            startActivity(intent);
         });
     }
 
