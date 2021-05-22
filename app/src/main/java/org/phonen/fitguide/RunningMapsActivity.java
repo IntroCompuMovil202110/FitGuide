@@ -456,15 +456,13 @@ public class RunningMapsActivity extends FragmentActivity implements OnMapReadyC
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        switch (requestCode) {
-            case SETTINGS_GPS: {
-                if (resultCode == RESULT_OK) {
-                    startLocationUpdates();
-                } else {
-                    Toast.makeText(this,
-                            "Sin acceso a localización, hardware deshabilitado!",
-                            Toast.LENGTH_LONG).show();
-                }
+        if (requestCode == SETTINGS_GPS) {
+            if (resultCode == RESULT_OK) {
+                startLocationUpdates();
+            } else {
+                Toast.makeText(this,
+                        "Sin acceso a localización, hardware deshabilitado!",
+                        Toast.LENGTH_LONG).show();
             }
         }
     }

@@ -30,7 +30,7 @@ import java.util.Map;
 public class FeedAdapter extends ArrayAdapter<Post> {
 
     private Map<String, User> users;
-    private SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
+    private final SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
     private Map<String, Bitmap> cachedImages;
     private String uid;
 

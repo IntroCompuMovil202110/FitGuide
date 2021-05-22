@@ -197,10 +197,9 @@ public class FinishActivity extends AppCompatActivity {
         int horas = ((int) time / 3600);
         int minutos = (int) ((time - horas * 3600) / 60);
         int segundos = (int) (time - (horas * 3600 + minutos * 60));
-        String sb = (horas < 10 ? "0" + horas : horas) + ":" +
+        return (horas < 10 ? "0" + horas : horas) + ":" +
                 (minutos < 10 ? "0" + minutos : minutos) + ":" +
                 (segundos < 10 ? "0" + segundos : segundos);
-        return sb;
     }
 
     private String getCurrentTime() {
