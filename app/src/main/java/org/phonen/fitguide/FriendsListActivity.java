@@ -9,7 +9,6 @@ import android.util.Log;
 import android.view.View;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.auth.FirebaseAuth;
@@ -19,10 +18,8 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import org.phonen.fitguide.helpers.FriendsListAdapter;
-import org.phonen.fitguide.model.User;
 import org.phonen.fitguide.utils.Constants;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 

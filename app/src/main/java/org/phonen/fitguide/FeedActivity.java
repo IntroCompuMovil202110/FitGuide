@@ -5,7 +5,6 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.ArrayMap;
 import android.util.Log;
 import android.widget.ListView;
 
@@ -22,8 +21,6 @@ import org.phonen.fitguide.model.User;
 import org.phonen.fitguide.utils.Constants;
 
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
