@@ -33,7 +33,7 @@ import java.util.Map;
 public class FeedAdapter extends ArrayAdapter<Post> {
 
     private Map<String, User> users;
-    SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
+    private SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
     private Map<String, Bitmap> cachedImages;
     private String uid;
 
@@ -59,12 +59,14 @@ public class FeedAdapter extends ArrayAdapter<Post> {
         TextView time = convertView.findViewById(R.id.feed_time);
         TextView description = convertView.findViewById(R.id.feed_text);
         ImageView image = convertView.findViewById(R.id.feed_image_post);
+        ImageView logo = convertView.findViewById(R.id.feed_logo_icon);
 
 
         User user = users.get(post.getUserUID());
         name.setText(user.getName() + " " + user.getLastName());
         username.setText(user.getUserName());
         time.setText(format.format(post.getDate()));
+        description.setText(post.getDescription());
         if(!post.getImagePath().isEmpty()){
             if(cachedImages.get(post.getImagePath()) == null){
                 StorageReference imageRef = FirebaseStorage.getInstance().getReference();
@@ -88,7 +90,13 @@ public class FeedAdapter extends ArrayAdapter<Post> {
         }
         switch (post.getType()) {
             case 0:
-                description.setText(post.getDescription());
+                logo.setImageDrawable(convertView.getResources().getDrawable(R.drawable.accept_icon, getContext().getTheme()));
+                break;
+            case 1:
+                logo.setImageDrawable(convertView.getResources().getDrawable(R.drawable.ic_baseline_assignment_turned_in_24, getContext().getTheme()));
+                break;
+            case 2:
+                logo.setImageDrawable(convertView.getResources().getDrawable(R.drawable.add_friend_icon, getContext().getTheme()));
                 break;
         }
 
