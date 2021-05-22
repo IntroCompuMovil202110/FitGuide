@@ -59,7 +59,7 @@ public class PostUploader {
                 stringBuilder.append("Monto bici");
                 break;
             default:
-                stringBuilder.append("Caminó");
+                stringBuilder.append("Realizó actividad");
                 break;
         }
         stringBuilder.append(" durante ");

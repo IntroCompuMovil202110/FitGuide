@@ -466,7 +466,6 @@ public class RunningMapsActivity extends FragmentActivity implements OnMapReadyC
                             "Sin acceso a localización, hardware deshabilitado!",
                             Toast.LENGTH_LONG).show();
                 }
-                return;
             }
         }
     }
