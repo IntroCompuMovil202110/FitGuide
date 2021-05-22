@@ -10,7 +10,6 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.firebase.auth.FirebaseAuth;
@@ -162,13 +161,10 @@ public class AddFriendActivity extends AppCompatActivity {
                 "/" +
                 mAuth.getCurrentUser().getUid()).setValue(
                         formatter.format(new Date())
-        ).addOnSuccessListener(new OnSuccessListener<Void>() {
-            @Override
-            public void onSuccess(Void aVoid) {
-                Toast.makeText(getApplicationContext(),
-                        "Solicitud enviada!", Toast.LENGTH_LONG).show();
-                usrNameField.setText("");
-            }
+        ).addOnSuccessListener(aVoid -> {
+            Toast.makeText(getApplicationContext(),
+                    "Solicitud enviada!", Toast.LENGTH_LONG).show();
+            usrNameField.setText("");
         });
     }
 

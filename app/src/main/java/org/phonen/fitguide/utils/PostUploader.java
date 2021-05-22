@@ -5,10 +5,8 @@ import org.phonen.fitguide.model.Session;
 import android.content.Context;
 import android.content.Intent;
 
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.UploadTask;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -17,31 +15,20 @@ import java.util.Random;
 public class PostUploader {
     public static void uploadPost(Post post, byte[] imgData, FirebaseDatabase mDatabase, FirebaseStorage mStorage, Intent targetIntent, Context context){
         if (post != null){
-            mDatabase.getReference(Constants.POSTS_PATH + post.getUserUID()).push().setValue(post).addOnSuccessListener(new OnSuccessListener<Void>() {
-                @Override
-                public void onSuccess(Void aVoid) {
-                    if (!post.getImagePath().equals("")){
-                        mStorage.getReference(post.getImagePath()).putBytes(imgData).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                            @Override
-                            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                                context.startActivity(targetIntent);
-                            }
-                        });
-                    }else{
-                        context.startActivity(targetIntent);
-                    }
+            mDatabase.getReference(Constants.POSTS_PATH + post.getUserUID()).push().setValue(post).addOnSuccessListener(aVoid -> {
+                if (!post.getImagePath().equals("")){
+                    mStorage.getReference(post.getImagePath()).putBytes(imgData).addOnSuccessListener(taskSnapshot -> context.startActivity(targetIntent));
+                }else{
+                    context.startActivity(targetIntent);
                 }
             });
         }
     }
     public static void uploadPost(Post post, byte[] imgData, FirebaseDatabase mDatabase, FirebaseStorage mStorage){
         if (post != null){
-            mDatabase.getReference(Constants.POSTS_PATH + post.getUserUID()).push().setValue(post).addOnSuccessListener(new OnSuccessListener<Void>() {
-                @Override
-                public void onSuccess(Void aVoid) {
-                    if(!post.getImagePath().equals("")){
-                        mStorage.getReference(post.getImagePath()).putBytes(imgData);
-                    }
+            mDatabase.getReference(Constants.POSTS_PATH + post.getUserUID()).push().setValue(post).addOnSuccessListener(aVoid -> {
+                if(!post.getImagePath().equals("")){
+                    mStorage.getReference(post.getImagePath()).putBytes(imgData);
                 }
             });
         }
@@ -59,7 +46,7 @@ public class PostUploader {
                 stringBuilder.append("Monto bici");
                 break;
             default:
-                stringBuilder.append("Caminó");
+                stringBuilder.append("Realizó actividad");
                 break;
         }
         stringBuilder.append(" durante ");

@@ -5,7 +5,6 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.ArrayMap;
 import android.util.Log;
 import android.widget.ListView;
 
@@ -22,8 +21,6 @@ import org.phonen.fitguide.model.User;
 import org.phonen.fitguide.utils.Constants;
 
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -56,13 +53,7 @@ public class FeedActivity extends AppCompatActivity {
         user = FirebaseAuth.getInstance().getCurrentUser();
         list = findViewById(R.id.feed_list_view);
         feedAdapter = new FeedAdapter(this, postsList, friendsMap, user.getUid());
-        feedAdapter.sort(new Comparator<Post>() {
-            @Override
-            public int compare(Post o1, Post o2) {
-                return o1.getDate().compareTo(o2.getDate());
-            }
-
-        });
+        feedAdapter.sort((o1, o2) -> o1.getDate().compareTo(o2.getDate()));
         list.setAdapter(feedAdapter);
 
         this.getFeedForUser();
