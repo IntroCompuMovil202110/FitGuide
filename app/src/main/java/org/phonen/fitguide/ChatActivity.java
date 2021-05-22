@@ -28,7 +28,7 @@ import java.util.ArrayList;
 
 public class ChatActivity extends AppCompatActivity  {
 
-    public static String CHANNEL_ID = "NOTI_APP";
+
     BottomNavigationView bottomNavigationView;
     //auth
     private FirebaseAuth mAuth;

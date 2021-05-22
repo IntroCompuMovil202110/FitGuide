@@ -31,8 +31,6 @@ import java.util.ArrayList;
 import java.util.Calendar;
 
 public class UserChatActivity extends AppCompatActivity {
-
-
     //components view
     TextView nameUser;
     TextView userName;
@@ -50,6 +48,7 @@ public class UserChatActivity extends AppCompatActivity {
     //extras
     private ArrayList<Message> mList = new ArrayList<>();
     MessageAdapter mAdapter;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -61,11 +60,11 @@ public class UserChatActivity extends AppCompatActivity {
         editText = findViewById(R.id.messageText);
         messages = findViewById(android.R.id.list);
         //firebase
-        mAuth =FirebaseAuth.getInstance();
+        mAuth = FirebaseAuth.getInstance();
         database = FirebaseDatabase.getInstance();
         //variables
         mList = new ArrayList<Message>();
-        mAdapter = new MessageAdapter(getApplicationContext(),R.layout.card_view_receiver,R.layout.card_view_transmit,mList);
+        mAdapter = new MessageAdapter(getApplicationContext(), R.layout.card_view_receiver, R.layout.card_view_transmit, mList);
         messages.setAdapter(mAdapter);
         String name;
         String lastName;
@@ -79,17 +78,16 @@ public class UserChatActivity extends AppCompatActivity {
         userName = extras.getString("nickName");
         friendId = extras.getString("uId");
         //actualización datos
-        myRef = database.getReference(Constants.CHAT_PATH+mAuth.getUid()+"/"+friendId);
-        myRef.child(Constants.CHAT_PATH).child(mAuth.getUid()).child("/"+ friendId);
-        friendref = database.getReference(Constants.CHAT_PATH+friendId+"/"+mAuth.getUid());
-        nameUser.setText(name+" "+lastName);
+        myRef = database.getReference(Constants.CHAT_PATH + mAuth.getUid() + "/" + friendId);
+        myRef.child(Constants.CHAT_PATH).child(mAuth.getUid()).child("/" + friendId);
+        friendref = database.getReference(Constants.CHAT_PATH + friendId + "/" + mAuth.getUid());
+        nameUser.setText(name + " " + lastName);
         this.userName.setText(userName);
         principalref = FirebaseDatabase.getInstance().getReference();
         principalref.child(Constants.USERS_PATH).child(mAuth.getUid()).get().addOnCompleteListener(task -> {
             if (!task.isSuccessful()) {
                 Log.e("firebase", "Error getting data", task.getException());
-            }
-            else {
+            } else {
                 principal = task.getResult().getValue(User.class);
             }
         });
@@ -97,8 +95,10 @@ public class UserChatActivity extends AppCompatActivity {
         buttonSend.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(editText.getText().length()>0)
-                {
+                if (editText.getText().length() > 0) {
+                    mList.clear();
+                    mAdapter.clear();
+                    mAdapter.notifyDataSetChanged();
                     String date = new SimpleDateFormat("yyyy/MM/dd ").format(Calendar.getInstance().getTime());
                     String time = new SimpleDateFormat("HH:mm:ss").format(Calendar.getInstance().getTime());
                     String messageText = editText.getText().toString();
@@ -111,41 +111,44 @@ public class UserChatActivity extends AppCompatActivity {
                     myRef.push().setValue(message);
                     friendref.push().setValue(message);
                     editText.setText("");
-
+                    //setScrollbar();
                 }
             }
         });
-subscribeToChanges();
+        subscribeToChanges();
     }
 
-    @Override
+    /*@Override
     protected void onRestart() {
         super.onRestart();
         mList = new ArrayList<Message>();
         mAdapter = new MessageAdapter(getApplicationContext(),R.layout.card_view_receiver,R.layout.card_view_transmit,mList);
         messages.setAdapter(mAdapter);
+    }*/
+
+    public void setScrollbar(){
+        messages.smoothScrollToPosition(0, messages.getBottom());
     }
 
-    private void subscribeToChanges()
-    {
-    myRef.addValueEventListener(new ValueEventListener() {
-        @Override
-        public void onDataChange(@NonNull DataSnapshot snapshot) {
-            mList.clear();
-            mAdapter.clear();
-            mAdapter.notifyDataSetChanged();
-            for(DataSnapshot single: snapshot.getChildren())
-            {
-                Message ms = single.getValue(Message.class);
-                mList.add(ms);
+    private void subscribeToChanges() {
+        myRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                mList.clear();
+                mAdapter.clear();
                 mAdapter.notifyDataSetChanged();
+                //setScrollbar();
+                for (DataSnapshot single : snapshot.getChildren()) {
+                    Message ms = single.getValue(Message.class);
+                    mList.add(ms);
+                    mAdapter.notifyDataSetChanged();
+                }
             }
-        }
 
-        @Override
-        public void onCancelled(@NonNull DatabaseError error) {
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
 
-        }
-    });
+            }
+        });
     }
 }

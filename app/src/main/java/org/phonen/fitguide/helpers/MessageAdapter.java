@@ -22,77 +22,67 @@ public class MessageAdapter extends ArrayAdapter<Message> {
     private ArrayList<Message> mList;
     private Context mContext;
     private int resource_receiver;
-    private  int resource_sender;
-    private FirebaseAuth mAuth =FirebaseAuth.getInstance();
-    Message ms;
-    public  class  ViewHolder
-    {
+    private int resource_sender;
+    private FirebaseAuth mAuth = FirebaseAuth.getInstance();
+    //Message ms;
+
+    public class ViewHolder {
         TextView message;
         TextView name;
         TextView date;
         TextView time;
     }
 
-    public MessageAdapter(@NonNull Context context, int receiver, int sender,@NonNull ArrayList<Message> objects) {
-        super(context, receiver,sender, objects);
-        this.mContext= context;
-        this.resource_receiver =receiver;
+    public MessageAdapter(@NonNull Context context, int receiver, int sender, @NonNull ArrayList<Message> objects) {
+        super(context, receiver, sender, objects);
+        this.mContext = context;
+        this.resource_receiver = receiver;
         this.resource_sender = sender;
         this.mList = objects;
-
- }
-
+    }
 
     @NonNull
     @Override
-
-    public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
-        View view = convertView;
+    public View getView(int position, @Nullable View view, @NonNull ViewGroup parent) {
+        //View view = convertView;
+        view = null;
         int viewType = getItemViewType(position);
-        if(view == null)
-        {getItemViewType(position);
-            if(viewType==1)
-            {
-                view = LayoutInflater.from(mContext).inflate(R.layout.card_view_transmit,parent,false);
+        if (view == null) {
+            getItemViewType(position);
+            if (viewType == 1) {
+                view = LayoutInflater.from(mContext).inflate(R.layout.card_view_transmit, parent, false);
                 LayoutInflater inflater = LayoutInflater.from(mContext);
-                view = inflater.inflate(resource_sender,parent,false);
+                view = inflater.inflate(resource_sender, parent, false);
 
-            }
-            else
-            {
-                view = LayoutInflater.from(mContext).inflate(R.layout.card_view_receiver,parent,false);
+            } else {
+                view = LayoutInflater.from(mContext).inflate(R.layout.card_view_receiver, parent, false);
                 LayoutInflater inflater = LayoutInflater.from(mContext);
-                view = inflater.inflate(resource_receiver,parent,false);
+                view = inflater.inflate(resource_receiver, parent, false);
             }
-
+            Message ms;
             ViewHolder viewHolder = new ViewHolder();
-            viewHolder.date = (TextView)view.findViewById(R.id.dateText);
-            viewHolder.message=(TextView)view.findViewById(R.id.messageView);
-            viewHolder.name =(TextView)view.findViewById(R.id.nameText);
-            viewHolder.time = (TextView)view.findViewById(R.id.timeText);
-            ms =mList.get(position);
+            viewHolder.date = (TextView) view.findViewById(R.id.dateText);
+            viewHolder.message = (TextView) view.findViewById(R.id.messageView);
+            viewHolder.name = (TextView) view.findViewById(R.id.nameText);
+            viewHolder.time = (TextView) view.findViewById(R.id.timeText);
+            ms = mList.get(position);
             viewHolder.name.setText(ms.getNombre());
             viewHolder.message.setText(ms.getMessage());
             viewHolder.time.setText(ms.getTime());
             viewHolder.date.setText(ms.getDate());
-
+            view.setTag(viewHolder);
         }
-        return  view;
+        return view;
     }
 
     @Override
     public int getItemViewType(int position) {
-    if(mList.get(position).getEmisor()!=null)
-    {
-        if(mList.get(position).getEmisor().equals(mAuth.getUid()))
-        {
-            return 1;
-        }
-        else
-        {
-            return -1;
-        }
-    }
-    else return  -1;
+        if (mList.get(position).getEmisor() != null) {
+            if (mList.get(position).getEmisor().equals(mAuth.getUid())) {
+                return 1;
+            } else {
+                return -1;
+            }
+        } else return -1;
     }
 }
