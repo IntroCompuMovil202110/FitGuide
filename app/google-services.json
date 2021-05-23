@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "85071717681",
+    "firebase_url": "https://fitguide-bdce7-default-rtdb.firebaseio.com",
+    "project_id": "fitguide-bdce7",
+    "storage_bucket": "fitguide-bdce7.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:85071717681:android:1a3117cc09e33ee0d5fc10",
+        "android_client_info": {
+          "package_name": "org.phonen.fitguide"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "85071717681-s74makurpif58ksgpvgcjbk3c7ld98fb.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCw807lNfw5rpUZ8mJ0dMtkOzyn6XmYhsE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "85071717681-s74makurpif58ksgpvgcjbk3c7ld98fb.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
