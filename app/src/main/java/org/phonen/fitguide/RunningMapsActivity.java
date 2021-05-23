@@ -53,7 +53,6 @@ import com.google.android.gms.tasks.Task;
 import org.phonen.fitguide.utils.ImageGenerator;
 import org.phonen.fitguide.utils.PermissionManager;
 
-import java.io.ByteArrayOutputStream;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -93,10 +92,12 @@ public class RunningMapsActivity extends FragmentActivity implements OnMapReadyC
     private static final double ALTITUT_THRESHOLD_B = 2000;
     //Layout
     private final DecimalFormat df = new DecimalFormat("##.###");
+    private final DecimalFormat ef = new DecimalFormat("##");
     private TextView distanceIndicator;
     private TextView bpmIndicator;
     private ImageView pepitoRunning;
     private Chronometer chronometer;
+    private TextView elevationText;
     //Data
     private double EXERCISE_CALORIES_CONSTANT_MET;
     private double currentDistance;
@@ -119,6 +120,7 @@ public class RunningMapsActivity extends FragmentActivity implements OnMapReadyC
         bpmIndicator = findViewById(R.id.labelBPM);
         chronometer = findViewById(R.id.chronometer);
         pepitoRunning = findViewById(R.id.pepitoRunning);
+        elevationText = findViewById(R.id.running_elevation);
         currentDistance = 0;
         routeCoords = new ArrayList<>();
         this.getIntentData(getIntent().getBundleExtra("bundle"));
@@ -165,6 +167,7 @@ public class RunningMapsActivity extends FragmentActivity implements OnMapReadyC
     public void endDataGathering() {
         this.chronometer.stop();
         this.totalTime = (SystemClock.elapsedRealtime() - this.chronometer.getBase()) / 1000;
+
         this.oxigeno = this.getOxigeno();
         this.burnedCalories = this.calcCalories();
     }
@@ -255,6 +258,7 @@ public class RunningMapsActivity extends FragmentActivity implements OnMapReadyC
                 this.bpmIndicator.setTextColor(getColor(R.color.low_alert));
             }
             this.currentAltitut = altitut;
+            elevationText.setText(ef.format(altitut) + " m");
         }
     }
 
@@ -452,16 +456,13 @@ public class RunningMapsActivity extends FragmentActivity implements OnMapReadyC
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        switch (requestCode) {
-            case SETTINGS_GPS: {
-                if (resultCode == RESULT_OK) {
-                    startLocationUpdates();
-                } else {
-                    Toast.makeText(this,
-                            "Sin acceso a localización, hardware deshabilitado!",
-                            Toast.LENGTH_LONG).show();
-                }
-                return;
+        if (requestCode == SETTINGS_GPS) {
+            if (resultCode == RESULT_OK) {
+                startLocationUpdates();
+            } else {
+                Toast.makeText(this,
+                        "Sin acceso a localización, hardware deshabilitado!",
+                        Toast.LENGTH_LONG).show();
             }
         }
     }

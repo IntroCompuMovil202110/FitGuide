@@ -4,22 +4,18 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.Manifest;
-import android.app.PendingIntent;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.media.MediaScannerConnection;
 import android.os.Bundle;
 import android.os.Environment;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
@@ -112,25 +108,22 @@ public class FinishActivity extends AppCompatActivity {
                         this.mAuth.getCurrentUser().getUid());
         myRef = myRef.push();
         String sessionID = myRef.getKey();
-        myRef.setValue(session).addOnSuccessListener(new OnSuccessListener<Void>() {
-            @Override
-            public void onSuccess(Void aVoid) {
-                Intent intent = new Intent(getApplicationContext(), FeedActivity.class);
-                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                PostUploader.uploadPost(PostUploader.createPostFromSession(
-                        session,
-                        mAuth.getCurrentUser().getUid(),
-                        Constants.POSTS_IMAGES +
-                                mAuth.getCurrentUser().getUid() +
-                                "/" +
-                                sessionID +
-                                ".jpeg"),
-                        imgData,
-                        mDB,
-                        FirebaseStorage.getInstance(),
-                        intent,
-                        getApplicationContext());
-            }
+        myRef.setValue(session).addOnSuccessListener(aVoid -> {
+            Intent intent = new Intent(getApplicationContext(), FeedActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            PostUploader.uploadPost(PostUploader.createPostFromSession(
+                    session,
+                    mAuth.getCurrentUser().getUid(),
+                    Constants.POSTS_IMAGES +
+                            mAuth.getCurrentUser().getUid() +
+                            "/" +
+                            sessionID +
+                            ".jpeg"),
+                    imgData,
+                    mDB,
+                    FirebaseStorage.getInstance(),
+                    intent,
+                    getApplicationContext());
         });
     }
 
@@ -141,16 +134,13 @@ public class FinishActivity extends AppCompatActivity {
                         this.mAuth.getCurrentUser().getUid());
         myRef = myRef.push();
         String sessionID = myRef.getKey();
-        myRef.setValue(session).addOnSuccessListener(new OnSuccessListener<Void>() {
-            @Override
-            public void onSuccess(Void aVoid) {
-                Intent intent = new Intent(getApplicationContext(), EndShareActivity.class);
-                Bundle bundle = new Bundle();
-                bundle.putString("sessionID", sessionID);
-                bundle.putSerializable("sessionObject", session);
-                intent.putExtra("sessionBundle", bundle);
-                startActivity(intent);
-            }
+        myRef.setValue(session).addOnSuccessListener(aVoid -> {
+            Intent intent = new Intent(getApplicationContext(), EndShareActivity.class);
+            Bundle bundle = new Bundle();
+            bundle.putString("sessionID", sessionID);
+            bundle.putSerializable("sessionObject", session);
+            intent.putExtra("sessionBundle", bundle);
+            startActivity(intent);
         });
     }
 
@@ -204,7 +194,12 @@ public class FinishActivity extends AppCompatActivity {
     }
 
     private String calcularTiempo(double time) {
-        return PostUploader.getNaturalTime(time);
+        int horas = ((int) time / 3600);
+        int minutos = (int) ((time - horas * 3600) / 60);
+        int segundos = (int) (time - (horas * 3600 + minutos * 60));
+        return (horas < 10 ? "0" + horas : horas) + ":" +
+                (minutos < 10 ? "0" + minutos : minutos) + ":" +
+                (segundos < 10 ? "0" + segundos : segundos);
     }
 
     private String getCurrentTime() {

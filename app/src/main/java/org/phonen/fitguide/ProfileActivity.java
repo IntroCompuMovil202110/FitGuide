@@ -4,9 +4,14 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 
+
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.graphics.Color;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -40,8 +45,10 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
+
 import org.phonen.fitguide.model.Session;
 import org.phonen.fitguide.utils.Level;
+import org.phonen.fitguide.services.RequestsListenerService;
 import org.phonen.fitguide.utils.References;
 import org.phonen.fitguide.model.User;
 
@@ -54,10 +61,15 @@ import java.util.Date;
 import java.util.List;
 
 public class ProfileActivity extends AppCompatActivity {
+    //Google
     private FirebaseAuth mAuth;
     FirebaseDatabase database;
     DatabaseReference myRef;
+
     DatabaseReference myRefS;
+    private String CHANNEL_ID_REQ = "RequestChannel";
+
+
 
     User user;
     BottomNavigationView bottomNavigationView;
@@ -118,6 +130,8 @@ public class ProfileActivity extends AppCompatActivity {
 
             }
         });
+        createNotificationChannel();
+    }
 
         semanal.setOnClickListener(new View.OnClickListener() {
 
@@ -140,8 +154,28 @@ public class ProfileActivity extends AppCompatActivity {
         });
 
 
+    private void createNotificationChannel() {
+        // Create the NotificationChannel, but only on API 26+ because
+        // the NotificationChannel class is new and not in the support library
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            //Friends request notifications
+            CharSequence nameReq ="Friends requests channel";
+            String descriptionReq = "Channel used to notify new incoming friend requests";
+            int importanceReq = NotificationManager.IMPORTANCE_DEFAULT;
+            //IMPORTANCE_MAX MUESTRA LA NOTIFICACIÓN ANIMADA
+            NotificationChannel channelReq = new NotificationChannel(CHANNEL_ID_REQ, nameReq, importanceReq);
+            channelReq.setDescription(descriptionReq);
+            // Register the channel with the system; you can't change the importance
+            // or other notification behaviors after this
+            NotificationManager notificationManager = getSystemService(NotificationManager.class);
+            notificationManager.createNotificationChannel(channelReq);
+        }
     }
 
+    private void initNotificationService() {
+        Intent intentReq = new Intent(ProfileActivity.this, RequestsListenerService.class);
+        RequestsListenerService.enqueueWork(ProfileActivity.this, intentReq);
+    }
     public void navBarSettings(){
         bottomNavigationView = findViewById(R.id.bottomNavigationView);
         bottomNavigationView.setSelectedItemId(R.id.profileActivity);
@@ -158,7 +192,9 @@ public class ProfileActivity extends AppCompatActivity {
                 case R.id.profileActivity:
                     return true;
                 case R.id.startActivity:
-                    startActivity(new Intent(getApplicationContext(), StartActivity.class));
+                    startActivity(new Intent(getApplicationContext(), 
+                                             
+                                             tActivity.class));
                     overridePendingTransition(0, 0);
                     return true;
             }
@@ -342,6 +378,7 @@ public class ProfileActivity extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
         getDataChartWeek();
+        this.initNotificationService();
     }
 
     @Override
@@ -375,6 +412,7 @@ public class ProfileActivity extends AppCompatActivity {
             }
             createChartd(months, date.getMonth()+1);
         });
+
     }
 
 
