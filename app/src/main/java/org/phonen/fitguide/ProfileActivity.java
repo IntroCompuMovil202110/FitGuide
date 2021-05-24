@@ -18,7 +18,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 import org.phonen.fitguide.services.RequestsListenerService;
-import org.phonen.fitguide.utils.References;
+import org.phonen.fitguide.utils.Constants;
 import org.phonen.fitguide.model.User;
 
 public class ProfileActivity extends AppCompatActivity {
@@ -54,7 +54,7 @@ public class ProfileActivity extends AppCompatActivity {
         String uId =mAuth.getUid();
         Log.i("DEBUG uID",uId);
         myRef = FirebaseDatabase.getInstance().getReference();
-        myRef.child(References.PATH_USERS).child(uId).get().addOnCompleteListener(task -> {
+        myRef.child(Constants.USERS_PATH).child(uId).get().addOnCompleteListener(task -> {
             if (!task.isSuccessful()) {
                 Log.e("firebase", "Error getting data", task.getException());
             }
