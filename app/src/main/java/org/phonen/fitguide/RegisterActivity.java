@@ -14,6 +14,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 import org.phonen.fitguide.model.User;
+import org.phonen.fitguide.utils.Constants;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -21,8 +22,6 @@ import java.util.Calendar;
 import java.util.Locale;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
-import static org.phonen.fitguide.utils.References.PATH_USERS;
 
 public class RegisterActivity extends AppCompatActivity {
 
@@ -55,7 +54,7 @@ public class RegisterActivity extends AppCompatActivity {
 
         mAuth = FirebaseAuth.getInstance();
         database = FirebaseDatabase.getInstance();
-        myRef = database.getReference(PATH_USERS);
+        myRef = database.getReference(Constants.USERS_PATH);
 
         name = findViewById(R.id.editTextTextName);
         lastName = findViewById(R.id.editTextLastName);
@@ -179,7 +178,7 @@ public class RegisterActivity extends AppCompatActivity {
                     userN.setUserName(userNames);
                     userN.setWeight(we);
                     String key = user.getUid();
-                    myRef = database.getReference(PATH_USERS + key);
+                    myRef = database.getReference(Constants.USERS_PATH + key);
                     myRef.setValue(userN);
                     startActivity(new Intent(getApplicationContext(), ProfileActivity.class));
                 }

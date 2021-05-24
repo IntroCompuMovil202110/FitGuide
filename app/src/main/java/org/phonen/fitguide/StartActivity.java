@@ -17,8 +17,8 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-import org.phonen.fitguide.utils.References;
 import org.phonen.fitguide.model.User;
+import org.phonen.fitguide.utils.Constants;
 
 public class StartActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;
@@ -56,7 +56,7 @@ public class StartActivity extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
         database = FirebaseDatabase.getInstance();
         String uId =mAuth.getUid();
-        myRef = database.getReference(References.PATH_USERS+uId);
+        myRef = database.getReference(Constants.USERS_PATH+uId);
         myRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
