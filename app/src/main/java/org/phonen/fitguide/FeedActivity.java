@@ -86,12 +86,10 @@ public class FeedActivity extends AppCompatActivity {
                 //Iterate over posts
                 posts.get().addOnSuccessListener(a -> {
                     // If the user does have post
-                    Log.i("USERS", "Inside");
                     if (a.getValue() != null) {
                         FirebaseDatabase.getInstance().getReference(Constants.USERS_PATH + a.getKey())
                                 .get()
                                 .addOnSuccessListener(b -> {
-                                    Log.i("POSTS", "Inside");
                                     friendsMap.put(a.getKey(), b.getValue(User.class));
                                     for (DataSnapshot ds : a.getChildren()) {
                                         if (postIndexed.get(ds.getKey()) == null) {

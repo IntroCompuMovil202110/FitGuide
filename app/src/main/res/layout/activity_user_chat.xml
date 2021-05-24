@@ -15,9 +15,17 @@
         <LinearLayout
             android:id="@+id/linearLayout5"
             android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:background="@drawable/border_style_purple"
-            android:orientation="horizontal">
+            android:layout_height="65dp"
+            android:background="@drawable/border_user_chat"
+            android:orientation="horizontal"
+            android:padding="10dp">
+
+            <ImageView
+                android:id="@+id/imageView6"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="4"
+                app:srcCompat="@drawable/w2b" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -32,8 +40,9 @@
                     android:layout_weight="1"
                     android:shadowColor="#F6F6F6"
                     android:text="@string/sample_add_friend_name_2"
-                    android:textColor="@color/maincolorhard"
-                    android:textSize="17dp" />
+                    android:textColor="@color/white"
+                    android:textSize="17dp"
+                    android:textStyle="bold" />
 
                 <TextView
                     android:id="@+id/nicknameChat"
@@ -41,7 +50,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:text="@string/sample_add_friend_username"
-                    android:textColor="@color/maincolorhard"
+                    android:textColor="@color/white"
                     android:textSize="16dp" />
             </LinearLayout>
 
@@ -53,8 +62,11 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="12dp"
             android:layout_weight="5"
+            android:divider="@null"
+            android:dividerHeight="0dp"
+            android:padding="5dp"
             android:stackFromBottom="true"
-            android:transcriptMode="alwaysScroll"/>
+            android:transcriptMode="alwaysScroll" />
 
         <LinearLayout
             android:id="@+id/linearLayout4"
@@ -66,9 +78,10 @@
 
             <EditText
                 android:id="@+id/messageText"
-                android:layout_width="300dp"
+                android:layout_width="match_parent"
                 android:layout_height="50dp"
                 android:layout_gravity="center_vertical"
+                android:layout_weight="13"
                 android:background="@drawable/border_style_purple"
                 android:gravity="center_vertical"
                 android:hint="Escribe un mensaje"
@@ -81,6 +94,7 @@
                 android:layout_width="50dp"
                 android:layout_height="50dp"
                 android:layout_marginLeft="5dp"
+                android:layout_weight="1"
                 android:background="@drawable/purple_border_button"
                 android:backgroundTint="@color/white"
                 app:srcCompat="@drawable/ic_chat" />

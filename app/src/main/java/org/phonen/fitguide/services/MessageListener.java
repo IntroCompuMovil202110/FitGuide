@@ -91,7 +91,46 @@ public class MessageListener extends JobIntentService {
                     cambios.add(cambio);
                 }
                 for (int i = 0; i < cambios.size(); i++) {
-                    if (cambios.get(i).second > chats.get(cambios.get(i).first)) {
+                    if(cambios.get(i).second!=null && chats.get(cambios.get(i).first)!=null)
+                    {
+                        if (cambios.get(i).second > chats.get(cambios.get(i).first)) {
+                            ultimoMensajeRef = database.getReference(Constants.CHAT_PATH + mAuth.getUid() + "/" + cambios.get(i).first);
+                            ultimoMensajeRef.addValueEventListener(new ValueEventListener() {
+                                @Override
+                                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                    int k = 0;
+                                    for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
+                                        if (k == snapshot.getChildrenCount() - 1) {
+                                            msg = dataSnapshot.getValue(Message.class);
+                                        }
+                                        k++;
+                                    }
+                                }
+
+                                @Override
+                                public void onCancelled(@NonNull DatabaseError error) {
+
+                                }
+                            });
+                            //referencia usuarios
+                            usersref.child(cambios.get(i).first).get().addOnCompleteListener(task -> {
+                                if (!task.isSuccessful()) {
+                                    Log.e("firebase", "Error getting data", task.getException());
+                                } else {
+                                    User us = task.getResult().getValue(User.class);
+                                    name = us.getName();
+                                    lastName = us.getLastName();
+                                    username = us.getUserName();
+                                    if (!msg.getEmisor().equals(mAuth.getUid())) {
+                                        buildAndShowNotification(name, lastName, key, username);
+                                    }
+                                }
+                            });
+                            chats.put(cambios.get(i).first, cambios.get(i).second);
+                            key = cambios.get(i).first;
+                        }
+                    }
+                    else{
                         ultimoMensajeRef = database.getReference(Constants.CHAT_PATH + mAuth.getUid() + "/" + cambios.get(i).first);
                         ultimoMensajeRef.addValueEventListener(new ValueEventListener() {
                             @Override
@@ -99,9 +138,7 @@ public class MessageListener extends JobIntentService {
                                 int k = 0;
                                 for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
                                     if (k == snapshot.getChildrenCount() - 1) {
-                                        Log.i("NOTIFICACIONES", "en el if");
                                         msg = dataSnapshot.getValue(Message.class);
-                                        Log.i("NOTIFICACIONES", msg.getMessage());
                                     }
                                     k++;
                                 }
@@ -112,7 +149,6 @@ public class MessageListener extends JobIntentService {
 
                             }
                         });
-                        //referencia usuarios
                         usersref.child(cambios.get(i).first).get().addOnCompleteListener(task -> {
                             if (!task.isSuccessful()) {
                                 Log.e("firebase", "Error getting data", task.getException());
@@ -128,7 +164,9 @@ public class MessageListener extends JobIntentService {
                         });
                         chats.put(cambios.get(i).first, cambios.get(i).second);
                         key = cambios.get(i).first;
+
                     }
+
                 }
 
             }
@@ -143,8 +181,8 @@ public class MessageListener extends JobIntentService {
     private void buildAndShowNotification(String name, String lastName, String key, String username) {
         NotificationCompat.Builder nBuilder = new NotificationCompat.Builder(this, FeedActivity.CHANNEL_ID);
         nBuilder.setSmallIcon(R.drawable.w2b);
-        nBuilder.setContentTitle("FitGuide");
-        nBuilder.setContentText(name + " " + lastName + " ha enviado un mensaje");
+        nBuilder.setContentTitle(name + " " + lastName + " envió un mensaje");
+        nBuilder.setContentText(msg.getMessage());
         nBuilder.setPriority(NotificationCompat.PRIORITY_DEFAULT);
         Intent intent = new Intent(this, UserChatActivity.class);
         Bundle extras = new Bundle();
