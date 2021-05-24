@@ -93,10 +93,12 @@ public class RunningMapsActivity extends FragmentActivity implements OnMapReadyC
     private static final double ALTITUT_THRESHOLD_B = 2000;
     //Layout
     private final DecimalFormat df = new DecimalFormat("##.###");
+    private final DecimalFormat ef = new DecimalFormat("##");
     private TextView distanceIndicator;
     private TextView bpmIndicator;
     private ImageView pepitoRunning;
     private Chronometer chronometer;
+    private TextView elevationText;
     //Data
     private double EXERCISE_CALORIES_CONSTANT_MET;
     private double currentDistance;
@@ -119,6 +121,7 @@ public class RunningMapsActivity extends FragmentActivity implements OnMapReadyC
         bpmIndicator = findViewById(R.id.labelBPM);
         chronometer = findViewById(R.id.chronometer);
         pepitoRunning = findViewById(R.id.pepitoRunning);
+        elevationText = findViewById(R.id.running_elevation);
         currentDistance = 0;
         routeCoords = new ArrayList<>();
         this.getIntentData(getIntent().getBundleExtra("bundle"));
@@ -256,6 +259,7 @@ public class RunningMapsActivity extends FragmentActivity implements OnMapReadyC
                 this.bpmIndicator.setTextColor(getColor(R.color.low_alert));
             }
             this.currentAltitut = altitut;
+            elevationText.setText(ef.format(altitut) + " m");
         }
     }
 
