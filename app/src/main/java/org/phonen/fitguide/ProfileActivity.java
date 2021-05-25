@@ -1,7 +1,6 @@
 package org.phonen.fitguide;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.content.ContextCompat;
 
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
@@ -47,7 +46,6 @@ import org.phonen.fitguide.utils.Constants;
 import org.phonen.fitguide.model.User;
 import org.phonen.fitguide.utils.Level;
 import org.phonen.fitguide.utils.MyAxisValueFormatter;
-import org.phonen.fitguide.utils.navBar;
 
 import java.time.LocalDate;
 import java.time.ZoneId;
@@ -222,14 +220,6 @@ public class ProfileActivity extends AppCompatActivity {
         });
     }
 
-    /* public void navBarSettings(){
-        bottomNavigationView = findViewById(R.id.bottomNavigationView);
-        bottomNavigationView.setSelectedItemId(R.id.profileActivity);
-         navBar navbar = new navBar();
-         Intent i = navbar.navBarSettings(bottomNavigationView, getApplicationContext());
-        startActivity(i);
-        overridePendingTransition(0, 0);
-    }*/
 
     public void EditarPerfil(View view) {
         startActivity(new Intent(getApplicationContext(), EditProfileActivity.class));
