@@ -48,6 +48,7 @@
                 android:id="@+id/pepitoRunning"
                 android:layout_width="50dp"
                 android:layout_height="50dp"
+                android:layout_marginRight="10dp"
                 android:src="@drawable/w2b" />
 
             <LinearLayout
@@ -56,7 +57,7 @@
                 android:orientation="vertical">
 
                 <TextView
-                    android:id="@+id/textView5"
+                    android:id="@+id/running_curr_temp"
                     android:layout_width="wrap_content"
                     android:layout_height="0dp"
                     android:layout_weight="0.6"
@@ -72,7 +73,7 @@
                     android:orientation="horizontal">
 
                     <TextView
-                        android:id="@+id/textView8"
+                        android:id="@+id/running_max_temp"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
@@ -81,7 +82,7 @@
                         android:textSize="10sp" />
 
                     <TextView
-                        android:id="@+id/textView11"
+                        android:id="@+id/running_min_temp"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
