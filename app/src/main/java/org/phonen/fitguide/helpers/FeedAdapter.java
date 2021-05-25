@@ -77,9 +77,10 @@ public class FeedAdapter extends ArrayAdapter<Post> {
                     cachedImages.put(post.getImagePath(), bm);
                 });
             }else {
-                Log.i("CACHE HIT", "Already cached image, using this instead");
                 image.setImageBitmap(cachedImages.get(post.getImagePath()));
             }
+        }else{
+            image.setImageBitmap(null);
         }
 
         LinearLayout layoutTop = convertView.findViewById(R.id.feed_top_card);
