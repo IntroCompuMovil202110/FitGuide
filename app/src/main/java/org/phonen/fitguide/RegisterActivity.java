@@ -22,7 +22,9 @@ import java.util.Locale;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import static org.phonen.fitguide.utils.References.PATH_USERS;
+import org.phonen.fitguide.utils.Constants.*;
+
+import static org.phonen.fitguide.utils.Constants.USERS_PATH;
 
 public class RegisterActivity extends AppCompatActivity {
 
@@ -55,7 +57,7 @@ public class RegisterActivity extends AppCompatActivity {
 
         mAuth = FirebaseAuth.getInstance();
         database = FirebaseDatabase.getInstance();
-        myRef = database.getReference(PATH_USERS);
+        myRef = database.getReference(USERS_PATH);
 
         name = findViewById(R.id.editTextTextName);
         lastName = findViewById(R.id.editTextLastName);
@@ -179,7 +181,7 @@ public class RegisterActivity extends AppCompatActivity {
                     userN.setUserName(userNames);
                     userN.setWeight(we);
                     String key = user.getUid();
-                    myRef = database.getReference(PATH_USERS + key);
+                    myRef = database.getReference(USERS_PATH + key);
                     myRef.setValue(userN);
                     startActivity(new Intent(getApplicationContext(), ProfileActivity.class));
                 }

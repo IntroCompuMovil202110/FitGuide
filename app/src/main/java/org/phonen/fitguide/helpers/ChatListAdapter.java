@@ -3,6 +3,7 @@ package org.phonen.fitguide.helpers;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.storage.StorageManager;
 import android.util.Log;
@@ -20,12 +21,20 @@ import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
 import org.phonen.fitguide.UserChatActivity;
+import org.phonen.fitguide.model.Position;
 import org.phonen.fitguide.model.User;
 import org.phonen.fitguide.model.UserModel;
+import org.phonen.fitguide.utils.Constants;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -35,9 +44,10 @@ public class ChatListAdapter extends ArrayAdapter<UserModel> {
     private ArrayList<UserModel> userList;
     private Context mContext;
     private int resource_layout;
-    private StorageReference storageReference;
-    FirebaseStorage storageInstance;
 
+    FirebaseDatabase database;
+    DatabaseReference posRef;
+    Position position;
     // UserModel user;
 
     public ChatListAdapter(@NonNull Context context, int resource, @NonNull ArrayList<UserModel> objects) {
@@ -45,6 +55,8 @@ public class ChatListAdapter extends ArrayAdapter<UserModel> {
         userList = objects;
         mContext = context;
         resource_layout = resource;
+
+        position = new Position();
     }
 
     public class ViewHolder {
@@ -67,9 +79,27 @@ public class ChatListAdapter extends ArrayAdapter<UserModel> {
         viewHolder.messageButton = (ImageButton) view.findViewById(R.id.messageButton);
         viewHolder.nombre = (TextView) view.findViewById(R.id.nameandlast);
         viewHolder.nickName = view.findViewById(R.id.nickname);
-        storageInstance = FirebaseStorage.getInstance();
-        storageReference = FirebaseStorage.getInstance().getReference();
         UserModel user = userList.get(position);
+
+        database = FirebaseDatabase.getInstance();
+        posRef = database.getReference(Constants.POSITION_PATH + user.getIdU() + "/moving");
+        posRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if(snapshot.getValue(boolean.class) == null){
+                    viewHolder.locationButton.setImageResource(R.drawable.ic_baseline_directions_run_24);
+                }else if(!snapshot.getValue(boolean.class)){
+                    viewHolder.locationButton.setImageResource(R.drawable.ic_baseline_directions_run_24);
+                }else{
+                    viewHolder.locationButton.setImageResource(R.drawable.green_man_running);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
 
         viewHolder.nombre.setText(user.getName() + " " + user.getLastName());
         viewHolder.nickName.setText(user.getUserName());
@@ -89,10 +119,10 @@ public class ChatListAdapter extends ArrayAdapter<UserModel> {
                 mContext.startActivity(intent);
             }
         });
+
         viewHolder.locationButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
             }
         });
 

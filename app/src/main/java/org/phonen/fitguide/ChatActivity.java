@@ -91,10 +91,9 @@ public class ChatActivity extends AppCompatActivity  {
                         }
                         else {
                             User user = task.getResult().getValue(User.class);
-                            UserModel um = new UserModel(user.getName(),user.getLastName(),user.getUserName(),idu);
+                            UserModel um = new UserModel(user.getName(), user.getLastName(), user.getUserName(), idu);
                             mlista.add(um);
                             mAdapter.notifyDataSetChanged();
-
                         }
                     });
                 }

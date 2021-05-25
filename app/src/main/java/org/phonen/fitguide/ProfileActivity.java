@@ -15,7 +15,6 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 import org.phonen.fitguide.utils.Constants;
-import org.phonen.fitguide.utils.References;
 import org.phonen.fitguide.model.User;
 
 public class ProfileActivity extends AppCompatActivity {

@@ -1,4 +1,3 @@
-
 package org.phonen.fitguide;
 
 import android.Manifest;
@@ -49,11 +48,15 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PolylineOptions;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
+import org.phonen.fitguide.model.Position;
+import org.phonen.fitguide.utils.Constants;
 import org.phonen.fitguide.utils.ImageGenerator;
 import org.phonen.fitguide.utils.PermissionManager;
 
-import java.io.ByteArrayOutputStream;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -107,6 +110,12 @@ public class RunningMapsActivity extends FragmentActivity implements OnMapReadyC
     private double currentAltitut;
     private int exerType;
 
+    private FirebaseAuth mAuth;
+    FirebaseDatabase database;
+    DatabaseReference posRef;
+    String uId;
+    Position position;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -114,6 +123,12 @@ public class RunningMapsActivity extends FragmentActivity implements OnMapReadyC
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
+
+        position = new Position();
+        mAuth = FirebaseAuth.getInstance();
+        database = FirebaseDatabase.getInstance();
+        uId = mAuth.getUid();
+        posRef = database.getReference(Constants.POSITION_PATH + uId);
 
         distanceIndicator = findViewById(R.id.labelKM);
         bpmIndicator = findViewById(R.id.labelBPM);
@@ -158,6 +173,9 @@ public class RunningMapsActivity extends FragmentActivity implements OnMapReadyC
 
 
     public void endActivity(View view) {
+        position.setMoving(false);
+        posRef = database.getReference(Constants.POSITION_PATH + uId + "/moving");
+        posRef.setValue(position.isMoving());
         this.endDataGathering();
         this.sendIntent();
     }
@@ -296,6 +314,8 @@ public class RunningMapsActivity extends FragmentActivity implements OnMapReadyC
             locationClient = LocationServices.getFusedLocationProviderClient(this);
             mLocationRequest = createLocationRequest();
             checkSettingsLocation();
+            //cambiar el estado de moving a true
+
             mLocationCallback = new LocationCallback() {
                 @Override
                 public void onLocationResult(LocationResult locationResult) {
@@ -303,6 +323,19 @@ public class RunningMapsActivity extends FragmentActivity implements OnMapReadyC
                     Location location = locationResult.getLastLocation();
                     if (location != null) {
                         LatLng newLocation = new LatLng(location.getLatitude(), location.getLongitude());
+
+                        position.setMoving(true);
+                        posRef = database.getReference(Constants.POSITION_PATH + uId + "/moving");
+                        posRef.setValue(position.isMoving());
+
+                        position.setLatitude(newLocation.latitude);
+                        posRef = database.getReference(Constants.POSITION_PATH + uId + "/latitude");
+                        posRef.setValue(position.getLatitude());
+
+                        position.setLongitude(newLocation.longitude);
+                        posRef = database.getReference(Constants.POSITION_PATH + uId + "/longitude");
+                        posRef.setValue(position.getLongitude());
+
                         if (prevLocation == null) {
                             currentDistance = 0;
                             //startTime = Calendar.getInstance().getTime();

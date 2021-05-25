@@ -23,5 +23,6 @@
     <string name="friend_requests_button_label">SOLICITUDES DE AMISTAD</string>
     <string name="add_friend_button_label">AGREGAR AMIGO</string>
     <string name="title_activity_running_maps">Map</string>
+    <string name="title_activity_follow">Map</string>
 
 </resources>

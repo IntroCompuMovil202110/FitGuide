@@ -21,13 +21,13 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-import org.phonen.fitguide.utils.References;
+import org.phonen.fitguide.utils.Constants;
 import org.phonen.fitguide.model.User;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import static org.phonen.fitguide.utils.References.PATH_USERS;
+
 
 public class EditProfileActivity extends AppCompatActivity {
 
@@ -76,7 +76,7 @@ public class EditProfileActivity extends AppCompatActivity {
         password2 = findViewById(R.id.editTextConfirmPassword);
 
         uId = mAuth.getUid();
-        myRef = database.getReference(References.PATH_USERS + uId);
+        myRef = database.getReference(Constants.USERS_PATH + uId);
         myRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -294,7 +294,7 @@ public class EditProfileActivity extends AppCompatActivity {
 
                 }
                 //Cambio de otros datos de usuario
-                myRef = database.getReference(PATH_USERS + uId);
+                myRef = database.getReference(Constants.USERS_PATH + uId);
                 myRef.setValue(user);
             }
 
