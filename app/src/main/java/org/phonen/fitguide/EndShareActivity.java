@@ -42,6 +42,7 @@ public class EndShareActivity extends AppCompatActivity {
     //Data
     private Session session;
     private String sessionID;
+    private Bitmap bitmap;
     //Permissions
     private static final int CAMERA_PERMISSION_ID = 1;
     private static final int IMAGE_PICKER_PERMISSION_ID = 2;
@@ -111,7 +112,7 @@ public class EndShareActivity extends AppCompatActivity {
                     PostUploader.createPostFromSession(
                             session, mAuth.getCurrentUser().getUid(),imagePath
                     ),
-                    ImageGenerator.bytesFromBitmap(((BitmapDrawable)this.final_imageView.getDrawable()).getBitmap()),
+                    ImageGenerator.bytesFromBitmap(bitmap),
                     FirebaseDatabase.getInstance(),
                     FirebaseStorage.getInstance(),
                     intent,
@@ -151,14 +152,14 @@ public class EndShareActivity extends AppCompatActivity {
         super.onActivityResult(request_code, result_code, data);
         if (request_code == CAMERA_PERMISSION_ID && result_code == RESULT_OK) {
             Bundle extras = data.getExtras();
-            Bitmap bm = (Bitmap) extras.get("data");
-            final_imageView.setImageBitmap(bm);
+            bitmap = (Bitmap) extras.get("data");
+            final_imageView.setImageBitmap(bitmap);
         } else if (request_code == IMAGE_PICKER_PERMISSION_ID && result_code == RESULT_OK) {
             try {
                 final Uri imageUri = data.getData();
                 final InputStream imageStream = getContentResolver().openInputStream(imageUri);
-                final Bitmap selectedImage = BitmapFactory.decodeStream(imageStream);
-                final_imageView.setImageBitmap(selectedImage);
+                bitmap = BitmapFactory.decodeStream(imageStream);
+                final_imageView.setImageBitmap(bitmap);
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
             }
