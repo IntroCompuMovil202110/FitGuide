@@ -355,11 +355,23 @@
             android:orientation="vertical">
 
 
+            <TextView
+                android:id="@+id/stastTitle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:fontFamily="@font/roboto_bold"
+                android:text="Estadísticas"
+                android:textAlignment="center"
+                android:textAllCaps="true"
+                android:textColor="@color/main_purple"
+                android:textSize="30sp" />
+
             <View
                 android:layout_width="300dp"
                 android:layout_height="2dp"
                 android:layout_gravity="center"
-                android:layout_marginTop="40dp"
+                android:layout_marginTop="10dp"
                 android:layout_marginBottom="25dp"
                 android:background="@color/main_purple" />
 

@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -13,6 +14,7 @@ import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
@@ -93,9 +95,7 @@ public class AddFriendActivity extends AppCompatActivity {
         if (validFields()){
             String friendUsrName = usrNameField.getText().toString();
             mDB.getReference(Constants.USERS_PATH).orderByChild("userName")
-                    .equalTo(friendUsrName).limitToFirst(1).addListenerForSingleValueEvent(new ValueEventListener() {
-                @Override
-                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                    .equalTo(friendUsrName).limitToFirst(1).get().addOnSuccessListener(snapshot -> {
                     if(snapshot.exists()){
                         String friendUid = "";
                         for(DataSnapshot ds : snapshot.getChildren()){
@@ -103,59 +103,50 @@ public class AddFriendActivity extends AppCompatActivity {
                         }
                         checkIfIsFriendAndSend(friendUsrName, friendUid);
                     }else{
-                        Toast.makeText(getApplicationContext(),
-                                friendUsrName + " no existe, trate con otro username...",
-                                Toast.LENGTH_LONG).show();
+                        new MaterialAlertDialogBuilder(this)
+                                .setTitle("Ups!")
+                                .setMessage("No encontramos a " + usrNameField.getText().toString())
+                                .setPositiveButton("OK",null)
+                                .show();
                     }
-                }
-
-                @Override
-                public void onCancelled(@NonNull DatabaseError error) {
-                    Log.w("SENDR", error.toString());
-                }
             });
         }else{
-            Toast.makeText(this, "Ingrese el username de la persona que quiere agregar...", Toast.LENGTH_LONG).show();
+            new MaterialAlertDialogBuilder(this)
+                    .setTitle("Ups!")
+                    .setMessage("Debes ingresar un nombre de usuario válido.")
+                    .setPositiveButton("OK",null)
+                    .show();
         }
     }
 
     private void checkIfIsFriendAndSend(String friendUsrName, String friendUid) {
-        mDB.getReference(Constants.FRIENDS_LIST + mAuth.getCurrentUser().getUid() + "/" + friendUid).addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
+        mDB.getReference(Constants.FRIENDS_LIST + mAuth.getCurrentUser().getUid() + "/" + friendUid).get().addOnSuccessListener(snapshot -> {
                 if (!snapshot.exists()){
                     checkIfHasrequestAndSend(friendUsrName, friendUid);
                 }else {
-                    Toast.makeText(getApplicationContext(),
-                            friendUsrName + " ya es tu amigo!",
-                            Toast.LENGTH_LONG).show();
+                    new MaterialAlertDialogBuilder(this)
+                            .setTitle("Ups!")
+                            .setMessage(friendUsrName + " ya es tu amigo!")
+                            .setPositiveButton("OK",null)
+                            .show();
+                    usrNameField.setText("");
                 }
-            }
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-                Log.w("SENDR", error.toString());
-            }
         });
     }
 
     private void checkIfHasrequestAndSend(String friendUsrName, String friendUid) {
-        mDB.getReference(Constants.FRIENDS_REQUEST + friendUid + "/" +  mAuth.getCurrentUser().getUid())
-                .addListenerForSingleValueEvent(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+        mDB.getReference(Constants.FRIENDS_REQUEST + friendUid + "/" +  mAuth.getCurrentUser().getUid()).get()
+                .addOnSuccessListener(snapshot -> {
                         if (!snapshot.exists()){
                             createFriendRequest(friendUid);
                         }else{
-                            Toast.makeText(getApplicationContext(),
-                                    "Ya has enviado solicitud de amistad a " +friendUsrName + "!",
-                                    Toast.LENGTH_LONG).show();
+                            new MaterialAlertDialogBuilder(this)
+                                    .setTitle("Ups!")
+                                    .setMessage("Ya has enviado solicitud de amistad a " +friendUsrName + "!")
+                                    .setPositiveButton("OK",null)
+                                    .show();
                             usrNameField.setText("");
                         }
-                    }
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError error) {
-                        Log.w("SENDR", error.toString());
-                    }
                 });
     }
 
@@ -165,22 +156,17 @@ public class AddFriendActivity extends AppCompatActivity {
                 "/" +
                 mAuth.getCurrentUser().getUid()).setValue(
                         formatter.format(new Date())
-        ).addOnSuccessListener(new OnSuccessListener<Void>() {
-            @Override
-            public void onSuccess(Void aVoid) {
-                Toast.makeText(getApplicationContext(),
-                        "Solicitud enviada!", Toast.LENGTH_LONG).show();
-                usrNameField.setText("");
-            }
+        ).addOnSuccessListener(v -> {
+            new MaterialAlertDialogBuilder(this)
+                    .setTitle("Correcto!")
+                    .setMessage("Solicitud enviada!")
+                    .setPositiveButton("OK",null)
+                    .show();
         });
     }
 
     private boolean validFields() {
         return !TextUtils.isEmpty(this.usrNameField.getText().toString())
                 && !currentUser.getUserName().equals(this.usrNameField.getText().toString());
-    }
-
-    public void loadContactsActivity(View view) {
-        startActivity(new Intent(getApplicationContext(), ContactsActivity.class));
     }
 }

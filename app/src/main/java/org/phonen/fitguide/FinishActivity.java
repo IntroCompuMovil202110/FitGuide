@@ -18,6 +18,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseReference;
@@ -228,11 +229,19 @@ public class FinishActivity extends AppCompatActivity {
     }
 
     private void savedSuccessfully() {
-        Toast.makeText(this, "Imagen guardada con exito en la galeria", Toast.LENGTH_SHORT).show();
+        new MaterialAlertDialogBuilder(this)
+                .setTitle("Listo!")
+                .setMessage("Imagen guardada con exito en la galería!")
+                .setPositiveButton("OK",null)
+                .show();
     }
 
     private void unableToSave() {
-        Toast.makeText(this, "No se ha podido guardar la imagen!", Toast.LENGTH_SHORT).show();
+        new MaterialAlertDialogBuilder(this)
+                .setTitle("Ups!")
+                .setMessage("No se ha podido guardar la imagen!")
+                .setPositiveButton("OK",null)
+                .show();
     }
 
     @Override

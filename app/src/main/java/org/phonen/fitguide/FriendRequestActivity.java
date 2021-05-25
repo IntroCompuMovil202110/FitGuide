@@ -57,6 +57,9 @@ public class FriendRequestActivity extends AppCompatActivity {
                 for(DataSnapshot ds: snapshot.getChildren()){
                     requestsUids.add(ds.getKey());
                 }
+                if (requestsUids.size() == 0){
+                    emptyText.setText("No tienes solicitudes.");
+                }
                 loadAdapter();
             }
             @Override

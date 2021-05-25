@@ -12,6 +12,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
@@ -101,7 +102,11 @@ public class RequestsListAdapter extends ArrayAdapter<String> {
                         currentUserUid)
                         .setValue(formatter.format(new Date())).addOnSuccessListener(v3 -> {
                     createNewFriendPost(pos);
-                    Toast.makeText(getContext(), "Solicitud aceptada!", Toast.LENGTH_LONG).show();
+                    new MaterialAlertDialogBuilder(getContext())
+                            .setTitle("Genial!")
+                            .setMessage("Ahora son amigos!")
+                            .setPositiveButton("OK",null)
+                            .show();
                 });
             });
         });
@@ -124,7 +129,11 @@ public class RequestsListAdapter extends ArrayAdapter<String> {
                 "/" +
                 getItem(pos))
                 .setValue(null).addOnSuccessListener(v -> {
-            Toast.makeText(getContext(), "Solicitud denegada...", Toast.LENGTH_LONG).show();
+                new MaterialAlertDialogBuilder(getContext())
+                        .setTitle("Correcto...")
+                        .setMessage("Solicitud rechazada.")
+                        .setPositiveButton("OK",null)
+                        .show();
             remove(getItem(pos));
             notifyDataSetChanged();
         });
