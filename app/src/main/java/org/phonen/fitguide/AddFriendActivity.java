@@ -3,6 +3,7 @@ package org.phonen.fitguide;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -21,6 +22,7 @@ import com.google.firebase.database.ValueEventListener;
 
 import org.phonen.fitguide.model.User;
 import org.phonen.fitguide.utils.Constants;
+import org.phonen.fitguide.utils.navBar;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -29,6 +31,7 @@ public class AddFriendActivity extends AppCompatActivity {
     //View
     BottomNavigationView bottomNavigationView;
     TextInputEditText usrNameField;
+    navBar navbar;
     //Google
     private FirebaseAuth mAuth;
     private FirebaseDatabase mDB;

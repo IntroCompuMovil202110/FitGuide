@@ -6,6 +6,7 @@ import androidx.core.content.ContextCompat;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
@@ -29,6 +30,9 @@ import com.github.mikephil.charting.data.DataSet;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
+import com.github.mikephil.charting.data.PieData;
+import com.github.mikephil.charting.data.PieDataSet;
+import com.github.mikephil.charting.data.PieEntry;
 import com.github.mikephil.charting.formatter.IndexAxisValueFormatter;
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -42,6 +46,8 @@ import org.phonen.fitguide.services.RequestsListenerService;
 import org.phonen.fitguide.utils.Constants;
 import org.phonen.fitguide.model.User;
 import org.phonen.fitguide.utils.Level;
+import org.phonen.fitguide.utils.MyAxisValueFormatter;
+import org.phonen.fitguide.utils.navBar;
 
 import java.time.LocalDate;
 import java.time.ZoneId;
@@ -77,13 +83,20 @@ public class ProfileActivity extends AppCompatActivity {
     private LineChart lineChart;
     private PieChart pieChart;
     private String[] months = new String[]{"Enero", "Febrero", "Marzo","Abril", "Mayo","Junio","Julio","Agosto", "Septiembre", "Octubre", "Noviembre", "Dicimebre"};
-    private String[] week = new String[]{"Lunes", "Martes", "MiÃ©rcoles","Jueves", "Viernes","SÃ¡bado","Domingo"};
-    private List<Double> dataCalories=  new ArrayList<Double>();
-    private List<Double> dataDistance=  new ArrayList<Double>();
-    private int[] colors = new int[] { R.color.main_purple, R.color.dark_green};
+    private String[] week = new String[]{"Lunes", "Martes", "Miércoles","Jueves", "Viernes","Sábado","Domingo"};
+    private String[] levelOx = new String[]{"Alta", "Medio", "Bajo"};
+    private List<Double> dataCalories =  new ArrayList<Double>();
+    private List<Double> dataDistance =  new ArrayList<Double>();
+    private List<Double> dataOx =  new ArrayList<Double>();
+    ArrayList<Integer> colors;
     private String uId;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        colors = new ArrayList<>();
+        colors.add(getResources().getColor(R.color.main_green));
+        colors.add(getResources().getColor(R.color.clear_purple));
+        colors.add(getResources().getColor(R.color.main_purple));
+        colors.add(getResources().getColor(R.color.dark_green));
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
         navBarSettings();
@@ -102,7 +115,7 @@ public class ProfileActivity extends AppCompatActivity {
         semanal = findViewById(R.id.semanal);
         chart = (BarChart) findViewById(R.id.chart1);
         lineChart = (LineChart) findViewById(R.id.chart2);
-        //pieChart = (PieChart) findViewById(R.id.chart3);
+        pieChart = (PieChart) findViewById(R.id.chart3);
 
         getPhrase();
 
@@ -130,7 +143,7 @@ public class ProfileActivity extends AppCompatActivity {
         semanal.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                semanal.setTextColor(getResources().getColor(R.color.main_green));
+                semanal.setTextColor(colors.get(0));
                 mensual.setTextColor(getResources().getColor(R.color.white));
                 getDataChartWeek();
             }
@@ -139,7 +152,7 @@ public class ProfileActivity extends AppCompatActivity {
         mensual.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mensual.setTextColor(getResources().getColor(R.color.main_green));
+                mensual.setTextColor(colors.get(0));
                 semanal.setTextColor(getResources().getColor(R.color.white));
                 getDataChartMonth();
             }
@@ -183,7 +196,7 @@ public class ProfileActivity extends AppCompatActivity {
         Intent intentReq = new Intent(ProfileActivity.this, RequestsListenerService.class);
         RequestsListenerService.enqueueWork(ProfileActivity.this, intentReq);
     }
-    public void navBarSettings(){
+   public void navBarSettings(){
         bottomNavigationView = findViewById(R.id.bottomNavigationView);
         bottomNavigationView.setSelectedItemId(R.id.profileActivity);
         bottomNavigationView.setOnNavigationItemSelectedListener(item -> {
@@ -197,6 +210,8 @@ public class ProfileActivity extends AppCompatActivity {
                     overridePendingTransition(0, 0);
                     return true;
                 case R.id.profileActivity:
+                    startActivity(new Intent(getApplicationContext(), ProfileActivity.class));
+                    overridePendingTransition(0, 0);
                     return true;
                 case R.id.startActivity:
                     startActivity(new Intent(getApplicationContext(), StartActivity.class));
@@ -206,6 +221,15 @@ public class ProfileActivity extends AppCompatActivity {
             return false;
         });
     }
+
+    /* public void navBarSettings(){
+        bottomNavigationView = findViewById(R.id.bottomNavigationView);
+        bottomNavigationView.setSelectedItemId(R.id.profileActivity);
+         navBar navbar = new navBar();
+         Intent i = navbar.navBarSettings(bottomNavigationView, getApplicationContext());
+        startActivity(i);
+        overridePendingTransition(0, 0);
+    }*/
 
     public void EditarPerfil(View view) {
         startActivity(new Intent(getApplicationContext(), EditProfileActivity.class));
@@ -231,13 +255,13 @@ public class ProfileActivity extends AppCompatActivity {
         this.initNotificationService();
     }
 
-    private Chart getChart(Chart chart, String description, int limit)
+    private Chart getChart(String[] legend, Chart chart, String description, int limit)
     {
         chart.getDescription().setText(description);
         chart.getDescription().setTextSize(15);
         chart.setBackgroundColor(getResources().getColor(R.color.soft_white2));
         chart.animateY(2);
-        legend(chart, week, limit);
+        //legend(chart, legend, limit);
         return chart;
     }
     private void legend(Chart chart, String[] DataLegend, int limit )
@@ -251,19 +275,34 @@ public class ProfileActivity extends AppCompatActivity {
             LegendEntry entry = new LegendEntry();
 
             entry.label = DataLegend[i];
-            entry.formColor= getResources().getColor(R.color.main_purple);
+            entry.formColor= colors.get(2);
             entries.add(entry);
 
         }
+
+        chart.getLegend().setTextColor(colors.get(2));
         legend.setCustom(entries);
     }
-    private ArrayList<BarEntry> getBarEntriesCalories(int limit){
+    private ArrayList<BarEntry> getBarEntries(int limit,List<Double> data ){
 
         ArrayList<BarEntry> entries = new ArrayList<>();
         for( int i =0; i < limit ;i++)
         {
-            double value = dataCalories.get(i);
+            double value = data.get(i);
             entries.add(new BarEntry(i, (float) value));
+
+        }
+
+        return entries;
+    }
+    private ArrayList<PieEntry> getBarEntriesOxy(){
+
+        ArrayList<PieEntry> entries = new ArrayList<>();
+        for( int i =0; i < 3 ;i++)
+        {
+            double value = dataOx.get(i);
+            if(value != 0)
+                entries.add(new PieEntry((float) value,levelOx[i]));
 
         }
 
@@ -275,7 +314,7 @@ public class ProfileActivity extends AppCompatActivity {
         for( int i =0; i < limit ;i++)
         {
             double value = (double) Math.round(dataDistance.get(i) * 100) / 100;
-            entries.add(new BarEntry(i, (float) value));
+            entries.add(new BarEntry(i, (float) value/1000));
 
         }
 
@@ -285,23 +324,25 @@ public class ProfileActivity extends AppCompatActivity {
         axis.setGranularityEnabled(true);
         axis.setPosition(XAxis.XAxisPosition.BOTTOM);
         axis.setValueFormatter(new IndexAxisValueFormatter(week));
-
-        chart.getXAxis().setAxisLineColor(getResources().getColor(R.color.main_purple));
-        chart.getXAxis().setTextColor(getResources().getColor(R.color.main_purple));
-        chart.getXAxis().setDrawGridLines(false);
+        axis.setAxisLineColor(colors.get(2));
+        axis.setTextColor(colors.get(2));
+        axis.setDrawGridLines(false);
     }
     private void axisLeft(YAxis axis)
     {
-        chart.getAxisLeft().setAxisLineColor(getResources().getColor(R.color.main_purple));
-        chart.getAxisLeft().setTextColor(getResources().getColor(R.color.main_purple));
+        axis.setAxisLineColor(colors.get(2));
+        axis.setTextColor(colors.get(2));
         axis.setSpaceTop(30);
+        axis.setDrawGridLines(false);
         axis.setAxisMinimum(0);
     }
     private void axisRight(YAxis axis){
         axis.setEnabled(false);
+        axis.setDrawGridLines(false);
     }
-    public void createChartd(String[] legend, int limit){
-        chart = (BarChart)getChart(chart, "",limit);
+    public void createChart(String[] legend, int limit){
+        //Bar Chart
+        chart = (BarChart)getChart(legend, chart, "",limit);
         chart.setDrawGridBackground(false);
         chart.setDrawBarShadow(false);
         chart.invalidate();
@@ -309,51 +350,78 @@ public class ProfileActivity extends AppCompatActivity {
         axisX(chart.getXAxis(), legend);
         axisLeft(chart.getAxisLeft());
         axisRight(chart.getAxisRight());
-        chart.getAxisLeft().setDrawGridLines(false);
-        chart.getAxisRight().setDrawGridLines(false);
         chart.getLegend().setEnabled(false);
-        chart.getLegend().setTextColor(getResources().getColor(R.color.main_purple));
 
-        lineChart = (LineChart)getChart(lineChart, "",limit);
+        //LineChart
+        lineChart = (LineChart)getChart(legend, lineChart, "",limit);
         lineChart.setDrawGridBackground(false);
         lineChart.invalidate();
         lineChart.setData(getDataLineChart(limit));
         axisX(lineChart.getXAxis(), legend);
         axisLeft(lineChart.getAxisLeft());
         axisRight(lineChart.getAxisRight());
-        lineChart.getAxisLeft().setDrawGridLines(false);
-        lineChart.getAxisRight().setDrawGridLines(false);
+        lineChart.getAxisLeft().setValueFormatter(new MyAxisValueFormatter());
         lineChart.getLegend().setEnabled(false);
-        lineChart.getLegend().setTextColor(getResources().getColor(R.color.main_purple));
-
-        //pieChart = (PieChart) getChart(pieChart, "", limit);
     }
+
+    public void createPieChart(String[] legend){
+
+        pieChart.setRotationEnabled(true);
+        pieChart.setHoleRadius(0);
+        pieChart.getDescription().setEnabled(false);
+        legend(chart, legend, 3);
+        pieChart.getLegend().setTextColor(colors.get(2));
+
+        pieChart.setTransparentCircleAlpha(0);
+        pieChart.setEntryLabelColor(Color.WHITE);
+        pieChart.setCenterTextSize(10);
+        pieChart.setData(getDataPieChart());
+        pieChart.invalidate();
+
+    }
+
+
     private DataSet getData(DataSet dataSet){
-        ArrayList<Integer> colorC = new ArrayList<Integer>();
 
-
-        colorC.add(ContextCompat.getColor(this, R.color.main_purple));
-        colorC.add(ContextCompat.getColor(this, R.color.main_green));
-        dataSet.setColors(colorC);
+        dataSet.setColors(colors);
 
         dataSet.setValueTextSize(10);
         return dataSet;
     }
     private BarData getDataChart(int limit){
-        BarDataSet data = (BarDataSet)getData(new BarDataSet(getBarEntriesCalories(limit),""));
+        BarDataSet data = (BarDataSet)getData(new BarDataSet(getBarEntries(limit, dataCalories),""));
 
         BarData barData = new BarData(data);
+        barData.setValueTextColor(colors.get(2));
+        barData.setValueTextSize(9f);
         barData.setBarWidth(0.45f);
         return barData;
     }
     private LineData getDataLineChart(int limit){
         LineDataSet set = new LineDataSet(getBarEntriesDistance(limit), "");
-        set.setColor(getResources().getColor(R.color.main_purple));
-        set.setCircleColor(getResources().getColor(R.color.dark_green));
+        set.setColor(colors.get(2));
+
+        set.setCircleColor(colors.get(3));
         ArrayList<ILineDataSet> dataSet = new ArrayList<>();
         dataSet.add(set);
 
+
         LineData barData = new LineData(dataSet);
+        barData.setValueTextColor(colors.get(2));
+        barData.setValueTextSize(10f);
+
+        return barData;
+    }
+    private PieData getDataPieChart(){
+        PieDataSet pieDataSet = new PieDataSet(getBarEntriesOxy(), "");
+        pieDataSet.setSliceSpace(2);
+        pieDataSet.setValueTextSize(12);
+        pieDataSet.setColors(colors);
+
+        PieData barData = new PieData(pieDataSet);
+        barData.setValueTextColor(Color.WHITE);
+        barData.setValueTextSize(10f);
+
         return barData;
     }
 
@@ -361,11 +429,7 @@ public class ProfileActivity extends AppCompatActivity {
         date =  new Date();
         myRefS = FirebaseDatabase.getInstance().getReference("sessions/" + uId);
         myRefS.get().addOnSuccessListener(v->{
-            Log.i("DEBUG SESSION ",Constants.SESSIONS_PATH+ uId +"/");
-            dataCalories.clear();
-            dataCalories = new ArrayList<Double>(Collections.nCopies(7, 0.0));
-            dataDistance.clear();
-            dataDistance = new ArrayList<Double>(Collections.nCopies(7, 0.0));
+            setZero();
             for( DataSnapshot single: v.getChildren())
             {
                 Session session = single.getValue(Session.class);
@@ -377,11 +441,12 @@ public class ProfileActivity extends AppCompatActivity {
                     dataCalories.set(day-1,dataCalories.get(day-1)+ session.getCalories());
                     dataDistance.set(day-1,dataDistance.get(day-1)+ session.getDistanceTraveled());
 
+                    int i = getIndex(session.getOxygenLevel());
+                    dataOx.set(i, dataOx.get(i)+1);
                 }
-
-
             }
-            createChartd(week, date.getDay());
+            createChart(week, date.getDay());
+            createPieChart(levelOx);
         });
 
     }
@@ -389,18 +454,13 @@ public class ProfileActivity extends AppCompatActivity {
     @Override
     protected void onPause() {
         super.onPause();
-       // myRefS.removeEventListener(EventChart);
     }
 
     public void getDataChartMonth() {
         date =  new Date();
         myRefS = FirebaseDatabase.getInstance().getReference("sessions/" + uId);
         myRefS.get().addOnSuccessListener(v->{
-            Log.i("MONYH::::  ",Constants.SESSIONS_PATH+ uId +"/");
-            dataCalories.clear();
-            dataCalories = new ArrayList<Double>(Collections.nCopies(12, 0.0));
-            dataDistance.clear();
-            dataDistance = new ArrayList<Double>(Collections.nCopies(12, 0.0));
+            setZero();
             for( DataSnapshot single: v.getChildren())
             {
                 Session session = single.getValue(Session.class);
@@ -412,13 +472,41 @@ public class ProfileActivity extends AppCompatActivity {
                     int month =  session.getDate().getMonth();
                     dataCalories.set(month,dataCalories.get(month)+ session.getCalories());
                     dataDistance.set(month,dataDistance.get(month)+ session.getDistanceTraveled());
+
+                    int i = getIndex(session.getOxygenLevel());
+                    dataOx.set(i, dataOx.get(i)+1);
                 }
 
             }
-            createChartd(months, date.getMonth()+1);
+            createChart(months, date.getMonth()+1);
         });
 
     }
+    private void setZero(){
+        dataCalories.clear();
+        dataCalories = new ArrayList<Double>(Collections.nCopies(7, 0.0));
+        dataDistance.clear();
+        dataDistance = new ArrayList<Double>(Collections.nCopies(7, 0.0));
+        dataOx.clear();
+        dataOx  = new ArrayList<Double>(Collections.nCopies(3, 0.0));
+    }
+    private int getIndex(String oxigenation){
+        if(oxigenation.equals("ALTO"))
+        {
+            return 0;
+        }
+        else if(oxigenation.equals("MEDIO"))
+        {
+            return 1;
+        }
+        else if(oxigenation.equals("BAJO"))
+        {
+            return 2;
+        }
+        return 2;
+
+    }
+
 
 
 
