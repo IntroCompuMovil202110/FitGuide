@@ -193,7 +193,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/constraintLayout3"
         android:layout_width="75dp"
-        android:layout_height="109dp"
+        android:layout_height="118dp"
         android:layout_marginStart="16dp"
         app:layout_constraintBottom_toTopOf="@id/scrollView4"
         app:layout_constraintStart_toStartOf="parent"
@@ -220,11 +220,11 @@
 
         <TextView
             android:id="@+id/textVRank"
-            android:layout_width="69dp"
-            android:layout_height="40dp"
+            android:layout_width="74dp"
+            android:layout_height="46dp"
             android:layout_marginStart="5dp"
             android:layout_marginEnd="5dp"
-            android:layout_marginBottom="8dp"
+            android:layout_marginBottom="4dp"
             android:gravity="center"
             android:text="NIVEL:    "
             android:textColor="@color/main_purple"
@@ -340,8 +340,8 @@
         android:layout_height="317dp"
         android:layout_marginTop="50dp"
         android:background="@drawable/corner_radius"
-        android:paddingBottom="20dp"
         android:paddingTop="20dp"
+        android:paddingBottom="20dp"
         app:layout_constraintBottom_toBottomOf="@+id/bottomNavigationView"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
@@ -383,7 +383,7 @@
                 android:layout_marginRight="90dp"
                 android:gravity="center"
                 android:text="EXCELENTE"
-                android:textColor="@color/main_green"
+                android:textColor="@color/white"
                 android:textSize="20dp"
                 android:textStyle="bold" />
 
@@ -396,8 +396,8 @@
                 android:background="@color/main_purple" />
 
             <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_width="399dp"
+                android:layout_height="49dp"
                 android:layout_below="@+id/pass"
                 android:orientation="horizontal">
 
@@ -407,7 +407,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="20dp"
                     android:layout_marginRight="20dp"
-                    android:layout_weight="0.5"
+                    android:layout_weight="1"
                     android:gravity="center"
                     android:text="SEMANAL"
                     android:textColor="@color/main_green"
@@ -421,7 +421,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="20dp"
                     android:layout_marginRight="20dp"
-                    android:layout_weight="0.5"
+                    android:layout_weight="1"
                     android:gravity="center"
                     android:text="MENSUAL"
                     android:textColor="@color/white"
@@ -454,14 +454,13 @@
                     android:background="@color/soft_white2"
                     android:paddingTop="10dp" />
 
+
                 <TextView
                     android:id="@+id/textView48"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="20dp"
                     android:layout_marginBottom="10dp"
-                    android:layout_weight="1"
-                    android:paddingTop="15dp"
                     android:text="DISTANCIA (KM)"
                     android:textColor="@color/main_purple" />
 
@@ -473,6 +472,30 @@
                     android:layout_marginRight="20dp"
                     android:background="@color/soft_white2"
                     android:paddingTop="10dp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/textOxigeno"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="20dp"
+                    android:text="NIVEL DE OXIGENACIÓN"
+                    android:textColor="@color/main_purple" />
+
+                <com.github.mikephil.charting.charts.PieChart
+                    android:id="@+id/chart3"
+                    android:layout_width="match_parent"
+                    android:layout_height="200dp"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginRight="20dp"
+                    android:background="@color/soft_white2"
+                    android:paddingTop="10dp" />
+
 
             </LinearLayout>
 
