@@ -13,7 +13,9 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import org.phonen.fitguide.FollowActivity;
 import org.phonen.fitguide.R;
 
 import androidx.annotation.NonNull;
@@ -48,6 +50,7 @@ public class ChatListAdapter extends ArrayAdapter<UserModel> {
     FirebaseDatabase database;
     DatabaseReference posRef;
     Position position;
+    Boolean isMoving = false;
     // UserModel user;
 
     public ChatListAdapter(@NonNull Context context, int resource, @NonNull ArrayList<UserModel> objects) {
@@ -86,11 +89,13 @@ public class ChatListAdapter extends ArrayAdapter<UserModel> {
         posRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
+                isMoving = false;
                 if(snapshot.getValue(boolean.class) == null){
                     viewHolder.locationButton.setImageResource(R.drawable.ic_baseline_directions_run_24);
                 }else if(!snapshot.getValue(boolean.class)){
                     viewHolder.locationButton.setImageResource(R.drawable.ic_baseline_directions_run_24);
                 }else{
+                    isMoving = true;
                     viewHolder.locationButton.setImageResource(R.drawable.green_man_running);
                 }
             }
@@ -123,6 +128,16 @@ public class ChatListAdapter extends ArrayAdapter<UserModel> {
         viewHolder.locationButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if(isMoving){
+                    Intent intent = new Intent(v.getContext(), FollowActivity.class);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    Bundle extras = new Bundle();
+                    extras.putString("uId", user.getIdU());
+                    intent.putExtras(extras);
+                    mContext.startActivity(intent);
+                }else{
+                    Toast.makeText(mContext, "Usuario " + user.getName() + " no está haciendo actividad física en el momento", Toast.LENGTH_SHORT).show();
+                }
             }
         });
 
