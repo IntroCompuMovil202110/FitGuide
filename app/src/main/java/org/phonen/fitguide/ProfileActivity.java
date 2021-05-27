@@ -1,7 +1,6 @@
 package org.phonen.fitguide;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.content.ContextCompat;
 
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
@@ -47,9 +46,8 @@ import org.phonen.fitguide.services.RequestsListenerService;
 
 import org.phonen.fitguide.utils.Constants;
 import org.phonen.fitguide.model.User;
-import org.phonen.fitguide.utils.Level;
+import org.phonen.fitguide.model.Level;
 import org.phonen.fitguide.utils.MyAxisValueFormatter;
-import org.phonen.fitguide.utils.navBar;
 
 import java.time.LocalDate;
 import java.time.ZoneId;
@@ -198,13 +196,13 @@ public class ProfileActivity extends AppCompatActivity {
         Intent intentReq = new Intent(ProfileActivity.this, RequestsListenerService.class);
         RequestsListenerService.enqueueWork(ProfileActivity.this, intentReq);
     }
-   public void navBarSettings(){
+    private void navBarSettings() {
         bottomNavigationView = findViewById(R.id.bottomNavigationView);
         bottomNavigationView.setSelectedItemId(R.id.profileActivity);
         bottomNavigationView.setOnNavigationItemSelectedListener(item -> {
             switch (item.getItemId()) {
-                case R.id.challengesActivity:
-                    startActivity(new Intent(getApplicationContext(), ChallengesActivity.class));
+                case R.id.chatActivity:
+                    startActivity(new Intent(getApplicationContext(), ChatActivity.class));
                     overridePendingTransition(0, 0);
                     return true;
                 case R.id.feedActivity:
@@ -217,10 +215,6 @@ public class ProfileActivity extends AppCompatActivity {
                     return true;
                 case R.id.startActivity:
                     startActivity(new Intent(getApplicationContext(), StartActivity.class));
-                    overridePendingTransition(0, 0);
-                    return true;
-                case R.id.chatActivity:
-                    startActivity(new Intent(getApplicationContext(), ChatActivity.class));
                     overridePendingTransition(0, 0);
                     return true;
             }

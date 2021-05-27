@@ -105,8 +105,8 @@ public class EditProfileActivity extends AppCompatActivity {
         bottomNavigationView.setSelectedItemId(R.id.profileActivity);
         bottomNavigationView.setOnNavigationItemSelectedListener(item -> {
             switch (item.getItemId()) {
-                case R.id.challengesActivity:
-                    startActivity(new Intent(getApplicationContext(), ChallengesActivity.class));
+                case R.id.chatActivity:
+                    startActivity(new Intent(getApplicationContext(), ChatActivity.class));
                     overridePendingTransition(0, 0);
                     return true;
                 case R.id.feedActivity:
