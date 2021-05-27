@@ -16,10 +16,15 @@ import android.view.View;
 import android.Manifest;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 
 import java.io.File;
@@ -31,6 +36,7 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
 import org.phonen.fitguide.model.Session;
+import org.phonen.fitguide.model.User;
 import org.phonen.fitguide.utils.Constants;
 import org.phonen.fitguide.utils.ImageGenerator;
 import org.phonen.fitguide.utils.PermissionManager;
@@ -56,8 +62,12 @@ public class EndShareActivity extends AppCompatActivity {
     Button buttonGallery;
     Button buttonShare;
     Button buttonFinishShare;
+    TextView headername;
     //Google
     private FirebaseAuth mAuth;
+    FirebaseDatabase database;
+    DatabaseReference myRef;
+    User user;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,10 +79,30 @@ public class EndShareActivity extends AppCompatActivity {
         buttonGallery = (Button) findViewById(R.id.buttonGallery);
         buttonShare = (Button) findViewById(R.id.buttonShare); //save image
         buttonFinishShare = (Button) findViewById(R.id.buttonFinishShare);
+        headername = findViewById(R.id.labelName);
+
         mAuth = FirebaseAuth.getInstance();
         Bundle bundle = getIntent().getBundleExtra("sessionBundle");
         this.session = (Session)bundle.getSerializable("sessionObject");
         this.sessionID = bundle.getString("sessionID");
+        mAuth = FirebaseAuth.getInstance();
+        database = FirebaseDatabase.getInstance();
+
+        String uId = mAuth.getUid();
+        myRef = database.getReference(Constants.USERS_PATH + uId);
+        myRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                user = snapshot.getValue(User.class);
+                headername.setText("¡VAMOS " + user.getName().toUpperCase() + "!");
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+
     }
 
     public void camera(View view) {
