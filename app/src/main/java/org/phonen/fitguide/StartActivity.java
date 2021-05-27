@@ -109,13 +109,13 @@ public class StartActivity extends AppCompatActivity {
     }
 
 
-    public void navBarSettings() {
+    private void navBarSettings() {
         bottomNavigationView = findViewById(R.id.bottomNavigationView);
-        bottomNavigationView.setSelectedItemId(R.id.startActivity);
+        bottomNavigationView.setSelectedItemId(R.id.profileActivity);
         bottomNavigationView.setOnNavigationItemSelectedListener(item -> {
             switch (item.getItemId()) {
-                case R.id.challengesActivity:
-                    startActivity(new Intent(getApplicationContext(), ChallengesActivity.class));
+                case R.id.chatActivity:
+                    startActivity(new Intent(getApplicationContext(), ChatActivity.class));
                     overridePendingTransition(0, 0);
                     return true;
                 case R.id.feedActivity:
@@ -127,9 +127,7 @@ public class StartActivity extends AppCompatActivity {
                     overridePendingTransition(0, 0);
                     return true;
                 case R.id.startActivity:
-                    return true;
-                case R.id.chatActivity:
-                    startActivity(new Intent(getApplicationContext(), ChatActivity.class));
+                    startActivity(new Intent(getApplicationContext(), StartActivity.class));
                     overridePendingTransition(0, 0);
                     return true;
             }

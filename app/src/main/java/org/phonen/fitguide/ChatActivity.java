@@ -112,8 +112,6 @@ public class ChatActivity extends AppCompatActivity  {
         bottomNavigationView.setSelectedItemId(R.id.chatActivity);
         bottomNavigationView.setOnNavigationItemSelectedListener(item -> {
             switch (item.getItemId()) {
-                case R.id.challengesActivity:
-                    return true;
                 case R.id.feedActivity:
                     startActivity(new Intent(getApplicationContext(), FeedActivity.class));
                     overridePendingTransition(0, 0);
@@ -127,8 +125,6 @@ public class ChatActivity extends AppCompatActivity  {
                     overridePendingTransition(0, 0);
                     return true;
                 case R.id.chatActivity:
-                    startActivity(new Intent(getApplicationContext(), ChatActivity.class));
-                    overridePendingTransition(0, 0);
                     return true;
             }
             return false;

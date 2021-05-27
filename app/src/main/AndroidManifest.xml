@@ -11,12 +11,8 @@
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.CAMERA" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
     <uses-permission android:name="android.permission.INTERNET" />
-
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -24,7 +20,6 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.FItguide">
-
         <!--
              The API key for Google Maps-based APIs is defined as a string resource.
              (See the file "res/values/google_maps_api.xml").
@@ -36,10 +31,9 @@
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/google_maps_key" />
-
         <activity
             android:name=".FollowActivity"
-            android:label="@string/title_activity_follow"></activity>
+            android:label="@string/title_activity_follow"/>
         <activity android:name=".UserChatActivity" />
         <activity android:name=".ChatActivity" />
         <activity
@@ -59,7 +53,6 @@
         <activity android:name=".EditProfileActivity" />
         <activity android:name=".RegisterActivity" />
         <activity android:name=".LoginActivity" />
-
         <activity android:name=".LoggedOutActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -67,14 +60,12 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
-
         <service
-            android:name=".services.MessageListener"/>
+            android:name=".services.MessageListener"
+            android:permission="android.permission.BIND_JOB_SERVICE" />
         <service
         android:name=".services.RequestsListenerService"
         android:permission="android.permission.BIND_JOB_SERVICE" />
-
     </application>
 
 </manifest>

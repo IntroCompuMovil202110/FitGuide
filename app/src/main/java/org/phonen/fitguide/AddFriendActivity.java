@@ -24,7 +24,6 @@ import com.google.firebase.database.ValueEventListener;
 
 import org.phonen.fitguide.model.User;
 import org.phonen.fitguide.utils.Constants;
-import org.phonen.fitguide.utils.navBar;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -33,7 +32,6 @@ public class AddFriendActivity extends AppCompatActivity {
     //View
     BottomNavigationView bottomNavigationView;
     TextInputEditText usrNameField;
-    navBar navbar;
     //Google
     private FirebaseAuth mAuth;
     private FirebaseDatabase mDB;
@@ -68,10 +66,7 @@ public class AddFriendActivity extends AppCompatActivity {
         bottomNavigationView.setSelectedItemId(R.id.profileActivity);
         bottomNavigationView.setOnNavigationItemSelectedListener(item -> {
             switch (item.getItemId()) {
-                case R.id.challengesActivity:
-                    startActivity(new Intent(getApplicationContext(), ChallengesActivity.class));
-                    overridePendingTransition(0, 0);
-                    return true;
+
                 case R.id.feedActivity:
                     startActivity(new Intent(getApplicationContext(), FeedActivity.class));
                     overridePendingTransition(0, 0);

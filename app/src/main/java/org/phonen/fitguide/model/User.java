@@ -21,6 +21,28 @@ public class User
     rank="HIERRO";
     }
 
+    public void addPoints(double kcal){
+        this.points += kcal;
+
+        if (this.points > 1000){
+            this.rank = Level.levels[4];
+            this.level = 5;
+        } else if (this.points > 700){
+            this.rank = Level.levels[3];
+            this.level = 4;
+        } else if (this.points > 200){
+            this.rank = Level.levels[2];
+            this.level = 3;
+        } else if (this.points > 50){
+            this.rank = Level.levels[1];
+            this.level = 2;
+        } else if(this.points >= 0){
+            this.rank = Level.levels[0];
+            this.level = 1;
+        }
+
+    }
+
     public int getLevel() {
         return level;
     }

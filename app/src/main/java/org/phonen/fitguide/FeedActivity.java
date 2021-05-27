@@ -104,16 +104,18 @@ public class FeedActivity extends AppCompatActivity {
 
     }
 
-    public void navBarSettings() {
+    private void navBarSettings() {
         bottomNavigationView = findViewById(R.id.bottomNavigationView);
-        bottomNavigationView.setSelectedItemId(R.id.feedActivity);
+        bottomNavigationView.setSelectedItemId(R.id.profileActivity);
         bottomNavigationView.setOnNavigationItemSelectedListener(item -> {
             switch (item.getItemId()) {
-                case R.id.challengesActivity:
-                    startActivity(new Intent(getApplicationContext(), ChallengesActivity.class));
+                case R.id.chatActivity:
+                    startActivity(new Intent(getApplicationContext(), ChatActivity.class));
                     overridePendingTransition(0, 0);
                     return true;
                 case R.id.feedActivity:
+                    startActivity(new Intent(getApplicationContext(), FeedActivity.class));
+                    overridePendingTransition(0, 0);
                     return true;
                 case R.id.profileActivity:
                     startActivity(new Intent(getApplicationContext(), ProfileActivity.class));
@@ -121,10 +123,6 @@ public class FeedActivity extends AppCompatActivity {
                     return true;
                 case R.id.startActivity:
                     startActivity(new Intent(getApplicationContext(), StartActivity.class));
-                    overridePendingTransition(0, 0);
-                    return true;
-                case R.id.chatActivity:
-                    startActivity(new Intent(getApplicationContext(), ChatActivity.class));
                     overridePendingTransition(0, 0);
                     return true;
             }
