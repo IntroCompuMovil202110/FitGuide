@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.app.PendingIntent;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -33,6 +34,7 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
+import org.phonen.fitguide.model.User;
 import org.phonen.fitguide.utils.PermissionManager;
 import org.phonen.fitguide.model.Session;
 import org.phonen.fitguide.utils.Constants;
@@ -52,11 +54,13 @@ public class FinishActivity extends AppCompatActivity {
     //Data
     private Session session;
     private byte[] imgData;
+    private double cal;
     //Google
     private FirebaseAuth mAuth;
     private FirebaseDatabase mDB;
 
 
+    @SuppressLint("SetTextI18n")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -82,7 +86,7 @@ public class FinishActivity extends AppCompatActivity {
         String timeS = calcularTiempo(time);
         double distance = intent.getDoubleExtra("distance", 1);
         String oxygen = intent.getStringExtra("oxigeno");
-        double calories = intent.getDoubleExtra("calories", 1);
+        this.cal = intent.getDoubleExtra("calories", 1);
         int type = intent.getIntExtra("exerType", 0);
         double temp = intent.getDoubleExtra("temperature", 30);
         double pressure = intent.getDoubleExtra("pressure", 1000);
@@ -90,21 +94,34 @@ public class FinishActivity extends AppCompatActivity {
         this.time.setText(timeS);
         this.distance.setText(decimalFormat.format(distance) + " M");
         this.oxygen.setText(oxygen);
-        this.calories.setText(decimalFormat.format(calories) + " KCAL");
+        this.calories.setText(decimalFormat.format(this.cal) + " KCAL");
         imagV.setImageBitmap(resizeBitmap);
         //Save data
         this.session = new Session();
         this.session.setType(type);
-        this.session.setCalories(calories);
+        this.session.setCalories(this.cal);
         this.session.setDistanceTraveled(distance);
         this.session.setTime(time);
         this.session.setTemperature(temp);
         this.session.setPressure(pressure);
         this.session.setOxygenLevel(oxygen);
-        this.session.setScore((int) calories);
+        this.session.setScore((int) this.cal);
         this.session.setDate(new Date());
+        this.updateUserData();
 
 
+    }
+
+    private void updateUserData() {
+        FirebaseDatabase.getInstance().getReference(Constants.USERS_PATH + this.mAuth.getUid())
+                .get().addOnSuccessListener(v->{
+                    if (v.exists()){
+                        User user = v.getValue(User.class);
+                        user.addPoints(this.cal);
+                        FirebaseDatabase.getInstance().getReference(Constants.USERS_PATH + this.mAuth.getUid())
+                                .setValue(user);
+                    }
+        });
     }
 
     public void shareFeed(View view) {

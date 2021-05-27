@@ -1,4 +1,4 @@
-package org.phonen.fitguide.utils;
+package org.phonen.fitguide.model;
 
 import androidx.annotation.IntDef;
 
@@ -18,6 +18,8 @@ public class Level {
     public static final int ORO = 0x1F947;
     public static final int PLATA = 0x1F948;
     public static final int HIERRO = 0x1F528;
+
+    public static final String[] levels = {"HIERRO", "BRONCE", "PLATA", "ORO", "DIAMANTE"};
 
     private int unicode;
     public String Season(String s) {
