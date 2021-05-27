@@ -50,7 +50,7 @@ public class ChatListAdapter extends ArrayAdapter<UserModel> {
     FirebaseDatabase database;
     DatabaseReference posRef;
     Position position;
-    Boolean isMoving = false;
+    Boolean isMoving;
     // UserModel user;
 
     public ChatListAdapter(@NonNull Context context, int resource, @NonNull ArrayList<UserModel> objects) {
@@ -72,6 +72,7 @@ public class ChatListAdapter extends ArrayAdapter<UserModel> {
     @NonNull
     @Override
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
+        isMoving=false;
         View view = convertView;
         if (view == null) {
             LayoutInflater inflater = LayoutInflater.from(mContext);
@@ -89,13 +90,14 @@ public class ChatListAdapter extends ArrayAdapter<UserModel> {
         posRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                isMoving = false;
                 if(snapshot.getValue(boolean.class) == null){
+                    isMoving=false;
                     viewHolder.locationButton.setImageResource(R.drawable.ic_baseline_directions_run_24);
-                }else if(!snapshot.getValue(boolean.class)){
+                } else if(!snapshot.getValue(boolean.class)){
+                    isMoving =false;
                     viewHolder.locationButton.setImageResource(R.drawable.ic_baseline_directions_run_24);
-                }else{
-                    isMoving = true;
+                }else if(snapshot.getValue(boolean.class)){
+                    isMoving =true;
                     viewHolder.locationButton.setImageResource(R.drawable.green_man_running);
                 }
             }
@@ -128,15 +130,18 @@ public class ChatListAdapter extends ArrayAdapter<UserModel> {
         viewHolder.locationButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+
                 if(isMoving){
                     Intent intent = new Intent(v.getContext(), FollowActivity.class);
                     intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                     Bundle extras = new Bundle();
                     extras.putString("uId", user.getIdU());
+                    extras.putString("name",user.getName());
                     intent.putExtras(extras);
                     mContext.startActivity(intent);
                 }else{
-                    Toast.makeText(mContext, "Usuario " + user.getName() + " no está haciendo actividad física en el momento", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(mContext, user.getName() + " no está haciendo actividad física en el momento", Toast.LENGTH_SHORT).show();
                 }
             }
         });

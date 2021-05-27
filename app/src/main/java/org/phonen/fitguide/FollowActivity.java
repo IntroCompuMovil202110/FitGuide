@@ -46,6 +46,7 @@ public class FollowActivity extends FragmentActivity implements OnMapReadyCallba
     User friend;
     String friendId;
     Position pos;
+    String friendName;
 
     //location
     private Marker marker;
@@ -73,20 +74,11 @@ public class FollowActivity extends FragmentActivity implements OnMapReadyCallba
         Intent intent = getIntent();
         Bundle extras = intent.getExtras();
         friendId = extras.getString("uId");
-
+        friendName = extras.getString("name");
         database = FirebaseDatabase.getInstance();
         friendRef = database.getReference(Constants.USERS_PATH + friendId);
         locationRef = database.getReference(Constants.POSITION_PATH + friendId);
-        locationRef.get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<DataSnapshot> task) {
-                if (!task.isSuccessful()) {
-                    Log.i("Firebase", "Error getting data", task.getException());
-                } else {
-                    pos = task.getResult().getValue(Position.class);
-                }
-            }
-        });
+
         friendRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -100,13 +92,26 @@ public class FollowActivity extends FragmentActivity implements OnMapReadyCallba
 
             }
         });
+
+
+        locationRef.get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DataSnapshot> task) {
+                if (!task.isSuccessful()) {
+                    Log.i("Firebase", "Error getting data", task.getException());
+                } else {
+                    pos = task.getResult().getValue(Position.class);
+                }
+            }
+        });
+
         geocoder = new Geocoder(this);
-        subscribeToChange();
 
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
+        subscribeToChange();
 
 
     }
@@ -123,12 +128,12 @@ public class FollowActivity extends FragmentActivity implements OnMapReadyCallba
                     LatLng latLng = new LatLng(pos.getLatitude(), pos.getLongitude());
                     if(latLng.latitude != 0.0 && latLng.longitude != 0.0){
                         Log.i("LATLNG", String.valueOf(latLng.longitude));
-                        marker = mMap.addMarker(new MarkerOptions().position(latLng).title("Ubicacion de " + friend.getName()
-                        + " " + LocationManager.geocoderSearch(latLng, geocoder)).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_CYAN)));
+                        marker = mMap.addMarker(new MarkerOptions().position(latLng).title("Ubicacion de " + friendName
+                        + ":" + LocationManager.geocoderSearch(latLng, geocoder)).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_CYAN)));
                         mMap.animateCamera(CameraUpdateFactory.newLatLngZoom((latLng), 13));
                     }
                 }else{
-                    Toast.makeText(FollowActivity.this, "Usuario " + friend.getName() + " se ha desconectado no se harán más actualizaciones", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(FollowActivity.this, friend.getName() + " se ha desconectado no se harán más actualizaciones", Toast.LENGTH_SHORT).show();
                 }
             }
 
@@ -151,6 +156,13 @@ public class FollowActivity extends FragmentActivity implements OnMapReadyCallba
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
+        LatLng latilong = new LatLng(pos.getLatitude(), pos.getLongitude());
+        if(latilong.latitude != 0.0 && latilong.longitude != 0.0){
+            Log.i("LATLNG", String.valueOf(latilong.longitude));
+            marker = mMap.addMarker(new MarkerOptions().position(latilong).title("Ubicación de :" + friendName
+                    + " " + LocationManager.geocoderSearch(latilong, geocoder)).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_CYAN)));
+            mMap.animateCamera(CameraUpdateFactory.newLatLngZoom((latilong), 13));
+        }
 
         // Add a marker in Sydney and move the camera
         mMap.getUiSettings().setZoomGesturesEnabled(true);

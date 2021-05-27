@@ -3,15 +3,21 @@ package org.phonen.fitguide;
 import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
 
 import org.phonen.fitguide.model.User;
 
@@ -32,6 +38,7 @@ public class RegisterActivity extends AppCompatActivity {
 
     private FirebaseAuth mAuth;
     private FirebaseDatabase database;
+    boolean userExist = false;
     DatabaseReference myRef;
     EditText name;
     EditText lastName;
@@ -159,6 +166,7 @@ public class RegisterActivity extends AppCompatActivity {
     }
 
     public void register(View view) {
+        userExist = false;
         String names = name.getText().toString();
         String lastNames = lastName.getText().toString();
         String emails = email.getText().toString();
@@ -168,24 +176,49 @@ public class RegisterActivity extends AppCompatActivity {
         String he = height.getText().toString();
         String we = weight.getText().toString();
         String date = this.date.getText().toString();
+
         if (validateForm(emails, passwords, names, lastNames, userNames, phones, he, we, date)) {
-            mAuth.createUserWithEmailAndPassword(emails, passwords).addOnCompleteListener(task -> {
-                FirebaseUser user = mAuth.getCurrentUser();
-                if (user != null) {
-                    User userN = new User();
-                    userN.setName(names);
-                    userN.setLastName(lastNames);
-                    userN.setPhone(phones);
-                    userN.setDate(date);
-                    userN.setHeight(he);
-                    userN.setUserName(userNames);
-                    userN.setWeight(we);
-                    String key = user.getUid();
-                    myRef = database.getReference(USERS_PATH + key);
-                    myRef.setValue(userN);
-                    startActivity(new Intent(getApplicationContext(), ProfileActivity.class));
+            userExist = false;
+            myRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                  for(DataSnapshot single: snapshot.getChildren())
+                  {
+                      User aux = single.getValue(User.class);
+                      if(aux.getUserName().equals(userNames))
+                      {
+                          Log.i("prueba","ondatachange entre");
+                          userExist = true;
+                          userName.setError("Usuario ya existente");
+
+                      }
+                  }
+                    if (!userExist)
+                    {
+                        mAuth.createUserWithEmailAndPassword(emails, passwords).addOnCompleteListener(task -> {
+                            FirebaseUser user = mAuth.getCurrentUser();
+                            if (user != null) {
+                                User userN = new User();
+                                userN.setName(names);
+                                userN.setLastName(lastNames);
+                                userN.setPhone(phones);
+                                userN.setDate(date);
+                                userN.setHeight(he);
+                                userN.setUserName(userNames);
+                                userN.setWeight(we);
+                                String key = user.getUid();
+                                myRef = database.getReference(USERS_PATH + key);
+                                myRef.setValue(userN);
+                                startActivity(new Intent(getApplicationContext(), ProfileActivity.class));
+                            }
+                        });
+                    }
                 }
 
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) {
+
+                }
             });
 
 
