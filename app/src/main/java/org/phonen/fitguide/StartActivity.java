@@ -49,23 +49,24 @@ public class StartActivity extends AppCompatActivity {
         userHeader = findViewById(R.id.titleComeon);
         level = findViewById(R.id.labelLevel);
         weightLabel = findViewById(R.id.labelWeight);
-      walkButton = findViewById(R.id.buttonWalk);
+        walkButton = findViewById(R.id.buttonWalk);
         runButton = findViewById(R.id.buttonRun);
         bikeButton = findViewById(R.id.buttonBici);
         //firebase
         mAuth = FirebaseAuth.getInstance();
         database = FirebaseDatabase.getInstance();
-        String uId =mAuth.getUid();
-        myRef = database.getReference(Constants.USERS_PATH+uId);
+
+        String uId = mAuth.getUid();
+        myRef = database.getReference(Constants.USERS_PATH + uId);
+
+
         myRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 user = snapshot.getValue(User.class);
-                userHeader.setText("¡VAMOS "+ user.getName().toUpperCase()+ "!");
-                level.setText("NIVEL:"+user.getRank());
-                weightLabel.setText(weightLabel.getText()+user.getWeight()+"KG");
-
-
+                userHeader.setText("¡VAMOS " + user.getName().toUpperCase() + "!");
+                level.setText("NIVEL:" + user.getRank());
+                weightLabel.setText(weightLabel.getText() + user.getWeight() + "KG");
             }
 
             @Override
@@ -74,7 +75,6 @@ public class StartActivity extends AppCompatActivity {
             }
         });
 
-       
         walkButton.setOnClickListener(v -> {
             deselectButtons();
             this.isWalkClicked = true;
@@ -96,13 +96,13 @@ public class StartActivity extends AppCompatActivity {
     }
 
     private void deselectButtons() {
-        if (this.isWalkClicked){
+        if (this.isWalkClicked) {
             this.walkButton.setBackgroundColor(getColor(R.color.clear_color));
             this.isWalkClicked = false;
-        }else if (this.isBikeClicked){
+        } else if (this.isBikeClicked) {
             this.bikeButton.setBackgroundColor(getColor(R.color.clear_color));
             this.isBikeClicked = false;
-        }else if (this.isRunClicked){
+        } else if (this.isRunClicked) {
             this.runButton.setBackgroundColor(getColor(R.color.clear_color));
             this.isRunClicked = false;
         }
@@ -128,6 +128,10 @@ public class StartActivity extends AppCompatActivity {
                     return true;
                 case R.id.startActivity:
                     return true;
+                case R.id.chatActivity:
+                    startActivity(new Intent(getApplicationContext(), ChatActivity.class));
+                    overridePendingTransition(0, 0);
+                    return true;
             }
             return false;
         });
@@ -138,7 +142,7 @@ public class StartActivity extends AppCompatActivity {
         if (user != null)
             weight = Double.parseDouble(user.getWeight());
 
-       // double weight = getIntent().getDoubleExtra("weight", 70);
+        // double weight = getIntent().getDoubleExtra("weight", 70);
         Intent intent = new Intent(getApplicationContext(), RunningMapsActivity.class);
         Bundle bundle = new Bundle();
         bundle.putDouble("weight", weight);

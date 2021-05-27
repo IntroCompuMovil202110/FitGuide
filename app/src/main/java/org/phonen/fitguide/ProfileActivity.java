@@ -41,8 +41,10 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+
 import org.phonen.fitguide.model.Session;
 import org.phonen.fitguide.services.RequestsListenerService;
+
 import org.phonen.fitguide.utils.Constants;
 import org.phonen.fitguide.model.User;
 import org.phonen.fitguide.utils.Level;
@@ -215,6 +217,10 @@ public class ProfileActivity extends AppCompatActivity {
                     return true;
                 case R.id.startActivity:
                     startActivity(new Intent(getApplicationContext(), StartActivity.class));
+                    overridePendingTransition(0, 0);
+                    return true;
+                case R.id.chatActivity:
+                    startActivity(new Intent(getApplicationContext(), ChatActivity.class));
                     overridePendingTransition(0, 0);
                     return true;
             }

@@ -3,7 +3,10 @@ package org.phonen.fitguide;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.ArrayMap;
 import android.util.Log;
@@ -19,6 +22,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import org.phonen.fitguide.helpers.FeedAdapter;
 import org.phonen.fitguide.model.Post;
 import org.phonen.fitguide.model.User;
+import org.phonen.fitguide.services.MessageListener;
 import org.phonen.fitguide.utils.Constants;
 
 import java.util.ArrayList;
@@ -31,6 +35,7 @@ import java.util.Map;
 public class FeedActivity extends AppCompatActivity {
     private final String STATE_LIST = "State Adapter List";
     private final String _LIST = "State Adapter List";
+    public static String CHANNEL_ID = "NOTI_APP";
 
 
     BottomNavigationView bottomNavigationView;
@@ -58,7 +63,7 @@ public class FeedActivity extends AppCompatActivity {
         feedAdapter = new FeedAdapter(this, postsList, friendsMap, user.getUid());
 
         list.setAdapter(feedAdapter);
-
+        createNotificacionChannel();
         this.getFeedForUser();
     }
 
@@ -76,12 +81,10 @@ public class FeedActivity extends AppCompatActivity {
                 //Iterate over posts
                 posts.get().addOnSuccessListener(a -> {
                     // If the user does have post
-                    Log.i("USERS", "Inside");
                     if (a.getValue() != null) {
                         FirebaseDatabase.getInstance().getReference(Constants.USERS_PATH + a.getKey())
                                 .get()
                                 .addOnSuccessListener(b -> {
-                                    Log.i("POSTS", "Inside");
                                     friendsMap.put(a.getKey(), b.getValue(User.class));
                                     for (DataSnapshot ds : a.getChildren()) {
                                         if (postIndexed.get(ds.getKey()) == null) {
@@ -120,6 +123,10 @@ public class FeedActivity extends AppCompatActivity {
                     startActivity(new Intent(getApplicationContext(), StartActivity.class));
                     overridePendingTransition(0, 0);
                     return true;
+                case R.id.chatActivity:
+                    startActivity(new Intent(getApplicationContext(), ChatActivity.class));
+                    overridePendingTransition(0, 0);
+                    return true;
             }
             return false;
         });
@@ -129,5 +136,34 @@ public class FeedActivity extends AppCompatActivity {
     protected void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
 
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        startListenerService();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        createNotificacionChannel();
+    }
+
+    private void startListenerService() {
+        Intent intent = new Intent(FeedActivity.this, MessageListener.class);
+        MessageListener.enqueueWork(FeedActivity.this, intent);
+    }
+
+    private void createNotificacionChannel() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            CharSequence name = "channel";
+            String description = "channel description";
+            int importance = NotificationManager.IMPORTANCE_DEFAULT;
+            NotificationChannel channel = new NotificationChannel(CHANNEL_ID, name, importance);
+            channel.setDescription(description);
+            NotificationManager notificationManager = getSystemService(NotificationManager.class);
+            notificationManager.createNotificationChannel(channel);
+        }
     }
 }

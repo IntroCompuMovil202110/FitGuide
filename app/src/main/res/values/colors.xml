@@ -19,4 +19,6 @@
     <color name ="clear_color">#00B23AF8</color>
     <color name ="mid_alert">#FF5733</color>
     <color name ="low_alert">#FF1818</color>
+    <color name="alpha50mainColor">#80B23AF8</color>
+    <color name="maincolorhard">#6B04A7</color>
 </resources>
