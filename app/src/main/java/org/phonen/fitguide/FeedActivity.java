@@ -63,7 +63,6 @@ public class FeedActivity extends AppCompatActivity {
         feedAdapter = new FeedAdapter(this, postsList, friendsMap, user.getUid());
 
         list.setAdapter(feedAdapter);
-        createNotificacionChannel();
         this.getFeedForUser();
     }
 
@@ -139,29 +138,13 @@ public class FeedActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
-        startListenerService();
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        createNotificacionChannel();
+
     }
 
-    private void startListenerService() {
-        Intent intent = new Intent(FeedActivity.this, MessageListener.class);
-        MessageListener.enqueueWork(FeedActivity.this, intent);
-    }
 
-    private void createNotificacionChannel() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            CharSequence name = "channel";
-            String description = "channel description";
-            int importance = NotificationManager.IMPORTANCE_DEFAULT;
-            NotificationChannel channel = new NotificationChannel(CHANNEL_ID, name, importance);
-            channel.setDescription(description);
-            NotificationManager notificationManager = getSystemService(NotificationManager.class);
-            notificationManager.createNotificationChannel(channel);
-        }
-    }
 }

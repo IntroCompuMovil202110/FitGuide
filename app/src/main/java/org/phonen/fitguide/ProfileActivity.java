@@ -42,6 +42,7 @@ import com.google.firebase.database.FirebaseDatabase;
 
 
 import org.phonen.fitguide.model.Session;
+import org.phonen.fitguide.services.MessageListener;
 import org.phonen.fitguide.services.RequestsListenerService;
 
 import org.phonen.fitguide.utils.Constants;
@@ -65,6 +66,8 @@ public class ProfileActivity extends AppCompatActivity {
     DatabaseReference myRefS;
     //Data
     private String CHANNEL_ID_REQ = "RequestChannel";
+    public static String CHANNEL_ID = "NOTI_APP";
+
 
 
     User user;
@@ -164,7 +167,6 @@ public class ProfileActivity extends AppCompatActivity {
             }
         });
 
-
         createNotificationChannel();
     }
 
@@ -175,16 +177,30 @@ public class ProfileActivity extends AppCompatActivity {
             //Friends request notifications
             CharSequence nameReq ="Friends requests channel";
             String descriptionReq = "Channel used to notify new incoming friend requests";
+            CharSequence nameMessage = "Message requests channel";
+            String descriptionMessage = "Channel used to notify new messages";
             int importanceReq = NotificationManager.IMPORTANCE_DEFAULT;
             //IMPORTANCE_MAX MUESTRA LA NOTIFICACIÓN ANIMADA
             NotificationChannel channelReq = new NotificationChannel(CHANNEL_ID_REQ, nameReq, importanceReq);
+            NotificationChannel channel = new NotificationChannel(CHANNEL_ID, nameMessage, importanceReq);
+            channel.setDescription(descriptionMessage);
             channelReq.setDescription(descriptionReq);
             // Register the channel with the system; you can't change the importance
             // or other notification behaviors after this
             NotificationManager notificationManager = getSystemService(NotificationManager.class);
             notificationManager.createNotificationChannel(channelReq);
+            NotificationManager notificationManager2 = getSystemService(NotificationManager.class);
+            notificationManager2.createNotificationChannel(channel);
         }
     }
+
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        createNotificationChannel();
+    }
+
     private void getPhrase() {
         Random r = new Random();
         int i = r.nextInt(Constants.PHRASE.length);
@@ -195,7 +211,11 @@ public class ProfileActivity extends AppCompatActivity {
     private void initNotificationService() {
         Intent intentReq = new Intent(ProfileActivity.this, RequestsListenerService.class);
         RequestsListenerService.enqueueWork(ProfileActivity.this, intentReq);
+
+        Intent intent = new Intent(ProfileActivity.this, MessageListener.class);
+        MessageListener.enqueueWork(ProfileActivity.this, intent);
     }
+
     private void navBarSettings() {
         bottomNavigationView = findViewById(R.id.bottomNavigationView);
         bottomNavigationView.setSelectedItemId(R.id.profileActivity);
@@ -506,6 +526,7 @@ public class ProfileActivity extends AppCompatActivity {
         return 2;
 
     }
+
 
 
 

@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.FragmentActivity;
 
 import android.Manifest;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.location.Geocoder;
 import android.os.Bundle;
@@ -24,6 +25,7 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -50,10 +52,7 @@ public class FollowActivity extends FragmentActivity implements OnMapReadyCallba
 
     //location
     private Marker marker;
-    private LatLng location;
-    private LocationRequest locationRequest;
-    private LocationCallback locationCallback;
-    private FusedLocationProviderClient locationClient;
+
     //Firebase database
     FirebaseDatabase database;
     DatabaseReference friendRef;
@@ -133,7 +132,18 @@ public class FollowActivity extends FragmentActivity implements OnMapReadyCallba
                         mMap.animateCamera(CameraUpdateFactory.newLatLngZoom((latLng), 13));
                     }
                 }else{
-                    Toast.makeText(FollowActivity.this, friend.getName() + " se ha desconectado no se harán más actualizaciones", Toast.LENGTH_SHORT).show();
+                    locationRef.removeEventListener(this);
+                    new MaterialAlertDialogBuilder(FollowActivity.this)
+                            .setTitle("Ups!")
+                            .setMessage(friend.getName()+ " se ha desconectado, no se harán más actualizaciones!")
+                            .setPositiveButton("OK", (dialog, which) -> {
+                                Intent intent = new Intent (getApplicationContext(),ChatActivity.class);
+                                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                                startActivity(intent);
+                            })
+                            .show();
+
+
                 }
             }
 
