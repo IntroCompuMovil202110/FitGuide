@@ -70,7 +70,8 @@
 
 
         <service
-            android:name=".services.MessageListener"/>
+            android:name=".services.MessageListener"
+            android:permission="android.permission.BIND_JOB_SERVICE"/>
         <service
         android:name=".services.RequestsListenerService"
         android:permission="android.permission.BIND_JOB_SERVICE" />

@@ -20,7 +20,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import org.phonen.fitguide.ChatActivity;
-import org.phonen.fitguide.FeedActivity;
+import org.phonen.fitguide.ProfileActivity;
 import org.phonen.fitguide.R;
 import org.phonen.fitguide.UserChatActivity;
 import org.phonen.fitguide.model.Message;
@@ -179,7 +179,7 @@ public class MessageListener extends JobIntentService {
     }
 
     private void buildAndShowNotification(String name, String lastName, String key, String username) {
-        NotificationCompat.Builder nBuilder = new NotificationCompat.Builder(this, FeedActivity.CHANNEL_ID);
+        NotificationCompat.Builder nBuilder = new NotificationCompat.Builder(this, ProfileActivity.CHANNEL_ID);
         nBuilder.setSmallIcon(R.drawable.w2b);
         nBuilder.setContentTitle(name + " " + lastName + " envió un mensaje");
         nBuilder.setContentText(msg.getMessage());
