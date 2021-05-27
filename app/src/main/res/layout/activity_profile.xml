@@ -26,9 +26,8 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/constraintLayout"
-        android:layout_width="84dp"
+        android:layout_width="wrap_content"
         android:layout_height="107dp"
-        android:layout_marginTop="16dp"
         android:layout_marginEnd="16dp"
         app:layout_constraintBottom_toTopOf="@+id/constraintLayout2"
         app:layout_constraintEnd_toEndOf="parent"
@@ -46,6 +45,7 @@
             android:layout_marginEnd="14dp"
             android:layout_marginBottom="10dp"
             android:backgroundTint="@color/main_purple"
+            android:onClick="ListaAmigos"
             android:src="@drawable/ic_manage_accounts_white_18dp"
             app:backgroundTint="@color/white"
             app:borderWidth="3dp"
@@ -55,8 +55,7 @@
             app:layout_constraintTop_toBottomOf="@+id/textView4"
             app:rippleColor="@color/main_purple"
             app:tint="@color/white"
-            tools:ignore="MissingConstraints"
-            android:onClick="ListaAmigos"/>
+            tools:ignore="MissingConstraints" />
 
         <TextView
             android:id="@+id/textView4"
@@ -77,12 +76,12 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/constraintLayout2"
-        android:layout_width="84dp"
         android:layout_height="107dp"
-        android:layout_marginTop="156dp"
+        android:layout_width="wrap_content"
         android:layout_marginEnd="16dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintBottom_toTopOf="@id/scrollView4"
+        app:layout_constraintTop_toBottomOf="@id/constraintLayout">
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/floatingActionButton"
@@ -95,6 +94,7 @@
             android:layout_marginTop="5dp"
             android:layout_marginEnd="14dp"
             android:backgroundTint="@color/white"
+            android:onClick="EditarPerfil"
             android:src="@drawable/ic_manage_accounts_white_18dp"
             app:backgroundTint="@color/main_purple"
             app:borderWidth="3dp"
@@ -104,8 +104,7 @@
             app:layout_constraintTop_toTopOf="parent"
             app:rippleColor="@color/white"
             app:tint="@color/main_purple"
-            tools:ignore="MissingConstraints"
-            android:onClick="EditarPerfil"/>
+            tools:ignore="MissingConstraints" />
 
         <TextView
             android:id="@+id/textView7"
@@ -126,16 +125,15 @@
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="84dp"
+        android:id="@+id/Puntaje"
+        android:layout_width="wrap_content"
         android:layout_height="107dp"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
+
         app:layout_constraintBottom_toTopOf="@+id/constraintLayout3"
-        app:layout_constraintEnd_toStartOf="@+id/constraintLayout"
-        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.0">
+        app:layout_constraintVertical_bias="0.51">
 
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -191,16 +189,15 @@
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/constraintLayout3"
-        android:layout_width="84dp"
-        android:layout_height="107dp"
+        android:layout_width="75dp"
+        android:layout_height="118dp"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="156dp"
-        app:layout_constraintEnd_toStartOf="@+id/constraintLayout2"
-        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintBottom_toTopOf="@id/scrollView4"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toBottomOf="@id/Puntaje">
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/floatingActionButton5"
@@ -209,14 +206,12 @@
             android:layout_alignParentBottom="true"
             android:layout_centerInParent="true"
             android:layout_gravity="bottom|center"
-            android:layout_marginStart="14dp"
-            android:layout_marginTop="5dp"
-            android:layout_marginEnd="14dp"
+            android:layout_marginTop="4dp"
             android:backgroundTint="@color/white"
             app:backgroundTint="@color/main_purple"
             app:borderWidth="3dp"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintHorizontal_bias="0.473"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:rippleColor="@color/white"
@@ -226,7 +221,7 @@
         <TextView
             android:id="@+id/textVRank"
             android:layout_width="74dp"
-            android:layout_height="40dp"
+            android:layout_height="46dp"
             android:layout_marginStart="5dp"
             android:layout_marginEnd="5dp"
             android:layout_marginBottom="4dp"
@@ -236,7 +231,7 @@
             android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="1.0"
+            app:layout_constraintHorizontal_bias="0.555"
             app:layout_constraintStart_toStartOf="parent" />
 
         <TextView
@@ -257,17 +252,16 @@
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/constraintLayout4"
         android:layout_width="157dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="30dp"
-        android:layout_marginTop="32dp"
-        android:layout_marginEnd="30dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/scrollView4"
+        app:layout_constraintEnd_toStartOf="@id/constraintLayout"
+        app:layout_constraintHorizontal_bias="0.571"
+        app:layout_constraintStart_toEndOf="@id/Puntaje"
         app:layout_constraintTop_toTopOf="parent"
+
         tools:ignore="MissingConstraints">
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -342,11 +336,13 @@
 
     <ScrollView
         android:id="@+id/scrollView4"
-        android:layout_width="match_parent"
-        android:layout_height="357dp"
+        android:layout_width="411dp"
+        android:layout_height="317dp"
         android:layout_marginTop="50dp"
         android:background="@drawable/corner_radius"
-        app:layout_constraintBottom_toTopOf="@+id/bottomNavigationView"
+        android:paddingTop="20dp"
+        android:paddingBottom="20dp"
+        app:layout_constraintBottom_toBottomOf="@+id/bottomNavigationView"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
@@ -358,99 +354,29 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
+
             <TextView
-                android:id="@+id/textView8"
+                android:id="@+id/stastTitle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="35dp"
-                android:layout_marginTop="40dp"
-                android:layout_marginRight="35dp"
-                android:layout_marginBottom="10dp"
-                android:gravity="center"
-                android:text="LOS RETOS QUE HAS COMPLETADO ESTA SEMANA"
+                android:layout_marginTop="10dp"
+                android:fontFamily="@font/roboto_bold"
+                android:text="Estadísticas"
+                android:textAlignment="center"
+                android:textAllCaps="true"
                 android:textColor="@color/main_purple"
-                android:textSize="20dp"
-                android:textStyle="bold" />
-
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/pass"
-                android:orientation="horizontal">
-
-                <TextView
-                    android:id="@+id/textView2"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="0.497"
-                    android:gravity="center"
-                    android:text="2"
-                    android:textColor="@color/main_purple"
-                    android:textSize="50dp"
-                    android:textStyle="bold" />
-
-
-                <View
-                    android:layout_width="0.2dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="0.006"
-                    android:background="@color/main_purple" />
-                android:layout_marginTop="20dp"
-                android:layout_marginLeft="175dp"/>
-
-                <TextView
-                    android:id="@+id/textView3"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="0.497"
-                    android:gravity="center"
-                    android:text="3"
-                    android:textColor="@color/main_purple"
-                    android:textSize="50dp"
-                    android:textStyle="bold" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/pass"
-                android:orientation="horizontal">
-
-                <TextView
-                    android:id="@+id/textView72"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="0.495"
-                    android:gravity="center"
-                    android:text="RETOS COMPLETADOS"
-                    android:textColor="@color/main_purple"
-                    android:textSize="14dp"
-                    android:textStyle="bold" />
-
-
-                <TextView
-                    android:id="@+id/textView37"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="0.495"
-                    android:gravity="center"
-                    android:text="RETOS POR ACABAR"
-                    android:textColor="@color/main_purple"
-                    android:textSize="14dp"
-                    android:textStyle="bold" />
-            </LinearLayout>
+                android:textSize="30sp" />
 
             <View
                 android:layout_width="300dp"
                 android:layout_height="2dp"
                 android:layout_gravity="center"
-                android:layout_marginTop="40dp"
+                android:layout_marginTop="10dp"
                 android:layout_marginBottom="25dp"
                 android:background="@color/main_purple" />
 
             <TextView
-                android:id="@+id/textView81"
+                android:id="@+id/textphrase"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="35dp"
@@ -462,14 +388,14 @@
                 android:textStyle="bold" />
 
             <Button
-                android:id="@+id/button"
+                android:id="@+id/textcomplement"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="90dp"
                 android:layout_marginRight="90dp"
                 android:gravity="center"
                 android:text="EXCELENTE"
-                android:textColor="@color/main_green"
+                android:textColor="@color/white"
                 android:textSize="20dp"
                 android:textStyle="bold" />
 
@@ -482,89 +408,109 @@
                 android:background="@color/main_purple" />
 
             <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_width="399dp"
+                android:layout_height="49dp"
                 android:layout_below="@+id/pass"
                 android:orientation="horizontal">
 
                 <Button
-                    android:id="@+id/button13"
+                    android:id="@+id/semanal"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="20dp"
                     android:layout_marginRight="20dp"
-                    android:layout_weight="0.5"
+                    android:layout_weight="1"
                     android:gravity="center"
                     android:text="SEMANAL"
-                    android:textColor="@color/white"
-                    android:textSize="14dp" />
+                    android:textColor="@color/main_green"
+                    android:textSize="14dp"
+                    android:textStyle="bold" />
 
 
                 <Button
-                    android:id="@+id/button12"
+                    android:id="@+id/mensual"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="20dp"
                     android:layout_marginRight="20dp"
-                    android:layout_weight="0.5"
+                    android:layout_weight="1"
                     android:gravity="center"
                     android:text="MENSUAL"
-                    android:textColor="@color/main_green"
+                    android:textColor="@color/white"
                     android:textSize="14dp"
                     android:textStyle="bold" />
             </LinearLayout>
 
-            <TextView
-                android:id="@+id/textView"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="20dp"
-                android:layout_marginBottom="10dp"
-                android:text="CALORÍAS"
-                android:textColor="@color/main_purple" />
+            <LinearLayout
 
-            <ImageView
-                android:id="@+id/pepitoRunning"
                 android:layout_width="match_parent"
-                android:layout_height="170dp"
-                android:layout_marginLeft="20dp"
-                android:layout_marginRight="20dp"
-                app:srcCompat="@drawable/graph1" />
+                android:layout_height="500dp"
+                android:orientation="vertical"
+                android:paddingTop="30dp">
 
-            <TextView
-                android:id="@+id/textView48"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="20dp"
-                android:layout_marginBottom="10dp"
-                android:text="DISTANCIA"
-                android:textColor="@color/main_purple" />
+                <TextView
+                    android:id="@+id/textView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginBottom="10dp"
+                    android:text="CALORÍAS"
+                    android:textColor="@color/main_purple" />
 
-            <ImageView
-                android:id="@+id/imageView22"
-                android:layout_width="match_parent"
-                android:layout_height="100dp"
-                android:layout_marginLeft="20dp"
-                android:layout_marginRight="20dp"
-                app:srcCompat="@drawable/graph2" />
+                <com.github.mikephil.charting.charts.BarChart
+                    android:id="@+id/chart1"
+                    android:layout_width="match_parent"
+                    android:layout_height="200dp"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginRight="20dp"
+                    android:background="@color/soft_white2"
+                    android:paddingTop="10dp" />
 
-            <ImageView
-                android:id="@+id/imageView29"
-                android:layout_width="match_parent"
-                android:layout_height="100dp"
-                android:layout_marginTop="10dp"
-                android:gravity="center"
-                app:srcCompat="@drawable/medal" />
 
-            <TextView
-                android:id="@+id/textView488"
+                <TextView
+                    android:id="@+id/textView48"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginBottom="10dp"
+                    android:text="DISTANCIA (KM)"
+                    android:textColor="@color/main_purple" />
+
+                <com.github.mikephil.charting.charts.LineChart
+                    android:id="@+id/chart2"
+                    android:layout_width="match_parent"
+                    android:layout_height="200dp"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginRight="20dp"
+                    android:background="@color/soft_white2"
+                    android:paddingTop="10dp" />
+            </LinearLayout>
+
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="20dp"
-                android:layout_marginBottom="10dp"
-                android:gravity="center"
-                android:text="RETO: 10K EN 20 MINUTOS"
-                android:textColor="@color/main_purple" />
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/textOxigeno"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="20dp"
+                    android:text="NIVEL DE OXIGENACIÓN"
+                    android:textColor="@color/main_purple" />
+
+                <com.github.mikephil.charting.charts.PieChart
+                    android:id="@+id/chart3"
+                    android:layout_width="match_parent"
+                    android:layout_height="200dp"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginRight="20dp"
+                    android:background="@color/soft_white2"
+                    android:paddingTop="10dp" />
+
+
+            </LinearLayout>
+
 
         </LinearLayout>
     </ScrollView>

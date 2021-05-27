@@ -9,6 +9,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
@@ -77,14 +78,16 @@ public class LoginActivity extends AppCompatActivity {
                 .addOnCompleteListener(this, task -> {
                     if (task.isSuccessful()) {
                         // Sign in success, update UI with the signed-in user's information
-                        Log.d(TAG, "signInWithEmail:success");
                         FirebaseUser user = mAuth.getCurrentUser();
                         updateUI(user);
                     } else {
                         // If sign in fails, display a message to the user.
                         Log.w(TAG, "signInWithEmail:failure", task.getException());
-                        Toast.makeText(LoginActivity.this, "Authentication failed.",
-                                Toast.LENGTH_SHORT).show();
+                        new MaterialAlertDialogBuilder(this)
+                                .setTitle("Ups!")
+                                .setMessage("Autenticación fallida!")
+                                .setPositiveButton("OK",null)
+                                .show();
                         updateUI(null);
                     }
                 });
@@ -102,7 +105,7 @@ public class LoginActivity extends AppCompatActivity {
     {
         if(currentUser!=null)
         {
-            startActivity(new Intent(getApplicationContext(), FeedActivity.class));
+            startActivity(new Intent(getApplicationContext(), ProfileActivity.class));
         }
         else
         {

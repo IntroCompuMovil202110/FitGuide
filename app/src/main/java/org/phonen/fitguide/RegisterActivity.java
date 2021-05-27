@@ -20,6 +20,7 @@ import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
 import org.phonen.fitguide.model.User;
+import org.phonen.fitguide.utils.Constants;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -28,9 +29,11 @@ import java.util.Locale;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+
 import org.phonen.fitguide.utils.Constants.*;
 
 import static org.phonen.fitguide.utils.Constants.USERS_PATH;
+
 
 public class RegisterActivity extends AppCompatActivity {
 
@@ -64,7 +67,8 @@ public class RegisterActivity extends AppCompatActivity {
 
         mAuth = FirebaseAuth.getInstance();
         database = FirebaseDatabase.getInstance();
-        myRef = database.getReference(USERS_PATH);
+
+        myRef = database.getReference(Constants.USERS_PATH);
 
         name = findViewById(R.id.editTextTextName);
         lastName = findViewById(R.id.editTextLastName);
@@ -178,6 +182,7 @@ public class RegisterActivity extends AppCompatActivity {
         String date = this.date.getText().toString();
 
         if (validateForm(emails, passwords, names, lastNames, userNames, phones, he, we, date)) {
+
             userExist = false;
             myRef.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
@@ -213,6 +218,7 @@ public class RegisterActivity extends AppCompatActivity {
                             }
                         });
                     }
+
                 }
 
                 @Override

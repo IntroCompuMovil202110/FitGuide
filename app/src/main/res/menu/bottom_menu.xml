@@ -14,8 +14,8 @@
         android:icon="@drawable/attribution_white_18dp"
         android:id="@+id/profileActivity"/>
     <item
-        android:title="Challenges"
-        android:icon="@drawable/emoji_events_white_18dp"
+        android:title="Chat"
+        android:icon="@drawable/baseline_question_answer_24"
         android:id="@+id/challengesActivity"/>
     <item
         android:title="Chat"

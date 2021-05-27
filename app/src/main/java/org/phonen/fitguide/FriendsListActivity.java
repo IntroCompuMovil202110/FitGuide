@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -33,6 +34,7 @@ public class FriendsListActivity extends AppCompatActivity {
     BottomNavigationView bottomNavigationView;
     ListView friendsListView;
     FriendsListAdapter adapter;
+    TextView emptyText;
     //Data
     private List<String> friendsUids;
     private String currentUserUid;
@@ -42,6 +44,7 @@ public class FriendsListActivity extends AppCompatActivity {
         setContentView(R.layout.activity_friends_list);
         navBarSettings();
         friendsListView = findViewById(R.id.friendsList);
+        this.emptyText = findViewById(R.id.emptyText);
         this.friendsUids = new ArrayList<>();
         this.mAuth = FirebaseAuth.getInstance();
         this.mDB = FirebaseDatabase.getInstance();
@@ -54,10 +57,14 @@ public class FriendsListActivity extends AppCompatActivity {
                 currentUserUid).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                for(DataSnapshot ds: snapshot.getChildren()){
-                    friendsUids.add(ds.getKey());
+                if (snapshot.getChildrenCount() < 1){
+                    emptyText.setText("No tienes amigos...");
+                }else {
+                    for(DataSnapshot ds: snapshot.getChildren()){
+                        friendsUids.add(ds.getKey());
+                    }
+                    loadAdapter();
                 }
-                loadAdapter();
             }
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
@@ -68,7 +75,7 @@ public class FriendsListActivity extends AppCompatActivity {
 
 
     private void loadAdapter() {
-        this.adapter = new FriendsListAdapter(this, this.friendsUids, currentUserUid);
+        this.adapter = new FriendsListAdapter(this, this.friendsUids, currentUserUid, emptyText);
         this.friendsListView.setAdapter(this.adapter);
     }
 

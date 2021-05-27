@@ -49,7 +49,7 @@
                         android:text="CHALLENGE 20K GOLD" />
 
                     <ImageView
-                        android:id="@+id/imageView4"
+                        android:id="@+id/acceptRequestBtn"
                         style="@style/Widget.App.CardMainIcon"
                         app:srcCompat="@drawable/accept_icon" />
                 </LinearLayout>
@@ -64,7 +64,7 @@
                         android:text="This a challenge test text and can be modified by the component\n\nPuntos: 200\nCalorias Promedio: 290" />
 
                     <ImageView
-                        android:id="@+id/imageView5"
+                        android:id="@+id/declineRequestBtn"
                         style="@style/Widget.App.ChallengeBadge"
                         app:srcCompat="@drawable/medal" />
                 </LinearLayout>

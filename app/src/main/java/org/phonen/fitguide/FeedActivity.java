@@ -61,12 +61,7 @@ public class FeedActivity extends AppCompatActivity {
         user = FirebaseAuth.getInstance().getCurrentUser();
         list = findViewById(R.id.feed_list_view);
         feedAdapter = new FeedAdapter(this, postsList, friendsMap, user.getUid());
-        feedAdapter.sort(new Comparator<Post>() {
-            @Override
-            public int compare(Post o1, Post o2) {
-                return o1.getDate().compareTo(o2.getDate());
-            }
-        });
+
         list.setAdapter(feedAdapter);
         createNotificacionChannel();
         this.getFeedForUser();
@@ -95,6 +90,7 @@ public class FeedActivity extends AppCompatActivity {
                                         if (postIndexed.get(ds.getKey()) == null) {
                                             postIndexed.put(ds.getKey(), true);
                                             feedAdapter.add(ds.getValue(Post.class));
+                                            feedAdapter.sort((o1, o2) -> o2.getDate().compareTo(o1.getDate()));
                                         }
                                     }
                                 });

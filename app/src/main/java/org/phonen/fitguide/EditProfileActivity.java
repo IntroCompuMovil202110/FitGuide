@@ -11,6 +11,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.EmailAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
@@ -21,13 +22,12 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-import org.phonen.fitguide.utils.Constants;
+
 import org.phonen.fitguide.model.User;
+import org.phonen.fitguide.utils.Constants;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
-
 
 public class EditProfileActivity extends AppCompatActivity {
 
@@ -240,15 +240,27 @@ public class EditProfileActivity extends AppCompatActivity {
                             if (task.isSuccessful()) {
                                 fUser.updatePassword(password2).addOnCompleteListener(task12 -> {
                                     if (!task12.isSuccessful()) {
-                                        Toast.makeText(EditProfileActivity.this, "Autenticación fallida", Toast.LENGTH_SHORT).show();
+                                        new MaterialAlertDialogBuilder(this)
+                                                .setTitle("Ups!")
+                                                .setMessage("Autenticación fallida!")
+                                                .setPositiveButton("OK",null)
+                                                .show();
                                         password.setError("Contraseña inválida");
                                     } else {
                                         changePass = true;
-                                        Toast.makeText(EditProfileActivity.this, "Contraseña actualizada", Toast.LENGTH_SHORT).show();
+                                        new MaterialAlertDialogBuilder(this)
+                                                .setTitle("Correcto!")
+                                                .setMessage("Contraseña actualizada!")
+                                                .setPositiveButton("OK",null)
+                                                .show();
                                     }
                                 });
                             } else {
-                                Toast.makeText(EditProfileActivity.this, "Autenticación fallida", Toast.LENGTH_SHORT).show();
+                                new MaterialAlertDialogBuilder(this)
+                                        .setTitle("Ups!")
+                                        .setMessage("Autenticación fallida!")
+                                        .setPositiveButton("OK",null)
+                                        .show();
                                 password.setError("Contraseña inválida");
                             }
                         });

@@ -73,7 +73,7 @@ public class PostUploader {
                 stringBuilder.append("Genial!");
                 break;
             case 1:
-                stringBuilder.append("Espéctacular!");
+                stringBuilder.append("Espectacular!");
                 break;
             case 2:
                 stringBuilder.append("Asombroso!");
@@ -84,11 +84,22 @@ public class PostUploader {
         }
         return stringBuilder.toString();
     }
+    private static String generateNewFriendDescription(String userAName, String userBName) {
+        return userAName + " ahora es amigo de " + userBName + "!";
+    }
 
     public static String getNaturalTime(double time) {
-        Date date = new Date((long) time * 1000L);
-        SimpleDateFormat df = new SimpleDateFormat("HH:mm:ss");
-        return df.format(date);
+        StringBuilder sb = new StringBuilder();
+        int horas = ((int) time / 3600);
+        int minutos = (int) ((time - horas * 3600) / 60);
+        int segundos = (int) (time - (horas * 3600 + minutos * 60));
+        sb.append(horas < 10 ? "0" + horas : horas).append(":");
+        sb.append(minutos < 10 ? "0" + minutos : minutos).append(":");
+        sb.append(segundos < 10 ? "0" + segundos : segundos);
+        return sb.toString();
+        //Date date = new Date((long) time * 1000L);
+        //SimpleDateFormat df = new SimpleDateFormat("HH:mm:ss");
+        //return df.format(date);
     }
 
     public static Post createPostFromSession(Session session, String userUID, String imagePath){
@@ -100,4 +111,16 @@ public class PostUploader {
         newPost.setImagePath(imagePath);
         return newPost;
     }
+
+    public static Post createNewFriendPost(String userUID, String userAName, String userBName) {
+        Post newPost = new Post();
+        newPost.setType(2);
+        newPost.setDate(new Date());
+        newPost.setDescription(generateNewFriendDescription(userAName, userBName));
+        newPost.setUserUID(userUID);
+        newPost.setImagePath("");
+        return newPost;
+
+    }
+
 }

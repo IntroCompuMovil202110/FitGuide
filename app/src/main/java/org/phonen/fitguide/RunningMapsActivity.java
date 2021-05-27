@@ -23,6 +23,12 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.FragmentActivity;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.common.api.CommonStatusCodes;
 import com.google.android.gms.common.api.ResolvableApiException;
@@ -52,7 +58,13 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+
 import org.phonen.fitguide.model.Position;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import org.phonen.fitguide.utils.Constants;
 import org.phonen.fitguide.utils.ImageGenerator;
 import org.phonen.fitguide.utils.PermissionManager;
@@ -96,10 +108,15 @@ public class RunningMapsActivity extends FragmentActivity implements OnMapReadyC
     private static final double ALTITUT_THRESHOLD_B = 2000;
     //Layout
     private final DecimalFormat df = new DecimalFormat("##.###");
+    private final DecimalFormat ef = new DecimalFormat("##");
     private TextView distanceIndicator;
     private TextView bpmIndicator;
     private ImageView pepitoRunning;
     private Chronometer chronometer;
+    private TextView elevationText;
+    private TextView apiTemp;
+    private TextView apiTempMax;
+    private TextView apiTempMin;
     //Data
     private double EXERCISE_CALORIES_CONSTANT_MET;
     private double currentDistance;
@@ -109,6 +126,10 @@ public class RunningMapsActivity extends FragmentActivity implements OnMapReadyC
     private double weight;
     private double currentAltitut;
     private int exerType;
+    //REST
+    private RequestQueue requestQueue;
+    private String city;
+    private boolean gathered;
 
     private FirebaseAuth mAuth;
     FirebaseDatabase database;
@@ -134,6 +155,10 @@ public class RunningMapsActivity extends FragmentActivity implements OnMapReadyC
         bpmIndicator = findViewById(R.id.labelBPM);
         chronometer = findViewById(R.id.chronometer);
         pepitoRunning = findViewById(R.id.pepitoRunning);
+        elevationText = findViewById(R.id.running_elevation);
+        apiTemp = findViewById(R.id.running_curr_temp);
+        apiTempMax = findViewById(R.id.running_max_temp);
+        apiTempMin = findViewById(R.id.running_min_temp);
         currentDistance = 0;
         routeCoords = new ArrayList<>();
         this.getIntentData(getIntent().getBundleExtra("bundle"));
@@ -148,6 +173,70 @@ public class RunningMapsActivity extends FragmentActivity implements OnMapReadyC
                 "Se necesita el permiso para realizar seguimiento de su actividad física.",
                 LOCATION_PERMISSION_ID);
         this.initView();
+
+        //REST API
+        this.requestQueue = Volley.newRequestQueue(this);
+
+    }
+
+    private void gatherCity(double lat, double lon) {
+        String url = Constants.WEATHER_ENDPOINT + "find?lat=" + lat +"&lon=" + lon +
+                "&cnt=1&units=metric&appid=" + Constants.WEATHER;
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        // Display the first 500 characters of the response string.
+                        try {
+                            JSONObject actualWeather = new JSONObject(response).getJSONArray("list").getJSONObject(0);
+                            JSONObject forecast = actualWeather.getJSONArray("weather").getJSONObject(0);
+                            JSONObject temp = actualWeather.getJSONObject("main");
+                            apiTemp.setText(temp.getInt("temp") + " °C");
+                            apiTempMax.setText(temp.getInt("temp_max") + " °C");
+                            apiTempMin.setText(temp.getInt("temp_min") + " °C");
+                            switch(forecast.getString("description")){
+                                case "clear sky":
+                                    pepitoRunning.setImageDrawable(getDrawable(R.drawable.ic_clear));
+                                    break;
+                                case "few clouds":
+                                    pepitoRunning.setImageDrawable(getDrawable(R.drawable.ic_few_clouds));
+                                    break;
+                                case "mist":
+                                    pepitoRunning.setImageDrawable(getDrawable(R.drawable.ic_mist));
+                                    break;
+                                case "scattered clouds":
+                                    pepitoRunning.setImageDrawable(getDrawable(R.drawable.ic_scattered_clouds));
+                                    break;
+                                case "broken clouds":
+                                    pepitoRunning.setImageDrawable(getDrawable(R.drawable.ic_broken_clouds));
+                                    break;
+                                case "shower rain":
+                                    pepitoRunning.setImageDrawable(getDrawable(R.drawable.ic_shower_rain));
+                                    break;
+                                case "rain":
+                                    pepitoRunning.setImageDrawable(getDrawable(R.drawable.ic_rain));
+                                    break;
+                                case "thunderstorm":
+                                    pepitoRunning.setImageDrawable(getDrawable(R.drawable.ic_storm));
+                                    break;
+                                case "snow":
+                                    pepitoRunning.setImageDrawable(getDrawable(R.drawable.ic_snow));
+                                    break;
+                            }
+
+
+
+                        } catch (JSONException e) {
+                            Log.e("ERROR JSON: ", e.getMessage());
+                        }
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+               Log.e("ERROR", "Cannot fullfil Request");
+            }
+        });
+        requestQueue.add(stringRequest);
     }
 
     private void getIntentData(Bundle bundle) {
@@ -167,8 +256,6 @@ public class RunningMapsActivity extends FragmentActivity implements OnMapReadyC
                 break;
         }
         this.weight = bundle.getDouble("weight", 60);
-        Log.i("INTENT DEBUG: ", "Received exercise weight: " + this.weight);
-        Log.i("INTENT DEBUG: ", "Selected MED: " + this.EXERCISE_CALORIES_CONSTANT_MET);
     }
 
 
@@ -183,6 +270,7 @@ public class RunningMapsActivity extends FragmentActivity implements OnMapReadyC
     public void endDataGathering() {
         this.chronometer.stop();
         this.totalTime = (SystemClock.elapsedRealtime() - this.chronometer.getBase()) / 1000;
+
         this.oxigeno = this.getOxigeno();
         this.burnedCalories = this.calcCalories();
     }
@@ -215,13 +303,13 @@ public class RunningMapsActivity extends FragmentActivity implements OnMapReadyC
             intent.putExtra("height", bitmap.getHeight());
             intent.putExtra("temperature", currentTemp);
             intent.putExtra("pressure", currentPressure);
-            intent.putExtra("exerType", exerType );
+            intent.putExtra("exerType", exerType);
             startActivity(intent);
         };
-        if (mMap != null){
+        if (mMap != null) {
             this.moveCameraToMarkers(initialLocation, prevLocation);
             mMap.snapshot(callBack);
-        }else {
+        } else {
             Intent intent = new Intent(getApplicationContext(), FinishActivity.class);
             startActivity(intent);
         }
@@ -273,6 +361,7 @@ public class RunningMapsActivity extends FragmentActivity implements OnMapReadyC
                 this.bpmIndicator.setTextColor(getColor(R.color.low_alert));
             }
             this.currentAltitut = altitut;
+            elevationText.setText(ef.format(altitut) + " m");
         }
     }
 
@@ -322,6 +411,9 @@ public class RunningMapsActivity extends FragmentActivity implements OnMapReadyC
                     super.onLocationResult(locationResult);
                     Location location = locationResult.getLastLocation();
                     if (location != null) {
+                        if(!gathered){
+                            gatherCity(location.getLatitude(), location.getLongitude());
+                        }
                         LatLng newLocation = new LatLng(location.getLatitude(), location.getLongitude());
 
                         position.setMoving(true);

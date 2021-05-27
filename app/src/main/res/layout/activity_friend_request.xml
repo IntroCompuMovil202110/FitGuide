@@ -11,106 +11,76 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <ImageView
-            android:id="@+id/imageView"
-            android:layout_width="146dp"
-            android:layout_height="117dp"
-            android:layout_marginTop="8dp"
-            android:contentDescription="Work to be icon"
-            app:layout_constraintBottom_toTopOf="@id/textView2"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/w2b" />
-
-        <TextView
-            android:id="@+id/textView2"
-            android:layout_width="256dp"
-            android:layout_height="92dp"
-            android:layout_marginTop="16dp"
-            android:fontFamily="@font/roboto_bold"
-            android:text="@string/friends_request_title"
-            android:textAlignment="center"
-            android:textColor="@color/white"
-            android:textSize="32sp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/imageView" />
-
-
-        <ScrollView
+        <LinearLayout
+            android:id="@+id/mainLinearReq"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingHorizontal="30dp"
-            android:paddingVertical="8dp"
-            app:layout_constraintBottom_toTopOf="@+id/bottomNavigationView"
-            app:layout_constraintTop_toBottomOf="@+id/textView2"
-            app:layout_constraintVertical_bias="0.16000003">
+            android:orientation="vertical"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent">
 
-            <LinearLayout
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <ImageView
+                    android:id="@+id/imageView"
+                    android:layout_width="146dp"
+                    android:layout_height="117dp"
+                    android:layout_marginTop="8dp"
+                    android:contentDescription="Work to be icon"
+                    app:layout_constraintBottom_toTopOf="@id/textView2"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:srcCompat="@drawable/w2b" />
+
+                <TextView
+                    android:id="@+id/textView2"
+                    android:layout_width="256dp"
+                    android:layout_height="92dp"
+                    android:layout_marginTop="16dp"
+                    android:fontFamily="@font/roboto_bold"
+                    android:text="@string/friends_request_title"
+                    android:textAlignment="center"
+                    android:textColor="@color/white"
+                    android:textSize="32sp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/imageView" />
+
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/linearReList"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintBottom_toTopOf="@id/bottomNavigationView"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/mainLinearReq"
+            app:layout_constraintVertical_bias="0.0">
+
+            <TextView
+                android:id="@+id/emptyTextReq"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical">
+                android:fontFamily="@font/roboto_bold"
+                android:gravity="center"
+                android:textColor="#FBFBFB"
+                android:textSize="20sp" />
 
-                <com.google.android.material.card.MaterialCardView
-                    android:id="@+id/card"
-                    style="@style/Widget.App.CardView">
-
-                    <LinearLayout style="@style/Widget.App.OddFriendRequestMainLayout">
-
-                        <LinearLayout style="@style/Widget.App.FriendRequestInfo">
-
-                            <TextView
-                                style="@style/Widget.App.NameText"
-                                android:text="@string/sample_add_friend_name" />
-
-                            <TextView
-                                style="@style/Widget.App.UsernameText"
-                                android:text="@string/sample_add_friend_username" />
-                        </LinearLayout>
-
-                        <ImageView
-                            android:id="@+id/imageView4"
-                            style="@style/Widget.App.OddIcon"
-                            app:srcCompat="@drawable/accept_icon" />
-
-                        <ImageView
-                            android:id="@+id/imageView5"
-                            style="@style/Widget.App.OddIcon"
-                            app:srcCompat="@drawable/reject_icon" />
-                    </LinearLayout>
-                </com.google.android.material.card.MaterialCardView>
-
-                <com.google.android.material.card.MaterialCardView
-                    android:id="@+id/card2"
-                    style="@style/Widget.App.CardView">
-
-                    <LinearLayout style="@style/Widget.App.EvenFriendRequestMainLayout">
-
-                        <LinearLayout style="@style/Widget.App.FriendRequestInfo">
-
-                            <TextView
-                                style="@style/Widget.App.EvenNameText"
-                                android:text="@string/sample_add_friend_name_2" />
-
-                            <TextView
-                                style="@style/Widget.App.EvenUsernameText"
-                                android:text="@string/sample_add_friend_username_2" />
-                        </LinearLayout>
-
-                        <ImageView
-                            android:id="@+id/imageView42"
-                            style="@style/Widget.App.EvenIcon"
-                            app:srcCompat="@drawable/accept_icon" />
-
-                        <ImageView
-                            android:id="@+id/imageView52"
-                            style="@style/Widget.App.EvenIcon"
-                            app:srcCompat="@drawable/reject_icon" />
-                    </LinearLayout>
-                </com.google.android.material.card.MaterialCardView>
-            </LinearLayout>
-        </ScrollView>
+            <ListView
+                android:id="@+id/requestListView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingHorizontal="30dp"
+                android:paddingVertical="8dp" />
+        </LinearLayout>
 
         <com.google.android.material.bottomnavigation.BottomNavigationView
             android:id="@+id/bottomNavigationView"
@@ -121,10 +91,7 @@
             app:itemTextColor="@drawable/selector"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="1.0"
             app:menu="@menu/bottom_menu" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </FrameLayout>
