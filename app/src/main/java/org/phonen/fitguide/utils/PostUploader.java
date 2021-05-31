@@ -56,7 +56,7 @@ public class PostUploader {
                 stringBuilder.append("Corrió");
                 break;
             case 2:
-                stringBuilder.append("Monto bici");
+                stringBuilder.append("Montó bici");
                 break;
             default:
                 stringBuilder.append("Caminó");

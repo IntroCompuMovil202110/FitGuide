@@ -129,7 +129,7 @@ public class FollowActivity extends FragmentActivity implements OnMapReadyCallba
                         Log.i("LATLNG", String.valueOf(latLng.longitude));
                         marker = mMap.addMarker(new MarkerOptions().position(latLng).title("Ubicacion de " + friendName
                         + ":" + LocationManager.geocoderSearch(latLng, geocoder)).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_CYAN)));
-                        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom((latLng), 13));
+                        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom((latLng), 18));
                     }
                 }else{
                     locationRef.removeEventListener(this);
@@ -166,12 +166,14 @@ public class FollowActivity extends FragmentActivity implements OnMapReadyCallba
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
+        mMap.getUiSettings().setAllGesturesEnabled(true);
+        mMap.getUiSettings().setZoomControlsEnabled(true);
         LatLng latilong = new LatLng(pos.getLatitude(), pos.getLongitude());
         if(latilong.latitude != 0.0 && latilong.longitude != 0.0){
             Log.i("LATLNG", String.valueOf(latilong.longitude));
             marker = mMap.addMarker(new MarkerOptions().position(latilong).title("Ubicación de :" + friendName
                     + " " + LocationManager.geocoderSearch(latilong, geocoder)).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_CYAN)));
-            mMap.animateCamera(CameraUpdateFactory.newLatLngZoom((latilong), 13));
+            mMap.animateCamera(CameraUpdateFactory.newLatLngZoom((latilong), 18));
         }
 
         // Add a marker in Sydney and move the camera
